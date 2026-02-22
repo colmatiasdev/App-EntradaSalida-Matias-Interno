@@ -23,6 +23,20 @@
     HOJA_PRODUCTOS: 'PRODUCTOS',
     HOJA_CLIENTES: 'CLIENTES',
 
+    /**
+     * Categorías para el filtro de productos en Nueva venta.
+     * Deben coincidir con los valores de la columna CATEGORIA en la hoja PRODUCTOS.
+     * El orden aquí define el orden en el combo. Editar para agregar, quitar o reordenar.
+     */
+    CATEGORIAS: [
+      'ALFAJOR',
+      'BUDINES',
+      'HOJALDRE',
+      'PANADERIA',
+      'ROSCAS',
+      'VARIOS'
+    ],
+
     /** URL pública CSV del Sheet (Compartir > Publicar en la web). */
     SHEET_WEB_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT28rd4v_LKDBh45YSVSCW3qhW2_HFkMR6ktjKaFGYFtM5D7iTtd4XYgSMoI15uRd0fH5c4Ir8jAFzg/pub?output=csv',
 

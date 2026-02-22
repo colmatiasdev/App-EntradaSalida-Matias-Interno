@@ -50,19 +50,23 @@
   function llenarSelectCategoria() {
     var selectCat = document.getElementById('nueva-venta-categoria');
     if (!selectCat) return;
-    // Vaciar opciones y dejar solo "Todas"
     selectCat.innerHTML = '<option value="">Todas</option>';
-    // Categorías únicas de la columna CATEGORIA de PRODUCTOS
-    var categorias = [];
-    productos.forEach(function (p) {
-      var cat = (p.CATEGORIA || '').trim();
-      if (cat && categorias.indexOf(cat) === -1) categorias.push(cat);
-    });
-    categorias.sort();
+    // Categorías definidas en config (configurable); si no hay, se derivan de los productos cargados
+    var categoriasConfig = (window.APP_CONFIG && window.APP_CONFIG.CATEGORIAS) || [];
+    var categorias = categoriasConfig.length
+      ? categoriasConfig.filter(function (c) { return c != null && String(c).trim() !== ''; })
+      : [];
+    if (categorias.length === 0) {
+      productos.forEach(function (p) {
+        var cat = (p.CATEGORIA || '').trim();
+        if (cat && categorias.indexOf(cat) === -1) categorias.push(cat);
+      });
+      categorias.sort();
+    }
     categorias.forEach(function (cat) {
       var opt = document.createElement('option');
-      opt.value = cat;
-      opt.textContent = cat;
+      opt.value = typeof cat === 'string' ? cat : String(cat);
+      opt.textContent = opt.value;
       selectCat.appendChild(opt);
     });
   }
