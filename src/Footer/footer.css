@@ -7,3 +7,10 @@
   color: var(--color-text-muted);
   border-top: 1px solid #eee;
 }
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 0.65rem 1rem;
+    font-size: 0.8rem;
+  }
+}

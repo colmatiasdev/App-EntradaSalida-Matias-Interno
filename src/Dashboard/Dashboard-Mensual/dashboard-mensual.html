@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Dashboard ventas mensuales - Panificacion Colombres</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -573,11 +573,26 @@
     [hidden] { display: none !important; }
 
     /* Responsive */
+    @media (max-width: 768px) {
+      .header { padding: 0 1rem; flex-wrap: wrap; }
+      .nav { flex-wrap: wrap; gap: .25rem; }
+      .nav__link { min-height: 44px; min-width: 44px; padding: .5rem .6rem; font-size: .8rem; display: inline-flex; align-items: center; justify-content: center; }
+      .main { padding: 1.25rem 1rem 3rem; }
+      .filtro-bar { flex-direction: column; align-items: stretch; gap: .75rem; padding: .9rem 1rem; }
+      .select-mes { width: 100%; min-height: 44px; min-width: 0; }
+      .btn-cargar { min-height: 44px; justify-content: center; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; gap: .75rem; }
+      .kpi-card { padding: 1rem 1.2rem; }
+      .detalle-search { width: 100%; max-width: 100%; }
+    }
     @media (max-width: 600px) {
-      .main { padding: 1rem; }
+      .main { padding: 1rem .75rem 3rem; }
       .kpi-grid { grid-template-columns: 1fr 1fr; }
       .donut-wrapper { flex-direction: column; }
       .cards-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .kpi-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>

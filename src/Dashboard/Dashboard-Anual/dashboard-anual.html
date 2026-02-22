@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Dashboard anual - Panificacion Colombres</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
@@ -303,10 +303,38 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    @media (max-width: 768px) {
+      .hdr { padding: 0 1rem; height: auto; min-height: 58px; flex-wrap: wrap; padding-bottom: .6rem; }
+      .hdr-nav { flex-wrap: wrap; gap: .25rem; }
+      .hdr-nav a { min-height: 44px; min-width: 44px; padding: .5rem .6rem; font-size: .75rem; display: inline-flex; align-items: center; justify-content: center; }
+      .main { padding: 1.25rem 1rem 3rem; }
+      .page-title { font-size: 1.5rem; }
+      .page-top { margin-bottom: 1.25rem; }
+      .year-bar { flex-direction: column; align-items: stretch; gap: .65rem; padding: .85rem 1rem; }
+      .year-status { margin-left: 0; justify-content: center; }
+      .year-select { width: 100%; min-height: 44px; }
+      .btn-load { min-height: 44px; justify-content: center; }
+      .kpi-row { grid-template-columns: 1fr 1fr; gap: .75rem; }
+      .kpi { padding: 1rem 1.2rem; }
+      .kpi-val { font-size: 1.45rem; }
+      .growth-card { padding: 1.2rem 1.25rem; }
+      .chart-hdr { flex-direction: column; align-items: flex-start; }
+      .secondary-row { grid-template-columns: 1fr; }
+      .sec-card { padding: 1.1rem 1.25rem; }
+      .month-table-card .month-table-hdr { padding: .9rem 1rem; flex-direction: column; align-items: stretch; }
+      .month-table-card div[style*="overflow-x"] { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -1rem; padding: 0 1rem; }
+      .month-table-card table { min-width: 520px; font-size: .78rem; }
+    }
     @media (max-width: 600px) {
-      .main { padding: 1rem 1rem 3rem; }
+      .main { padding: 1rem .75rem 3rem; }
       .kpi-row { grid-template-columns: 1fr 1fr; }
       .secondary-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .hdr { padding: 0 .75rem; }
+      .kpi-row { grid-template-columns: 1fr; }
+      .kpi-val { font-size: 1.35rem; }
+      .empty { padding: 2.5rem 1rem; }
     }
   </style>
 </head>

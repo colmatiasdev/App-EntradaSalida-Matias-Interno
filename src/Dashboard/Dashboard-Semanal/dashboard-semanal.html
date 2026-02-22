@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Dashboard semanal - Panificacion Colombres</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../Footer/footer.css">
+  <style>
+    :root {
+      --rojo:        #C41E3A;
+      --rojo-dark:   #9b1730;
+      --rojo-light:  #e84a67;
+      --rojo-xlight: #ff8fa3;
+      --rojo-glass:  rgba(196,30,58,.08);
+      --rojo-glow:   rgba(196,30,58,.22);
+      --verde:       #22c55e;
+      --verde-glass: rgba(34,197,94,.12);
+      --amber:       #f59e0b;
+      --amber-glass: rgba(245,158,11,.12);
+      --azul:        #3b82f6;
+      --bg:          #f2f0ed;
+      --surface:     #ffffff;
+      --surface2:    #faf9f8;
+      --surface3:    #f5f3f1;
+      --border:      #e6e2dd;
+      --text:        #1a1614;
+      --text-muted:  #7a7370;
+      --text-light:  #b5b0aa;
+      --radius:      10px;
+      --radius-lg:   16px;
+      --radius-xl:   22px;
+      --shadow-sm:   0 1px 3px rgba(0,0,0,.06);
+      --shadow:      0 4px 16px rgba(0,0,0,.08);
+      --shadow-lg:   0 8px 32px rgba(0,0,0,.13);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Sora', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .hdr {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      height: 58px; padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 200;
+      box-shadow: var(--shadow-sm);
+    }
+    .hdr-brand { display: flex; align-items: baseline; gap: .5rem; }
+    .hdr-brand h1 { font-size: 1.1rem; font-weight: 800; color: var(--rojo); letter-spacing: -.03em; }
+    .hdr-brand span { font-size: .72rem; color: var(--text-muted); font-weight: 300; }
+    .hdr-nav { display: flex; gap: .2rem; }
+    .hdr-nav a {
+      padding: .35rem .8rem; border-radius: 8px; font-size: .82rem;
+      font-weight: 600; color: var(--text-muted); text-decoration: none; transition: all .15s;
+    }
+    .hdr-nav a:hover { background: var(--rojo-glass); color: var(--rojo); }
+    .hdr-nav a.active { background: var(--rojo); color: #fff; }
+
+    /* ── MAIN ── */
+    .main { max-width: 1400px; margin: 0 auto; padding: 1.75rem 1.5rem 4rem; }
+
+    /* ── PAGE TOP ── */
+    .page-top {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;
+    }
+    .back-link {
+      font-size: .75rem; color: var(--text-muted); text-decoration: none;
+      display: inline-flex; align-items: center; gap: .3rem; margin-bottom: .3rem; transition: color .15s;
+    }
+    .back-link:hover { color: var(--rojo); }
+    .page-title { font-size: 1.75rem; font-weight: 800; letter-spacing: -.04em; }
+    .page-title em { color: var(--rojo); font-style: normal; }
+
+    /* ── WEEK NAVIGATOR ── */
+    .week-nav {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); padding: 1rem 1.25rem;
+      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+      box-shadow: var(--shadow-sm); margin-bottom: 1.5rem;
+    }
+
+    .week-arrows { display: flex; align-items: center; gap: .4rem; }
+    .arrow-btn {
+      width: 36px; height: 36px; border-radius: 8px;
+      border: 1.5px solid var(--border); background: var(--surface);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; color: var(--text-muted); transition: all .15s; flex-shrink: 0;
+    }
+    .arrow-btn:hover { border-color: var(--rojo); color: var(--rojo); background: var(--rojo-glass); }
+    .arrow-btn:active { transform: scale(.94); }
+    .arrow-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+    .week-label-block { flex: 1; min-width: 0; }
+    .week-range {
+      font-size: 1.05rem; font-weight: 800; letter-spacing: -.02em;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .week-num { font-size: .72rem; color: var(--text-muted); margin-top: .1rem; }
+    .week-num strong { color: var(--rojo); }
+
+    .btn-today {
+      padding: .45rem 1rem; border-radius: 8px;
+      border: 1.5px solid var(--rojo); background: var(--rojo-glass);
+      color: var(--rojo); font-family: 'Sora',sans-serif; font-size: .82rem;
+      font-weight: 700; cursor: pointer; transition: all .15s; white-space: nowrap;
+    }
+    .btn-today:hover { background: var(--rojo); color: #fff; }
+
+    .week-status { display: flex; align-items: center; gap: .4rem; font-size: .78rem; color: var(--text-muted); margin-left: auto; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #ccc; flex-shrink: 0; }
+    .dot--ok  { background: var(--verde); box-shadow: 0 0 6px rgba(34,197,94,.5); }
+    .dot--err { background: var(--rojo); }
+    .dot--load{ background: var(--amber); animation: blink 1s infinite; }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
+
+    /* ── 7-DAY STRIP ── */
+    .day-strip {
+      display: grid; grid-template-columns: repeat(7, 1fr);
+      gap: .65rem; margin-bottom: 1.5rem;
+    }
+
+    .day-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); padding: .85rem .75rem;
+      text-align: center; cursor: default;
+      transition: box-shadow .18s, transform .18s, border-color .18s;
+      position: relative; overflow: hidden;
+    }
+    .day-card--has-data { cursor: pointer; }
+    .day-card--has-data:hover { box-shadow: var(--shadow); transform: translateY(-2px); border-color: rgba(196,30,58,.25); }
+
+    .day-card--today {
+      border-color: var(--rojo);
+      box-shadow: 0 0 0 3px var(--rojo-glass), var(--shadow);
+    }
+    .day-card--today::before {
+      content: 'HOY';
+      position: absolute; top: 0; right: 0;
+      background: var(--rojo); color: #fff;
+      font-size: .52rem; font-weight: 800; letter-spacing: .08em;
+      padding: .18rem .45rem; border-radius: 0 var(--radius) 0 6px;
+    }
+    .day-card--selected {
+      border-color: var(--azul);
+      box-shadow: 0 0 0 3px rgba(59,130,246,.12), var(--shadow);
+    }
+    .day-card--empty { opacity: .5; }
+    .day-card--future { opacity: .4; }
+
+    .day-name { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: var(--text-muted); margin-bottom: .3rem; }
+    .day-num  { font-size: 1.5rem; font-weight: 800; letter-spacing: -.04em; line-height: 1; margin-bottom: .4rem; }
+    .day-card--today .day-num { color: var(--rojo); }
+
+    .day-monto {
+      font-size: .72rem; font-weight: 700; font-family: 'JetBrains Mono',monospace;
+      color: var(--text); margin-bottom: .2rem;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .day-monto--empty { color: var(--text-light); font-weight: 400; font-family: 'Sora',sans-serif; font-size: .68rem; }
+    .day-ventas { font-size: .62rem; color: var(--text-muted); }
+
+    .day-mini-bar {
+      height: 4px; border-radius: 2px;
+      background: linear-gradient(90deg, var(--rojo-light), var(--rojo));
+      margin: .45rem 0 0; transition: width .5s ease;
+    }
+    .day-card--today .day-mini-bar { background: linear-gradient(90deg, var(--rojo-xlight), var(--rojo-dark)); }
+
+    /* ── KPI ROW ── */
+    .kpi-row {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(170px,1fr));
+      gap: 1rem; margin-bottom: 1.5rem;
+    }
+    .kpi {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.1rem 1.3rem;
+      box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .kpi:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+    .kpi::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+      background: var(--rojo); transform: scaleX(0); transform-origin: left;
+      transition: transform .3s;
+    }
+    .kpi:hover::after { transform: scaleX(1); }
+    .kpi--hero {
+      background: linear-gradient(135deg, var(--rojo) 0%, var(--rojo-dark) 100%);
+      border-color: var(--rojo-dark);
+    }
+    .kpi--hero::after { display: none; }
+    .kpi--hero .kpi-lbl, .kpi--hero .kpi-sub { color: rgba(255,255,255,.7); }
+    .kpi--hero .kpi-val { color: #fff; }
+    .kpi-icon { font-size: 1.2rem; margin-bottom: .45rem; }
+    .kpi-lbl { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: var(--text-muted); margin-bottom: .2rem; }
+    .kpi-val { font-size: 1.6rem; font-weight: 700; letter-spacing: -.04em; font-family: 'JetBrains Mono',monospace; line-height: 1; }
+    .kpi-sub { font-size: .68rem; color: var(--text-muted); margin-top: .3rem; }
+    .delta {
+      display: inline-flex; align-items: center; gap: .2rem;
+      padding: .15rem .45rem; border-radius: 20px; font-size: .68rem; font-weight: 700; margin-top: .3rem;
+    }
+    .delta--up   { background: var(--verde-glass); color: #16a34a; }
+    .delta--down { background: var(--rojo-glass);  color: var(--rojo); }
+    .delta--eq   { background: var(--amber-glass); color: #b45309; }
+
+    /* ── BAR CHART ── */
+    .chart-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); padding: 1.4rem 1.6rem;
+      box-shadow: var(--shadow-sm); margin-bottom: 1.5rem;
+    }
+    .chart-hdr {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      flex-wrap: wrap; gap: .75rem; margin-bottom: 1.4rem;
+    }
+    .chart-section-lbl { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: var(--text-light); margin-bottom: .15rem; }
+    .chart-title { font-size: 1rem; font-weight: 700; letter-spacing: -.02em; }
+
+    .day-bars {
+      display: flex; align-items: flex-end; gap: 8px; height: 160px;
+    }
+    .dbar-col {
+      flex: 1; display: flex; flex-direction: column; align-items: center; gap: .4rem; height: 100%;
+    }
+    .dbar-wrap { flex: 1; width: 100%; display: flex; align-items: flex-end; }
+    .dbar {
+      width: 100%; border-radius: 7px 7px 0 0;
+      background: linear-gradient(180deg, var(--rojo-light) 0%, var(--rojo) 100%);
+      transition: height .65s cubic-bezier(.34,1.56,.64,1);
+      position: relative; cursor: pointer; min-height: 3px;
+    }
+    .dbar:hover { filter: brightness(1.1); }
+    .dbar--today { background: linear-gradient(180deg, var(--rojo-xlight) 0%, var(--rojo-dark) 100%); box-shadow: 0 -3px 12px var(--rojo-glow); }
+    .dbar--best  { background: linear-gradient(180deg, #ffd0da 0%, var(--rojo) 100%); }
+    .dbar--empty { background: var(--border); border-radius: 7px 7px 0 0; cursor: default; opacity: .5; }
+    .dbar--future { opacity: .25; cursor: default; }
+    .dbar-lbl { font-size: .62rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    .dbar-val { font-size: .6rem; font-family: 'JetBrains Mono',monospace; color: var(--text-muted); }
+    .dbar-today-marker {
+      position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+      background: var(--rojo); color: #fff; font-size: .5rem; font-weight: 800;
+      padding: .1rem .3rem; border-radius: 4px; white-space: nowrap;
+    }
+    .dbar-today-marker::after {
+      content: ''; position: absolute; bottom: -3px; left: 50%; transform: translateX(-50%);
+      border: 3px solid transparent; border-top-color: var(--rojo);
+    }
+
+    /* ── TWO-COL SECTION ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+    @media (max-width: 820px) { .two-col { grid-template-columns: 1fr; } }
+    .sec-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.25rem 1.4rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .sec-title { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: var(--text-light); margin-bottom: .15rem; }
+    .sec-subtitle { font-size: .9rem; font-weight: 700; margin-bottom: 1rem; }
+
+    .hbar-list { display: flex; flex-direction: column; gap: .6rem; }
+    .hbar-row { display: flex; align-items: center; gap: .65rem; }
+    .hbar-lbl { font-size: .72rem; color: var(--text-muted); width: 85px; text-align: right; flex-shrink: 0; font-weight: 600; }
+    .hbar-track { flex: 1; height: 18px; background: var(--bg); border-radius: 4px; overflow: hidden; }
+    .hbar-fill { height: 100%; border-radius: 4px; transition: width .8s cubic-bezier(.34,1.56,.64,1); }
+    .hbar-val { font-size: .68rem; font-family: 'JetBrains Mono',monospace; color: var(--text-muted); width: 65px; flex-shrink: 0; }
+
+    .prod-list { display: flex; flex-direction: column; gap: .5rem; }
+    .prod-row {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .55rem .7rem; border-radius: 8px;
+      background: var(--surface2); border: 1px solid var(--border);
+      transition: background .12s;
+    }
+    .prod-row:hover { background: var(--rojo-glass); }
+    .prod-rank { font-size: .7rem; font-weight: 800; color: var(--text-light); width: 20px; text-align: center; flex-shrink: 0; }
+    .prod-rank--gold { color: #d97706; }
+    .prod-rank--silver { color: #9ca3af; }
+    .prod-rank--bronze { color: #b45309; }
+    .prod-name { flex: 1; font-size: .8rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .prod-cat { font-size: .6rem; padding: .12rem .4rem; border-radius: 20px; background: var(--rojo-glass); color: var(--rojo); font-weight: 700; flex-shrink: 0; }
+    .prod-monto { font-size: .75rem; font-weight: 700; font-family: 'JetBrains Mono',monospace; color: var(--rojo); flex-shrink: 0; }
+
+    /* ── CARDS SECTION ── */
+    .cards-section {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); box-shadow: var(--shadow-sm);
+      overflow: hidden; margin-bottom: 1.5rem;
+    }
+    .cards-hdr {
+      padding: 1rem 1.5rem; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem;
+      background: var(--surface2);
+    }
+    .cards-hdr-title { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); display: flex; align-items: center; gap: .5rem; }
+    .cards-hdr-title::before { content: ''; width: 3px; height: 12px; background: var(--rojo); border-radius: 2px; display: inline-block; }
+    .cards-hdr-sub { font-size: .78rem; color: var(--text-muted); }
+    .cards-body { padding: 1.25rem 1.5rem; }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px,1fr)); gap: .75rem; }
+
+    .venta-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); overflow: hidden;
+      box-shadow: var(--shadow-sm); display: flex; flex-direction: column;
+      transition: box-shadow .18s, transform .18s, border-color .18s;
+      animation: fadeUp .3s ease both;
+    }
+    .venta-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); border-color: rgba(196,30,58,.22); }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+
+    .vc-top { padding: .8rem .95rem .65rem; display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; border-bottom: 1px solid var(--border); background: var(--surface2); }
+    .vc-prod { font-size: .9rem; font-weight: 700; letter-spacing: -.01em; line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+    .vc-monto { font-family: 'JetBrains Mono',monospace; font-size: 1.05rem; font-weight: 700; color: var(--rojo); white-space: nowrap; }
+    .vc-id { font-family: 'JetBrains Mono',monospace; font-size: .65rem; color: var(--text-light); margin-top: .2rem; }
+    .vc-body { padding: .65rem .95rem; flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: .5rem .9rem; }
+    .vcf-lbl { font-size: .58rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-light); }
+    .vcf-val { font-size: .78rem; font-weight: 500; }
+    .vcf-val--mono { font-family: 'JetBrains Mono',monospace; font-size: .74rem; }
+    .vc-foot { padding: .5rem .95rem; border-top: 1px solid var(--border); background: var(--surface2); display: flex; align-items: center; justify-content: space-between; }
+    .vc-hora { font-size: .68rem; color: var(--text-muted); display: flex; align-items: center; gap: .3rem; }
+
+    .badge {
+      display: inline-flex; padding: .15rem .5rem; border-radius: 20px;
+      font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .badge--sandwich { background: var(--rojo-glass); color: var(--rojo); }
+    .badge--bebida   { background: rgba(59,130,246,.1); color: #2563eb; }
+    .badge--empanada { background: rgba(245,158,11,.1); color: #b45309; }
+    .badge--postre   { background: rgba(168,85,247,.1); color: #7c3aed; }
+    .badge--otro     { background: rgba(20,184,166,.1); color: #0f766e; }
+
+    .empty-day { padding: 2.5rem; text-align: center; color: var(--text-muted); }
+    .empty-day-icon { font-size: 2.2rem; opacity: .3; margin-bottom: .5rem; }
+
+    /* ── WEEK OVERVIEW TABLE ── */
+    .table-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-sm);
+    }
+    .table-hdr {
+      padding: 1rem 1.5rem; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem;
+      background: var(--surface2);
+    }
+    .table-hdr-title { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); display: flex; align-items: center; gap: .5rem; }
+    .table-hdr-title::before { content: ''; width: 3px; height: 12px; background: var(--rojo); border-radius: 2px; display: inline-block; }
+
+    table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+    thead th {
+      padding: .6rem 1rem; text-align: left; background: var(--rojo-glass);
+      color: var(--rojo); font-size: .65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .07em; white-space: nowrap; border-bottom: 1px solid rgba(196,30,58,.12);
+    }
+    thead th.r { text-align: right; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--surface2); }
+    tbody tr.tr-today { background: rgba(196,30,58,.05); }
+    tbody tr.tr-today td:first-child { border-left: 3px solid var(--rojo); padding-left: calc(1rem - 3px); }
+    tbody td { padding: .58rem 1rem; vertical-align: middle; }
+    tbody td.r { text-align: right; font-family: 'JetBrains Mono',monospace; font-weight: 600; }
+    tbody td.muted { color: var(--text-muted); font-size: .75rem; }
+    .td-monto { color: var(--rojo); }
+    .mini-bar-wrap { display: flex; align-items: center; gap: .4rem; }
+    .mini-bar { height: 5px; border-radius: 3px; background: var(--rojo); min-width: 2px; transition: width .6s ease; }
+    .sin-datos { color: var(--text-light); font-size: .73rem; font-style: italic; }
+    .today-tag { display: inline-flex; padding: .12rem .42rem; border-radius: 20px; background: var(--rojo); color: #fff; font-size: .58rem; font-weight: 800; margin-left: .4rem; }
+
+    .loading-ring {
+      display: inline-block; width: 14px; height: 14px;
+      border: 2px solid rgba(196,30,58,.2); border-top-color: var(--rojo);
+      border-radius: 50%; animation: spin .6s linear infinite;
+    }
+    @keyframes spin { to{transform:rotate(360deg)} }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 768px) {
+      .hdr { padding: 0 .75rem; height: auto; min-height: 58px; flex-wrap: wrap; padding-bottom: .6rem; }
+      .hdr-nav { flex-wrap: wrap; gap: .25rem; }
+      .hdr-nav a { min-height: 44px; min-width: 44px; padding: .5rem .6rem; font-size: .75rem; display: inline-flex; align-items: center; justify-content: center; }
+      .main { padding: 1rem .75rem 3rem; }
+      .page-title { font-size: 1.4rem; }
+      .week-nav { flex-direction: column; align-items: stretch; gap: .75rem; padding: .85rem 1rem; }
+      .week-arrows { justify-content: center; }
+      .week-label-block { text-align: center; }
+      .week-status { margin-left: 0; justify-content: center; }
+      .btn-today { min-height: 44px; }
+      .arrow-btn { width: 44px; height: 44px; }
+      .day-strip { grid-template-columns: repeat(7, 1fr); gap: .35rem; }
+      .day-num { font-size: 1.1rem; }
+      .kpi-row { grid-template-columns: 1fr 1fr; gap: .75rem; }
+      .kpi { padding: 1rem 1.1rem; }
+      .kpi-val { font-size: 1.4rem; }
+      .chart-card { padding: 1rem 1.2rem; }
+      .chart-hdr { flex-direction: column; align-items: flex-start; }
+      .day-bars { height: 140px; gap: 4px; }
+      .dbar-lbl { font-size: .58rem; }
+      .two-col { grid-template-columns: 1fr; }
+      .sec-card { padding: 1rem 1.2rem; }
+      .cards-section .cards-hdr { padding: .85rem 1rem; flex-direction: column; align-items: flex-start; }
+      .cards-body { padding: 1rem; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .table-card .table-hdr { padding: .85rem 1rem; flex-direction: column; align-items: stretch; }
+      .table-card div[style*="overflow-x"] { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -1rem; padding: 0 1rem; }
+      .table-card table { min-width: 500px; font-size: .78rem; }
+      .venta-card .vc-body { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .day-strip { gap: .2rem; }
+      .day-card { padding: .6rem .3rem; }
+      .day-num { font-size: 1rem; }
+      .day-monto { display: none; }
+      .day-name { font-size: .58rem; }
+      .kpi-row { grid-template-columns: 1fr; }
+      .kpi-val { font-size: 1.35rem; }
+      .hbar-lbl { width: 70px; font-size: .68rem; }
+      .prod-row { flex-wrap: wrap; gap: .4rem; }
+      .prod-name { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-brand">
+    <h1>Panificacion Colombres</h1>
+    <span>Sistema de Ventas</span>
+  </div>
+  <nav class="hdr-nav">
+    <a href="../../Ventas/Seleccionar-cliente/seleccionar-cliente.html">Nueva venta</a>
+    <a href="../../Ventas/Listado-Ventas/listado-ventas.html">Listado de ventas</a>
+    <a href="../dashboard.html">Dashboard</a>
+    <a href="../Dashboard-Anual/dashboard-anual.html">Anual</a>
+    <a href="dashboard-semanal.html" class="active">Semanal</a>
+  </nav>
+</header>
+
+<main class="main">
+
+  <div class="page-top">
+    <div>
+      <a href="../../../index.html" class="back-link">← Volver al inicio</a>
+      <h1 class="page-title">Dashboard <em>semanal</em></h1>
+    </div>
+  </div>
+
+  <div class="week-nav">
+    <div class="week-arrows">
+      <button class="arrow-btn" id="btn-prev" title="Semana anterior">‹</button>
+      <button class="arrow-btn" id="btn-next" title="Semana siguiente">›</button>
+    </div>
+    <div class="week-label-block">
+      <div class="week-range" id="week-range">—</div>
+      <div class="week-num" id="week-num"></div>
+    </div>
+    <button class="btn-today" id="btn-today">📍 Semana actual</button>
+    <div class="week-status">
+      <div class="dot" id="status-dot"></div>
+      <span id="status-txt">Cargando…</span>
+    </div>
+  </div>
+
+  <div class="day-strip" id="day-strip"></div>
+
+  <div class="kpi-row" id="kpi-row">
+    <div class="kpi kpi--hero">
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-lbl">Facturación semana</div>
+      <div class="kpi-val" id="kpi-total">—</div>
+      <div class="kpi-sub" id="kpi-total-sub">total semanal</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-icon">📅</div>
+      <div class="kpi-lbl">Mejor día</div>
+      <div class="kpi-val" id="kpi-mejor">—</div>
+      <div class="kpi-sub" id="kpi-mejor-sub"></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-icon">🧾</div>
+      <div class="kpi-lbl">Total ventas</div>
+      <div class="kpi-val" id="kpi-ventas">—</div>
+      <div class="kpi-sub" id="kpi-ventas-sub"></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-icon">📦</div>
+      <div class="kpi-lbl">Unidades</div>
+      <div class="kpi-val" id="kpi-unidades">—</div>
+      <div class="kpi-sub" id="kpi-unidades-sub"></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-icon">⚡</div>
+      <div class="kpi-lbl">Ticket promedio</div>
+      <div class="kpi-val" id="kpi-ticket">—</div>
+      <div class="kpi-sub" id="kpi-ticket-sub"></div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-hdr">
+      <div>
+        <div class="chart-section-lbl">Facturación diaria</div>
+        <div class="chart-title">Rendimiento por día · <span id="chart-week-lbl" style="color:var(--rojo)">—</span></div>
+      </div>
+      <div style="font-size:.72rem;color:var(--text-muted)" id="chart-legend-note"></div>
+    </div>
+    <div class="day-bars" id="day-bars"></div>
+  </div>
+
+  <div class="two-col">
+    <div class="sec-card">
+      <div class="sec-title">Distribución</div>
+      <div class="sec-subtitle">Ventas por categoría</div>
+      <div class="hbar-list" id="hbar-list"></div>
+    </div>
+    <div class="sec-card">
+      <div class="sec-title">Ranking</div>
+      <div class="sec-subtitle">Top productos de la semana</div>
+      <div class="prod-list" id="prod-list"></div>
+    </div>
+  </div>
+
+  <div class="cards-section" id="cards-section">
+    <div class="cards-hdr">
+      <div class="cards-hdr-title" id="cards-day-title">Detalle del día</div>
+      <div class="cards-hdr-sub" id="cards-day-sub"></div>
+    </div>
+    <div class="cards-body" id="cards-body">
+      <div class="empty-day">
+        <div class="empty-day-icon">👆</div>
+        <div>Hacé clic en un día para ver el detalle de ventas</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-hdr">
+      <div class="table-hdr-title">Resumen diario de la semana</div>
+      <div style="font-size:.72rem;color:var(--text-muted)" id="table-week-note"></div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Día</th>
+            <th>Fecha</th>
+            <th class="r">Facturación</th>
+            <th class="r">Ventas</th>
+            <th class="r">Unidades</th>
+            <th class="r">Ticket prom.</th>
+            <th>Participación</th>
+          </tr>
+        </thead>
+        <tbody id="week-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<div id="footer-container" data-footer-src="../../Footer/footer.html"></div>
+
+<script src="../../Config/config.js"></script>
+<script src="../../Config/tables.js"></script>
+<script src="../../../main.js"></script>
+<script src="../../Footer/footer.js"></script>
+<script>
+(function(){
+'use strict';
+
+var APP_CONFIG = window.APP_CONFIG;
+var APP_TABLES = window.APP_TABLES;
+var SCRIPT_URL = APP_CONFIG && APP_CONFIG.APP_SCRIPT_URL;
+var CORS_PROXY = APP_CONFIG && APP_CONFIG.CORS_PROXY;
+
+var MESES_NOMBRES = (APP_TABLES && APP_TABLES.NOMBRES_HOJAS_MES) || [
+  'ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO',
+  'JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'
+];
+var MESES_CORTOS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+var DIAS_FULL  = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+var DIAS_SHORT = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+
+var CAT_COLORS = { 'SANDWICH':'#C41E3A','BEBIDA':'#2563eb','EMPANADA':'#b45309','POSTRE':'#7c3aed' };
+function catColor(c){ return CAT_COLORS[String(c).toUpperCase()] || '#0f766e'; }
+function catBadge(c){
+  var k = String(c).toLowerCase();
+  if(k.indexOf('sandwich')!==-1||k.indexOf('sándwich')!==-1) return 'badge--sandwich';
+  if(k.indexOf('bebida')!==-1) return 'badge--bebida';
+  if(k.indexOf('empanada')!==-1) return 'badge--empanada';
+  if(k.indexOf('postre')!==-1) return 'badge--postre';
+  return 'badge--otro';
+}
+
+function fmt(n){ return Number(n).toLocaleString('es-AR'); }
+function fmtM(n){ return '$\u00a0'+Number(n).toLocaleString('es-AR',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+function isoDate(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function pad(n){ return String(n).padStart(2,'0'); }
+function addDays(d, n){ var r=new Date(d); r.setDate(r.getDate()+n); return r; }
+
+function getMonday(d){
+  var dt = new Date(d);
+  var day = dt.getDay();
+  var diff = (day===0) ? -6 : 1-day;
+  dt.setDate(dt.getDate()+diff);
+  dt.setHours(0,0,0,0);
+  return dt;
+}
+
+var TODAY = new Date(); TODAY.setHours(0,0,0,0);
+var currentMonday = getMonday(new Date(TODAY));
+var allMonthData  = {};
+var weekDays      = [];
+var selectedDayIdx= -1;
+
+function setStatus(type, txt){
+  document.getElementById('status-dot').className='dot'+(type?' dot--'+type:'');
+  document.getElementById('status-txt').textContent=txt;
+}
+
+function formatWeekLabel(mon){
+  var sun = addDays(mon, 6);
+  var sameMonth = mon.getMonth()===sun.getMonth();
+  var sameYear  = mon.getFullYear()===sun.getFullYear();
+  var p1 = mon.getDate()+' '+MESES_CORTOS[mon.getMonth()]+(sameYear?'':' '+mon.getFullYear());
+  var p2 = sun.getDate()+' '+MESES_CORTOS[sun.getMonth()]+' '+sun.getFullYear();
+  return p1 + (sameMonth?' — '+sun.getDate()+' '+MESES_CORTOS[sun.getMonth()]+' '+sun.getFullYear() : ' — '+p2);
+}
+
+function weekNumber(d){
+  var dt = new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
+  var dayNum = dt.getUTCDay()||7;
+  dt.setUTCDate(dt.getUTCDate()+4-dayNum);
+  var yearStart = new Date(Date.UTC(dt.getUTCFullYear(),0,1));
+  return Math.ceil((((dt-yearStart)/86400000)+1)/7);
+}
+
+function isCurrentWeek(mon){
+  return isoDate(mon)===isoDate(getMonday(TODAY));
+}
+
+document.getElementById('btn-prev').addEventListener('click',function(){
+  currentMonday = addDays(currentMonday,-7);
+  loadWeek();
+});
+document.getElementById('btn-next').addEventListener('click',function(){
+  currentMonday = addDays(currentMonday,7);
+  loadWeek();
+});
+document.getElementById('btn-today').addEventListener('click',function(){
+  currentMonday = getMonday(new Date(TODAY));
+  loadWeek();
+});
+
+function monthsNeeded(mon){
+  var months = {};
+  for(var i=0;i<7;i++){
+    var d=addDays(mon,i);
+    var key=MESES_NOMBRES[d.getMonth()];
+    months[key]=true;
+  }
+  return Object.keys(months);
+}
+
+function loadWeek(){
+  selectedDayIdx=-1;
+  var mon = currentMonday;
+  var sun = addDays(mon,6);
+
+  document.getElementById('week-range').textContent = formatWeekLabel(mon);
+  var wn=weekNumber(mon);
+  var isCurrent=isCurrentWeek(mon);
+  document.getElementById('week-num').innerHTML=
+    'Semana <strong>#'+wn+'</strong> · '+mon.getFullYear()+
+    (isCurrent?' &nbsp;<span style="background:var(--rojo);color:#fff;padding:.1rem .4rem;border-radius:20px;font-size:.58rem;font-weight:800">ACTUAL</span>':'');
+  document.getElementById('btn-next').disabled = addDays(mon,7) > TODAY;
+
+  setStatus('load','Cargando semana…');
+
+  weekDays=[];
+  for(var i=0;i<7;i++){
+    var d=addDays(mon,i);
+    weekDays.push({
+      date: d,
+      isoKey: isoDate(d),
+      dayName: DIAS_FULL[i],
+      dayShort: DIAS_SHORT[i],
+      dayNum: d.getDate(),
+      monthCorto: MESES_CORTOS[d.getMonth()],
+      mesNombre: MESES_NOMBRES[d.getMonth()],
+      isToday: isoDate(d)===isoDate(TODAY),
+      isFuture: d > TODAY,
+    });
+  }
+
+  var needed = monthsNeeded(mon).filter(function(m){ return !allMonthData[m]; });
+
+  if(needed.length===0){
+    renderWeek();
+    return;
+  }
+
+  if(!SCRIPT_URL){
+    MESES_NOMBRES.forEach(function(m,mi){
+      if(!allMonthData[m]) allMonthData[m]=generateDemoMonth(m,mi);
+    });
+    renderWeek();
+    return;
+  }
+
+  var promises = needed.map(function(mes){
+    var payload={accion:'ventaLeer',hoja:mes};
+    var body='data='+encodeURIComponent(JSON.stringify(payload));
+    var url=(CORS_PROXY&&CORS_PROXY.length)?CORS_PROXY+encodeURIComponent(SCRIPT_URL):SCRIPT_URL;
+    return fetch(url,{method:'POST',mode:'cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body})
+      .then(function(r){
+        var ct=(r.headers.get('Content-Type')||'').toLowerCase();
+        if(ct.indexOf('json')!==-1) return r.json();
+        return r.text().then(function(t){ try{ return JSON.parse(t); } catch(e){ return {ok:false,datos:[]}; }; });
+      })
+      .then(function(d){ allMonthData[mes]=d&&d.datos?d.datos:[]; })
+      .catch(function(){ allMonthData[mes]=[]; });
+  });
+
+  Promise.all(promises).then(function(){
+    setStatus('ok','Semana cargada');
+    renderWeek();
+  });
+}
+
+function generateDemoMonth(mes, mi){
+  var anio=new Date().getFullYear();
+  var cats=['SANDWICH','BEBIDA','EMPANADA','POSTRE'];
+  var products={
+    SANDWICH:['Lomito especial','Mila completo','Chorizo a la criolla','Lomito EL TOTI','Mila prueba'],
+    BEBIDA:['Coca Cola 500ml','Mirinda 2L','Agua mineral','Sprite 500ml'],
+    EMPANADA:['Empanada carne','Empanada jamón/queso','Empanada pollo'],
+    POSTRE:['Flan con dulce','Brownie','Alfajor artesanal'],
+  };
+  var rows=[];
+  var daysInMonth=new Date(anio,mi+1,0).getDate();
+  for(var d=1;d<=daysInMonth;d++){
+    var nRows=Math.floor(Math.random()*8);
+    for(var i=0;i<nRows;i++){
+      var cat=cats[Math.floor(Math.random()*cats.length)];
+      var prods=products[cat];
+      var prod=prods[Math.floor(Math.random()*prods.length)];
+      var precio=cat==='SANDWICH'?2800+Math.floor(Math.random()*1800)
+                :cat==='BEBIDA'?500+Math.floor(Math.random()*900)
+                :cat==='EMPANADA'?450+Math.floor(Math.random()*400)
+                :700+Math.floor(Math.random()*700);
+      var cant=1+Math.floor(Math.random()*4);
+      rows.push({
+        MES:mes,
+        'ID-VENTA':'V-'+anio+pad(mi+1)+pad(d)+''+pad(i+1),
+        FECHA_OPERATIVA:anio+'-'+pad(mi+1)+'-'+pad(d),
+        HORA:'1899-12-30T'+(10+Math.floor(Math.random()*9)).toString().padStart(2,'0')+':'+pad(Math.floor(Math.random()*60))+':00.000Z',
+        CATEGORIA:cat,
+        'ID-PRODUCTO':'PROD-'+prod.replace(/ /g,'-').toUpperCase().substring(0,10),
+        PRODUCTO:prod,
+        CANTIDAD:cant,
+        PRECIO:precio,
+        MONTO:precio*cant,
+      });
+    }
+  }
+  return rows;
+}
+
+function getRowsForDate(isoKey){
+  var monthNum = parseInt(isoKey.split('-')[1], 10) - 1;
+  var mesNombre = MESES_NOMBRES[monthNum];
+  var allRows = allMonthData[mesNombre]||[];
+  return allRows.filter(function(r){
+    var f = String(r.FECHA_OPERATIVA||'').split('T')[0].trim();
+    return f===isoKey;
+  });
+}
+
+function parseHora(h){
+  var s=String(h||'');
+  var t=s.indexOf('T');
+  if(t!==-1) return s.substring(t+1,t+6);
+  return s.substring(0,5);
+}
+
+function renderWeek(){
+  weekDays.forEach(function(day){
+    var rows=getRowsForDate(day.isoKey);
+    day.rows=rows;
+    day.monto=rows.reduce(function(s,r){return s+(parseFloat(r.MONTO)||0);},0);
+    day.unidades=rows.reduce(function(s,r){return s+(parseFloat(r.CANTIDAD)||0);},0);
+    day.nVentas=rows.length;
+    day.ticket=day.nVentas?day.monto/day.nVentas:0;
+  });
+
+  var maxMonto=Math.max.apply(null,weekDays.map(function(d){return d.monto;})) || 1;
+  var totalSemana=weekDays.reduce(function(s,d){return s+d.monto;},0);
+  var bestDay=weekDays.reduce(function(a,b){return b.monto>a.monto?b:a;},weekDays[0]);
+
+  renderDayStrip(maxMonto);
+  renderKPIs(totalSemana, bestDay);
+  renderBarChart(maxMonto, bestDay);
+  renderCats();
+  renderProducts();
+  renderTable(totalSemana, maxMonto);
+
+  var diasConVentas = weekDays.filter(function(d){return d.nVentas>0;}).length;
+  setStatus('ok', totalSemana>0 ? 'Semana cargada · '+diasConVentas+' días con ventas' : 'Semana cargada');
+
+  document.getElementById('chart-week-lbl').textContent=formatWeekLabel(currentMonday);
+  document.getElementById('table-week-note').textContent=
+    weekDays.filter(function(d){return d.nVentas>0;}).length+' de 7 días con ventas';
+}
+
+function renderDayStrip(maxMonto){
+  var strip=document.getElementById('day-strip');
+  strip.innerHTML='';
+  weekDays.forEach(function(day,i){
+    var card=document.createElement('div');
+    var cls='day-card';
+    if(day.isToday) cls+=' day-card--today';
+    if(day.isFuture) cls+=' day-card--future';
+    else if(day.nVentas===0) cls+=' day-card--empty';
+    else cls+=' day-card--has-data';
+    if(i===selectedDayIdx) cls+=' day-card--selected';
+    card.className=cls;
+
+    var barW=maxMonto?Math.round((day.monto/maxMonto)*100):0;
+    card.innerHTML=
+      '<div class="day-name">'+day.dayShort+'</div>'+
+      '<div class="day-num">'+day.dayNum+'</div>'+
+      '<div class="day-monto'+(day.nVentas===0?' day-monto--empty':'')+'">'+
+        (day.nVentas>0?fmtM(day.monto):'Sin ventas')+
+      '</div>'+
+      '<div class="day-ventas">'+
+        (day.nVentas>0?day.nVentas+' venta'+(day.nVentas!==1?'s':''):'—')+
+      '</div>'+
+      (day.nVentas>0?'<div class="day-mini-bar" style="width:0" data-w="'+barW+'%"></div>':'');
+
+    if(!day.isFuture && day.nVentas>0){
+      card.addEventListener('click',(function(idx){
+        return function(){ selectDay(idx); };
+      })(i));
+    }
+    strip.appendChild(card);
+  });
+  setTimeout(function(){
+    strip.querySelectorAll('.day-mini-bar').forEach(function(el){
+      el.style.transition='width .5s ease';
+      el.style.width=el.getAttribute('data-w');
+    });
+  },80);
+}
+
+function selectDay(idx){
+  selectedDayIdx=idx;
+  var cards=document.getElementById('day-strip').querySelectorAll('.day-card');
+  cards.forEach(function(c,i){
+    c.classList.toggle('day-card--selected', i===idx);
+  });
+  var day=weekDays[idx];
+  renderDayDetail(day);
+}
+
+function renderDayDetail(day){
+  var titleEl=document.getElementById('cards-day-title');
+  var subEl=document.getElementById('cards-day-sub');
+  var bodyEl=document.getElementById('cards-body');
+
+  titleEl.textContent=day.dayName+' '+day.dayNum+' de '+day.monthCorto+(day.isToday?' (Hoy)':'');
+  subEl.textContent=day.nVentas+' venta'+(day.nVentas!==1?'s':'')+' · '+fmtM(day.monto);
+
+  if(day.nVentas===0){
+    bodyEl.innerHTML='<div class="empty-day"><div class="empty-day-icon">📭</div><div>No hay ventas registradas para este día</div></div>';
+    return;
+  }
+
+  var grid=document.createElement('div'); grid.className='cards-grid';
+  day.rows.forEach(function(row,ci){
+    var prod=row.PRODUCTO||row['ID-PRODUCTO']||'—';
+    var idV=row['ID-VENTA']||'—';
+    var idP=row['ID-PRODUCTO']||'—';
+    var cat=row.CATEGORIA||'—';
+    var cant=row.CANTIDAD!==undefined?row.CANTIDAD:'—';
+    var precio=row.PRECIO!==undefined?fmtM(parseFloat(row.PRECIO)||0):'—';
+    var monto=row.MONTO!==undefined?fmtM(parseFloat(row.MONTO)||0):'—';
+    var hora=parseHora(row.HORA);
+
+    var card=document.createElement('div');
+    card.className='venta-card';
+    card.style.animationDelay=(ci*0.04)+'s';
+    card.innerHTML=
+      '<div class="vc-top">'+
+        '<div>'+
+          '<div class="vc-prod" title="'+prod.replace(/"/g,'&quot;')+'">'+prod+'</div>'+
+          '<div class="vc-id">'+idV+'</div>'+
+        '</div>'+
+        '<div class="vc-monto">'+monto+'</div>'+
+      '</div>'+
+      '<div class="vc-body">'+
+        '<div><div class="vcf-lbl">Categoría</div><div class="vcf-val"><span class="badge '+catBadge(cat)+'">'+cat+'</span></div></div>'+
+        '<div><div class="vcf-lbl">ID Producto</div><div class="vcf-val vcf-val--mono">'+idP+'</div></div>'+
+        '<div><div class="vcf-lbl">Cantidad</div><div class="vcf-val vcf-val--mono">'+cant+' ud.</div></div>'+
+        '<div><div class="vcf-lbl">Precio unit.</div><div class="vcf-val vcf-val--mono">'+precio+'</div></div>'+
+      '</div>'+
+      '<div class="vc-foot">'+
+        '<div class="vc-hora">'+
+          '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'+
+          (hora?hora+' hs':'Sin hora')+
+        '</div>'+
+        '<div style="font-size:.72rem;font-weight:700;color:var(--rojo)">'+monto+'</div>'+
+      '</div>';
+    grid.appendChild(card);
+  });
+  bodyEl.innerHTML='';
+  bodyEl.appendChild(grid);
+}
+
+function renderKPIs(totalSemana, bestDay){
+  document.getElementById('kpi-total').textContent=fmtM(totalSemana);
+  var dias=weekDays.filter(function(d){return d.nVentas>0;});
+  document.getElementById('kpi-total-sub').textContent=dias.length+' días con actividad';
+  document.getElementById('kpi-mejor').textContent=fmtM(bestDay.monto);
+  document.getElementById('kpi-mejor-sub').textContent=bestDay.dayName+' '+bestDay.dayNum;
+  var totalVentas=weekDays.reduce(function(s,d){return s+d.nVentas;},0);
+  document.getElementById('kpi-ventas').textContent=fmt(totalVentas);
+  document.getElementById('kpi-ventas-sub').textContent='ventas totales';
+  var totalUnidades=weekDays.reduce(function(s,d){return s+d.unidades;},0);
+  document.getElementById('kpi-unidades').textContent=fmt(totalUnidades);
+  document.getElementById('kpi-unidades-sub').textContent='unidades despachadas';
+  var ticket=totalVentas?totalSemana/totalVentas:0;
+  document.getElementById('kpi-ticket').textContent=fmtM(ticket);
+  document.getElementById('kpi-ticket-sub').textContent='por venta promedio';
+}
+
+function renderBarChart(maxMonto, bestDay){
+  var container=document.getElementById('day-bars');
+  container.innerHTML='';
+  weekDays.forEach(function(day,i){
+    var col=document.createElement('div'); col.className='dbar-col';
+    var wrap=document.createElement('div'); wrap.className='dbar-wrap';
+    var bar=document.createElement('div');
+    var pct=maxMonto?(day.monto/maxMonto)*100:0;
+    var cls='dbar';
+    if(day.isFuture) cls+=' dbar--future';
+    else if(day.nVentas===0) cls+=' dbar--empty';
+    else if(day===bestDay) cls+=' dbar--best';
+    if(day.isToday) cls+=' dbar--today';
+    bar.className=cls;
+    bar.style.height='0%';
+    bar.title=day.dayName+': '+fmtM(day.monto);
+
+    if(day.isToday){
+      var marker=document.createElement('div');
+      marker.className='dbar-today-marker'; marker.textContent='HOY';
+      bar.appendChild(marker);
+    }
+
+    wrap.appendChild(bar);
+    var lbl=document.createElement('div'); lbl.className='dbar-lbl'; lbl.textContent=day.dayShort;
+    var val=document.createElement('div'); val.className='dbar-val';
+    val.textContent=day.nVentas>0?fmtM(day.monto):'—';
+    col.appendChild(wrap); col.appendChild(lbl); col.appendChild(val);
+    container.appendChild(col);
+
+    if(!day.isFuture){
+      setTimeout(function(b,p){ b.style.height=Math.max(p,day.nVentas?1.5:0)+'%'; },80+i*40, bar, pct);
+    }
+  });
+
+  var isCur=isCurrentWeek(currentMonday);
+  document.getElementById('chart-legend-note').textContent=
+    isCur?'▶ La barra marcada "HOY" es el día actual':'Semana histórica — todos los datos cargados';
+}
+
+function renderCats(){
+  var catMap={};
+  weekDays.forEach(function(day){
+    day.rows.forEach(function(r){
+      var c=r.CATEGORIA||'OTRO';
+      catMap[c]=(catMap[c]||0)+(parseFloat(r.MONTO)||0);
+    });
+  });
+  var sorted=Object.keys(catMap).map(function(k){return{name:k,val:catMap[k]};});
+  sorted.sort(function(a,b){return b.val-a.val;});
+  var maxCat=sorted[0]?sorted[0].val:1;
+  var total=sorted.reduce(function(s,c){return s+c.val;},0);
+
+  var list=document.getElementById('hbar-list'); list.innerHTML='';
+  if(sorted.length===0){
+    list.innerHTML='<div class="sin-datos" style="padding:.5rem">Sin datos esta semana</div>';
+    return;
+  }
+  sorted.forEach(function(cat){
+    var pctVal=total?Math.round(cat.val/total*100):0;
+    var row=document.createElement('div'); row.className='hbar-row';
+    row.innerHTML=
+      '<div class="hbar-lbl">'+cat.name+'</div>'+
+      '<div class="hbar-track"><div class="hbar-fill" style="width:0%;background:'+catColor(cat.name)+'" data-w="'+(cat.val/maxCat*100)+'%"></div></div>'+
+      '<div class="hbar-val">'+fmtM(cat.val)+'<br><span style="font-size:.6rem;color:var(--text-light)">'+pctVal+'%</span></div>';
+    list.appendChild(row);
+  });
+  setTimeout(function(){
+    list.querySelectorAll('.hbar-fill').forEach(function(el){
+      el.style.transition='width .7s cubic-bezier(.34,1.56,.64,1)';
+      el.style.width=el.getAttribute('data-w');
+    });
+  },100);
+}
+
+function renderProducts(){
+  var prodMap={};
+  weekDays.forEach(function(day){
+    day.rows.forEach(function(r){
+      var p=r.PRODUCTO||r['ID-PRODUCTO']||'?';
+      if(!prodMap[p]) prodMap[p]={monto:0,cat:r.CATEGORIA||''};
+      prodMap[p].monto+=(parseFloat(r.MONTO)||0);
+    });
+  });
+  var sorted=Object.keys(prodMap).map(function(k){return{name:k,monto:prodMap[k].monto,cat:prodMap[k].cat};});
+  sorted.sort(function(a,b){return b.monto-a.monto;});
+  var top=sorted.slice(0,6);
+
+  var list=document.getElementById('prod-list'); list.innerHTML='';
+  if(top.length===0){
+    list.innerHTML='<div class="sin-datos" style="padding:.5rem">Sin datos esta semana</div>';
+    return;
+  }
+  var medals=['🥇','🥈','🥉'];
+  var rankCls=['prod-rank--gold','prod-rank--silver','prod-rank--bronze'];
+  top.forEach(function(p,i){
+    var row=document.createElement('div'); row.className='prod-row';
+    row.innerHTML=
+      '<div class="prod-rank '+(rankCls[i]||'')+'">'+(medals[i]||('#'+(i+1)))+'</div>'+
+      '<div class="prod-name" title="'+p.name.replace(/"/g,'&quot;')+'">'+p.name+'</div>'+
+      '<span class="prod-cat">'+p.cat+'</span>'+
+      '<div class="prod-monto">'+fmtM(p.monto)+'</div>';
+    list.appendChild(row);
+  });
+}
+
+function renderTable(totalSemana, maxMonto){
+  var tbody=document.getElementById('week-tbody'); tbody.innerHTML='';
+  weekDays.forEach(function(day){
+    var tr=document.createElement('tr');
+    if(day.isToday) tr.className='tr-today';
+    var barW=totalSemana?Math.round((day.monto/totalSemana)*130):0;
+    var partPct=totalSemana?Math.round(day.monto/totalSemana*100):0;
+    var todayTag=day.isToday?'<span class="today-tag">hoy</span>':'';
+
+    if(day.isFuture){
+      tr.innerHTML=
+        '<td><strong>'+day.dayName+'</strong>'+todayTag+'</td>'+
+        '<td class="muted">'+day.dayNum+' '+day.monthCorto+'</td>'+
+        '<td class="r sin-datos">Pendiente</td>'+
+        '<td class="r muted">—</td><td class="r muted">—</td><td class="r muted">—</td>'+
+        '<td><span class="sin-datos">futuro</span></td>';
+    } else if(day.nVentas===0){
+      tr.innerHTML=
+        '<td><strong>'+day.dayName+'</strong>'+todayTag+'</td>'+
+        '<td class="muted">'+day.dayNum+' '+day.monthCorto+'</td>'+
+        '<td class="r sin-datos">Sin ventas</td>'+
+        '<td class="r muted">—</td><td class="r muted">—</td><td class="r muted">—</td>'+
+        '<td><span class="sin-datos">—</span></td>';
+    } else {
+      tr.innerHTML=
+        '<td><strong>'+day.dayName+'</strong>'+todayTag+'</td>'+
+        '<td class="muted">'+day.dayNum+' '+day.monthCorto+'</td>'+
+        '<td class="r td-monto">'+fmtM(day.monto)+'</td>'+
+        '<td class="r muted">'+fmt(day.nVentas)+'</td>'+
+        '<td class="r muted">'+fmt(day.unidades)+'</td>'+
+        '<td class="r muted">'+fmtM(day.ticket)+'</td>'+
+        '<td><div class="mini-bar-wrap">'+
+          '<div class="mini-bar" style="width:0" data-w="'+barW+'px"></div>'+
+          '<span style="font-size:.68rem;color:var(--text-muted)">'+partPct+'%</span>'+
+        '</div></td>';
+    }
+
+    if(!day.isFuture && day.nVentas>0){
+      tr.style.cursor='pointer';
+      var dayIdx = weekDays.indexOf(day);
+      tr.addEventListener('click',function(idx){
+        return function(){
+          selectDay(idx);
+          var el = document.getElementById('cards-section');
+          if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+        };
+      }(dayIdx));
+    }
+    tbody.appendChild(tr);
+  });
+
+  setTimeout(function(){
+    tbody.querySelectorAll('.mini-bar').forEach(function(el){
+      el.style.transition='width .6s ease';
+      el.style.width=el.getAttribute('data-w');
+    });
+  },150);
+}
+
+loadWeek();
+
+setTimeout(function(){
+  if(isCurrentWeek(currentMonday)){
+    var todayIdx=weekDays.findIndex(function(d){return d.isToday;});
+    if(todayIdx>=0 && weekDays[todayIdx].nVentas>0) selectDay(todayIdx);
+  }
+},400);
+
+})();
+</script>
+</body>
+</html>

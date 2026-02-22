@@ -67,3 +67,34 @@
   opacity: 0.9;
   color: white;
 }
+
+/* ─── Móvil ─── */
+@media (max-width: 768px) {
+  .seleccionar-cliente__lista {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .seleccionar-cliente__item {
+    padding: 1rem;
+  }
+
+  .seleccionar-cliente__btn {
+    min-height: 44px;
+    padding: 0.6rem 1rem;
+    width: 100%;
+    text-align: center;
+    margin-left: 0;
+    margin-top: 0.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .seleccionar-cliente__intro {
+    font-size: 0.9rem;
+  }
+
+  .seleccionar-cliente__nombre {
+    font-size: 0.95rem;
+  }
+}
