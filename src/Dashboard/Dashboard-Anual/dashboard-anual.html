@@ -66,6 +66,7 @@
     }
     .hdr-nav a:hover { background: var(--rojo-glass); color: var(--rojo); }
     .hdr-nav a.active { background: var(--rojo); color: #fff; }
+    .hdr--no-nav .hdr-nav { display: none !important; }
 
     /* ── MAIN ── */
     .main { max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
@@ -341,12 +342,12 @@
 <body>
 
 <!-- HEADER -->
-<header class="hdr">
+<header class="hdr hdr--no-nav">
   <div class="hdr-brand">
     <h1>Panificacion Colombres</h1>
     <span>Sistema de Ventas</span>
   </div>
-  <nav class="hdr-nav">
+  <nav class="hdr-nav" aria-hidden="true" hidden>
     <a href="../../Ventas/Seleccionar-cliente/seleccionar-cliente.html">Nueva venta</a>
     <a href="../../Ventas/Listado-Ventas/listado-ventas.html">Listado de ventas</a>
     <a href="../dashboard.html">Dashboard</a>

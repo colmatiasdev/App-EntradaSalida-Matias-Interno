@@ -64,6 +64,7 @@
     }
     .hdr-nav a:hover { background: var(--rojo-glass); color: var(--rojo); }
     .hdr-nav a.active { background: var(--rojo); color: #fff; }
+    .hdr--no-nav .hdr-nav { display: none !important; }
 
     /* ── MAIN ── */
     .main { max-width: 1400px; margin: 0 auto; padding: 1.75rem 1.5rem 4rem; }
@@ -244,6 +245,7 @@
     .dbar--best  { background: linear-gradient(180deg, #ffd0da 0%, var(--rojo) 100%); }
     .dbar--empty { background: var(--border); border-radius: 7px 7px 0 0; cursor: default; opacity: .5; }
     .dbar--future { opacity: .25; cursor: default; }
+    .dbar-col--selected .dbar:not(.dbar--future) { box-shadow: 0 0 0 3px var(--azul); }
     .dbar-lbl { font-size: .62rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
     .dbar-val { font-size: .6rem; font-family: 'JetBrains Mono',monospace; color: var(--text-muted); }
     .dbar-today-marker {
@@ -431,12 +433,12 @@
 </head>
 <body>
 
-<header class="hdr">
+<header class="hdr hdr--no-nav">
   <div class="hdr-brand">
     <h1>Panificacion Colombres</h1>
     <span>Sistema de Ventas</span>
   </div>
-  <nav class="hdr-nav">
+  <nav class="hdr-nav" aria-hidden="true" hidden>
     <a href="../../Ventas/Seleccionar-cliente/seleccionar-cliente.html">Nueva venta</a>
     <a href="../../Ventas/Listado-Ventas/listado-ventas.html">Listado de ventas</a>
     <a href="../dashboard.html">Dashboard</a>
@@ -868,6 +870,10 @@ function selectDay(idx){
   cards.forEach(function(c,i){
     c.classList.toggle('day-card--selected', i===idx);
   });
+  var cols=document.getElementById('day-bars').querySelectorAll('.dbar-col');
+  cols.forEach(function(c,i){
+    c.classList.toggle('dbar-col--selected', i===idx);
+  });
   var day=weekDays[idx];
   renderDayDetail(day);
 }
@@ -974,6 +980,14 @@ function renderBarChart(maxMonto, bestDay){
     container.appendChild(col);
 
     if(!day.isFuture){
+      col.style.cursor='pointer';
+      col.addEventListener('click',(function(idx){
+        return function(){
+          selectDay(idx);
+          var el=document.getElementById('cards-section');
+          if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+        };
+      })(i));
       setTimeout(function(b,p){ b.style.height=Math.max(p,day.nVentas?1.5:0)+'%'; },80+i*40, bar, pct);
     }
   });
