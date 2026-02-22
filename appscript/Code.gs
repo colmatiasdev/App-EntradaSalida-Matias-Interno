@@ -11,7 +11,7 @@
 /** ID del Google Sheet (solo el ID, no la URL completa).
  *  Obtenerlo de: https://docs.google.com/spreadsheets/d/ESTE_ES_EL_ID/edit
  *  No usar la URL de publicación (/pub?output=csv). */
-var SPREADSHEET_ID = 'REEMPLAZAR_CON_ID_DE_TU_HOJA';
+var SPREADSHEET_ID = 'https://docs.google.com/spreadsheets/d/1R05n3t2cgmzX-z58b9Sgx4He9k9Y9NAm9myQXbEwv3Q/edit';
 
 /** Nombres de las hojas/tabs de ventas por mes (índice 0 = ENERO … 11 = DICIEMBRE). */
 var NOMBRES_HOJAS_MES = [

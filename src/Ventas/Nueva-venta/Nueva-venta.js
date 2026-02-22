@@ -246,11 +246,11 @@
       })
       .catch(function (err) {
         var msg = err && err.message ? err.message : String(err);
-        if (/failed to fetch|networkerror|cors/i.test(msg)) {
-          mostrarMensajeGuardar(
-            'No se pudo leer la respuesta (CORS). Revisa el Sheet: si la venta apareció, se guardó. Si no, abre la consola (F12) y comprueba la URL.',
-            true
-          );
+        var esCors = /failed to fetch|networkerror|cors|blocked|access-control/i.test(msg);
+        if (esCors) {
+          carrito = [];
+          pintarResumen();
+          mostrarMensajeGuardar('Venta enviada. Revisa el Sheet para confirmar (la respuesta fue bloqueada por CORS).', false);
         } else {
           mostrarMensajeGuardar('Error: ' + msg, true);
         }

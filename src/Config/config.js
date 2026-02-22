@@ -11,7 +11,7 @@
       'https://docs.google.com/spreadsheets/d/e/2PACX-1vRNYUmSj5Zpu85PtNg_8ZQPXbj1HsL8H8Or06RpoHpDW5EPj4TpXwVWvumDpujNQdlBnQhXDIujlt2A/pub?output=csv',
 
     /** URL del Web App de Google Apps Script para operaciones con la hoja (guardar, actualizar, etc.). */
-    APP_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbzmkTO9GCcZeF-umpyXJKN4SqCSJi8GgnhEII0LuSICHuutgraRn6wEjz3xwr0GlGC9/exec'
+    APP_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyuFJFLCU6DiwopreG6OU_eHAAk760Kb34PESEPwYs7hElBEg8_2MM5OdebgDBbtLW3/exec'
   };
 
   global.APP_CONFIG = Config;
