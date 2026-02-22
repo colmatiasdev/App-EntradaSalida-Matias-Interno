@@ -5,6 +5,7 @@
   var TABLA_VENTAS = window.APP_TABLES && window.APP_TABLES.VENTAS;
   var CSV_URL = window.APP_CONFIG && window.APP_CONFIG.GOOGLE_SHEET_CSV_URL;
   var APP_SCRIPT_URL = window.APP_CONFIG && window.APP_CONFIG.APP_SCRIPT_URL;
+  var CORS_PROXY = window.APP_CONFIG && window.APP_CONFIG.CORS_PROXY;
   var NEGOCIO = window.APP_NEGOCIO;
   var productos = [];
   var carrito = [];
@@ -216,7 +217,10 @@
     if (btnGuardar) btnGuardar.disabled = true;
     if (msgGuardar) { msgGuardar.textContent = 'Guardando…'; msgGuardar.className = 'nueva-venta__guardar-msg'; }
     var bodyForm = 'data=' + encodeURIComponent(JSON.stringify(payload));
-    fetch(APP_SCRIPT_URL, {
+    var urlGuardar = (CORS_PROXY && CORS_PROXY.length > 0)
+      ? CORS_PROXY + encodeURIComponent(APP_SCRIPT_URL)
+      : APP_SCRIPT_URL;
+    fetch(urlGuardar, {
       method: 'POST',
       mode: 'cors',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
