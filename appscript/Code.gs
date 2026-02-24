@@ -94,6 +94,7 @@ function doPost(e) {
       case 'resumenOperativoModificacion': return resumenOperativoModificacion(params);
       case 'resumenOperativoLeer':       return resumenOperativoLeer(params);
       case 'componenteComboLeer':        return componenteComboLeer(params);
+      case 'operacionesGralAlta':        return operacionesGralAlta(params);
       default:
         return respuestaJson({ ok: false, error: 'Acción no reconocida: ' + accion });
     }
@@ -613,6 +614,33 @@ function resumenOperativoLeer(params) {
     filas = filas.filter(function (f) { return String(f[def.pk]).trim() === String(id).trim(); });
   }
   return respuestaJson({ ok: true, datos: filas });
+}
+
+// --- OPERACIONES-GENERALES (Gastos de Salida) ---
+
+function operacionesGralAlta(params) {
+  var def = TABLAS.OPERACIONES_GENERALES;
+  var dato = params.dato || params;
+  var idGral = dato['ID-OPERACION-GRAL'] || params.idOperacionGral || '';
+  if (!idGral) return respuestaJson({ ok: false, error: 'Falta ID-OPERACION-GRAL.' });
+  var ss = getSS();
+  var sheet = getHoja(ss, def.sheet, def.columns);
+  if (sheet.getLastRow() === 0) {
+    sheet.getRange(1, 1, 1, def.columns.length).setValues([def.columns]);
+    sheet.getRange(1, 1, 1, def.columns.length).setFontWeight('bold');
+  }
+  var obj = {
+    'ID-OPERACION-GRAL': idGral,
+    'FECHA_OPERATIVA': dato['FECHA_OPERATIVA'] !== undefined ? dato['FECHA_OPERATIVA'] : (params.fechaOperativa || ''),
+    'HORA': dato['HORA'] !== undefined ? dato['HORA'] : (params.hora || ''),
+    'CORRESPONDE-A': dato['CORRESPONDE-A'] !== undefined ? dato['CORRESPONDE-A'] : (params.correspondeA || ''),
+    'TIPO-OPERACION': dato['TIPO-OPERACION'] !== undefined ? dato['TIPO-OPERACION'] : (params.tipoOperacion || ''),
+    'DESCRIPCION': dato['DESCRIPCION'] !== undefined ? dato['DESCRIPCION'] : (params.descripcion || ''),
+    'IMPORTE': dato['IMPORTE'] !== undefined ? dato['IMPORTE'] : (params.importe !== undefined ? params.importe : 0)
+  };
+  var fila = objetoAFila(def, obj);
+  sheet.appendRow(fila);
+  return respuestaJson({ ok: true, mensaje: 'Operación guardada en OPERACIONES-GENERALES.' });
 }
 
 // --- COMPONENTE-COMBO (valores para combos: sucursal, tipo operación, categorías) ---

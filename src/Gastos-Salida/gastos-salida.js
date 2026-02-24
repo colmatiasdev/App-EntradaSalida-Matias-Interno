@@ -5,10 +5,9 @@
  *
  * OBJETIVO
  * --------
- * Permitir cargar operaciones (gastos/ventas especiales) asociadas a un responsable
- * (NOMBRE-APELLIDO), con un tipo de operación, producto y precio. Cada registro
- * se guarda como una fila en la hoja del mes correspondiente a la fecha operativa
- * (ENERO, FEBRERO, … DICIEMBRE), usando la misma estructura que el módulo Nueva venta.
+ * Permitir cargar operaciones (gastos de salida) en la tabla OPERACIONES-GENERALES.
+ * CORRESPONDE-A = nombre del responsable (#gastos-salida-nombre-apellido, ej. SILVINA).
+ * TIPO-OPERACION = valor del combo. DESCRIPCION = texto del campo descripción. IMPORTE = número.
  *
  * DEPENDENCIAS (cargadas en gastos-salida.html antes de este script)
  * ------------
@@ -18,10 +17,10 @@
  *
  * ELEMENTOS DEL DOM (IDs)
  * -----------------------
- * - gastos-salida-nombre-apellido  : <strong> con el nombre del responsable (ej. MATIAS)
- * - gastos-salida-tipo-operacion   : <select> con opciones desde COMPONENTE-COMBO
- * - gastos-salida-producto         : <input text> nombre del producto
- * - gastos-salida-precio           : <input number> precio (decimal)
+ * - gastos-salida-nombre-apellido  : <strong> responsable → CORRESPONDE-A (ej. SILVINA)
+ * - gastos-salida-tipo-operacion   : <select> → TIPO-OPERACION (COMPONENTE-COMBO)
+ * - gastos-salida-descripcion      : <input text> → DESCRIPCION
+ * - gastos-salida-importe          : <input number> → IMPORTE
  * - gastos-salida-form             : <form> envío con submit → guardar()
  * - gastos-salida-btn-guardar      : <button type="submit"> Guardar
  * - gastos-salida-guardar-msg      : <p> mensaje de éxito/error del guardado
@@ -44,52 +43,22 @@
  *    - APP_NEGOCIO.getFechaOperativa y getNombreHojaMes disponibles.
  *    - Tipo de operación seleccionado (obligatorio).
  * 2. Lee del DOM:
- *    - CATEGORIA     = valor del combo tipo operación (getCategoria()).
- *    - PRODUCTO      = texto del input producto (getProducto()).
- *    - PRECIO        = número del input precio (getPrecio()); si vacío → 0.
- *    - CANTIDAD      = 1 (constante CANTIDAD_DEFAULT en este módulo).
- *    - NOMBRE-APELLIDO = texto de #gastos-salida-nombre-apellido (getNombreApellido()); default 'MATIAS'.
- * 3. Calcula:
- *    - MONTO = CANTIDAD * PRECIO (en este módulo = 1 * precio).
- *    - fechaOperativa = NEGOCIO.getFechaOperativa() → formato YYYY-MM-DD según horario negocio (ej. 21:00–02:00).
- *    - nombreHoja = NEGOCIO.getNombreHojaMes(fechaOperativa) → ENERO | FEBRERO | … | DICIEMBRE.
- *    - hora = HH:MM actual.
- *    - idVenta = 'GS-' + Date.now() (prefijo GS para distinguir de Nueva venta).
- * 4. Arma el payload para guardarVenta:
- *    - accion: 'guardarVenta'
- *    - hoja: nombreHoja (mes)
- *    - idVenta, fechaOperativa, hora, nombreApellido, tipoListaPrecio: ''
- *    - items: [ { idProducto: '', categoria, producto, cantidad: 1, precio, monto } ]
- * 5. POST a APP_SCRIPT_URL (o CORS_PROXY + URL) con body: data=JSON.stringify(payload).
- * 6. Backend (Code.gs): doPost → ventaAlta(params):
- *    - Obtiene la hoja del Sheet por nombre (ENERO, FEBRERO, etc.).
- *    - Si la hoja está vacía, escribe la fila de encabezados (COLUMNAS_VENTAS).
- *    - Añade una fila por cada ítem con: ID-VENTA, AÑO, FECHA_OPERATIVA, HORA,
- *      NOMBRE-APELLIDO, TIPO-LISTA-PRECIO, ID-PRODUCTO, CATEGORIA, PRODUCTO, CANTIDAD, PRECIO, MONTO.
- * 7. Respuesta: { ok: true, mensaje: 'Venta guardada.' } o { ok: false, error: '...' }.
- * 8. En el frontend:
- *    - Si ok: mensaje "Operación guardada en la hoja [nombreHoja].", se vacían producto y precio.
- *    - Si error: se muestra el mensaje de error.
- *    - El botón se deshabilita durante la petición y se vuelve a habilitar al terminar.
+ *    - correspondeA   = #gastos-salida-nombre-apellido (getNombreApellido()); default 'SILVINA'.
+ *    - tipoOperacion   = combo (getCategoria()).
+ *    - descripcion     = input descripción (getDescripcion()).
+ *    - importe        = input importe (getImporte()); si vacío → 0.
+ * 3. fechaOperativa = NEGOCIO.getFechaOperativa(), hora = HH:MM, idOperacionGral = 'OG-' + Date.now().
+ * 4. Payload: accion 'operacionesGralAlta', idOperacionGral, fechaOperativa, hora, correspondeA, tipoOperacion, descripcion, importe.
+ * 5. POST → Backend operacionesGralAlta() escribe una fila en la hoja OPERACIONES-GENERALES.
+ * 6. Si ok: mensaje "Operación guardada en OPERACIONES-GENERALES.", se vacían descripción e importe.
  *
- * HOJAS DEL SHEET IMPLICADAS
- * --------------------------
- * - COMPONENTE-COMBO: columnas COMBO-SUCURSAL-COMERCIO, TIPO-OPERACION,
- *   COMBO-CATEGORIA-PANADERIA, COMBO-CATEGORIA-MARKET. Solo se usa TIPO-OPERACION
- *   para llenar el combo.
- * - ENERO, FEBRERO, … DICIEMBRE: mismas columnas que ventas (ID-VENTA, AÑO,
- *   FECHA_OPERATIVA, HORA, NOMBRE-APELLIDO, TIPO-LISTA-PRECIO, ID-PRODUCTO,
- *   CATEGORIA, PRODUCTO, CANTIDAD, PRECIO, MONTO). Las filas de Gastos de Salida
- *   tienen idVenta con prefijo "GS-", idProducto vacío y tipoListaPrecio vacío.
+ * HOJAS DEL SHEET
+ * ---------------
+ * - COMPONENTE-COMBO: valores para el combo TIPO-OPERACION.
+ * - OPERACIONES-GENERALES: ID-OPERACION-GRAL, FECHA_OPERATIVA, HORA, CORRESPONDE-A, TIPO-OPERACION, DESCRIPCION, IMPORTE.
  *
- * API USADA (backend appscript/Code.gs)
- * -------------------------------------
- * - componenteComboLeer: GET lógico de la hoja COMPONENTE-COMBO; devuelve todas las columnas.
- * - guardarVenta (ventaAlta): escribe en la hoja del mes según params.hoja.
- *
- * EXPUESTO EN window.GastosSalida
- * -------------------------------
- * - getCategoria(), getCantidad(), getProducto(), getPrecio(), CANTIDAD (1).
+ * API: componenteComboLeer, operacionesGralAlta.
+ * EXPUESTO: getCategoria(), getDescripcion(), getImporte(), getNombreApellido(), getCantidad(), CANTIDAD.
  * =============================================================================
  */
 (function () {
@@ -116,14 +85,14 @@
     return v;
   }
 
-  function getProducto() {
-    var input = document.getElementById('gastos-salida-producto');
+  function getDescripcion() {
+    var input = document.getElementById('gastos-salida-descripcion');
     if (!input) return '';
     return (input.value !== undefined && input.value !== null) ? String(input.value).trim() : '';
   }
 
-  function getPrecio() {
-    var input = document.getElementById('gastos-salida-precio');
+  function getImporte() {
+    var input = document.getElementById('gastos-salida-importe');
     if (!input || input.value === '' || input.value === null) return '';
     var n = parseFloat(String(input.value).replace(',', '.'), 10);
     return isNaN(n) ? '' : n;
@@ -131,9 +100,9 @@
 
   function getNombreApellido() {
     var el = document.getElementById('gastos-salida-nombre-apellido');
-    if (!el) return 'MATIAS';
+    if (!el) return 'SILVINA';
     var t = (el.textContent || '').trim();
-    return t || 'MATIAS';
+    return t || 'SILVINA';
   }
 
   function getBtnGuardar() { return document.getElementById('gastos-salida-btn-guardar'); }
@@ -153,45 +122,35 @@
       return;
     }
     var NEGOCIO = window.APP_NEGOCIO;
-    if (!NEGOCIO || !NEGOCIO.getFechaOperativa || !NEGOCIO.getNombreHojaMes) {
+    if (!NEGOCIO || !NEGOCIO.getFechaOperativa) {
       mostrarMensajeGuardar('Falta cargar negocio.js (tables.js y negocio.js)', true);
       return;
     }
-    var categoria = getCategoria();
-    if (!categoria) {
+    var tipoOperacion = getCategoria();
+    if (!tipoOperacion) {
       mostrarMensajeGuardar('Seleccioná un tipo de operación.', true);
       return;
     }
-    var producto = getProducto();
-    var precioNum = getPrecio();
-    if (precioNum === '') precioNum = 0;
-    else precioNum = Number(precioNum);
-    var cantidad = CANTIDAD_DEFAULT;
-    var monto = cantidad * precioNum;
+    var descripcion = getDescripcion();
+    var importeNum = getImporte();
+    if (importeNum === '') importeNum = 0;
+    else importeNum = Number(importeNum);
 
     var fechaOp = NEGOCIO.getFechaOperativa();
-    var nombreHoja = NEGOCIO.getNombreHojaMes(fechaOp);
     var ahora = new Date();
     var hora = ahora.getHours() + ':' + (ahora.getMinutes() < 10 ? '0' : '') + ahora.getMinutes();
-    var idVenta = 'GS-' + Date.now();
-    var nombreApellido = getNombreApellido();
+    var idOperacionGral = 'OG-' + Date.now();
+    var correspondeA = getNombreApellido();
 
     var payload = {
-      accion: 'guardarVenta',
-      hoja: nombreHoja,
-      idVenta: idVenta,
+      accion: 'operacionesGralAlta',
+      idOperacionGral: idOperacionGral,
       fechaOperativa: fechaOp,
       hora: hora,
-      nombreApellido: nombreApellido,
-      tipoListaPrecio: '',
-      items: [{
-        idProducto: '',
-        categoria: categoria,
-        producto: producto,
-        cantidad: cantidad,
-        precio: precioNum,
-        monto: monto
-      }]
+      correspondeA: correspondeA,
+      tipoOperacion: tipoOperacion,
+      descripcion: descripcion,
+      importe: importeNum
     };
 
     var btnGuardar = getBtnGuardar();
@@ -224,9 +183,11 @@
       .then(function (data) {
         var ok = data && (data.ok === true || data.success === true);
         if (ok) {
-          mostrarMensajeGuardar('Operación guardada en la hoja ' + nombreHoja + '.', false);
-          document.getElementById('gastos-salida-producto').value = '';
-          document.getElementById('gastos-salida-precio').value = '';
+          mostrarMensajeGuardar('Operación guardada en OPERACIONES-GENERALES.', false);
+          var inpDesc = document.getElementById('gastos-salida-descripcion');
+          var inpImp = document.getElementById('gastos-salida-importe');
+          if (inpDesc) inpDesc.value = '';
+          if (inpImp) inpImp.value = '';
         } else {
           mostrarMensajeGuardar((data && (data.error || data.mensaje)) || 'Error al guardar.', true);
         }
@@ -312,11 +273,11 @@
     init();
   }
 
-  /** Expuesto para uso al guardar: CATEGORIA, CANTIDAD, PRODUCTO, PRECIO. */
   window.GastosSalida = window.GastosSalida || {};
   window.GastosSalida.getCategoria = getCategoria;
   window.GastosSalida.getCantidad = function () { return CANTIDAD_DEFAULT; };
   window.GastosSalida.CANTIDAD = CANTIDAD_DEFAULT;
-  window.GastosSalida.getProducto = getProducto;
-  window.GastosSalida.getPrecio = getPrecio;
+  window.GastosSalida.getDescripcion = getDescripcion;
+  window.GastosSalida.getImporte = getImporte;
+  window.GastosSalida.getNombreApellido = getNombreApellido;
 })();
