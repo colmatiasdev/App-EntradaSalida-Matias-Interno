@@ -385,9 +385,9 @@
   function getTotalVenta() {
     var t = 0;
     carrito.forEach(function (item) {
-      t += item.producto.PRECIO * item.cantidad;
+      t += getPrecioUnitario(item.producto) * item.cantidad;
     });
-    return t;
+    return Math.round(t * 100) / 100;
   }
 
   function guardarVenta() {
@@ -401,7 +401,6 @@
       return;
     }
     var fechaOp = NEGOCIO.getFechaOperativa();
-    var nombreHoja = NEGOCIO.getNombreHojaMes(fechaOp);
     var total = getTotalVenta();
     var ahora = new Date();
     var hora = ahora.getHours() + ':' + (ahora.getMinutes() < 10 ? '0' : '') + ahora.getMinutes();
@@ -410,8 +409,7 @@
     var nombreApellido = (cliente['NOMBRE-APELLIDO'] || '').trim();
     var tipoListaPrecio = (cliente['TIPO-LISTA-PRECIO'] || '').trim();
     var payload = {
-      accion: 'guardarVenta',
-      hoja: nombreHoja,
+      accion: 'ventaMarketAlta',
       idVenta: idVenta,
       fechaOperativa: fechaOp,
       hora: hora,
@@ -420,13 +418,16 @@
       usuario: (window.APP_CONFIG && window.APP_CONFIG.USUARIO) || 'USR-MATIAS',
       total: total,
       items: carrito.filter(function (item) { return item.cantidad > 0; }).map(function (item) {
+        var precioUnit = getPrecioUnitario(item.producto); // columna PRECIO = Precio Unitario
+        var subtotal = Math.round(precioUnit * item.cantidad * 100) / 100; // columna MONTO = Subtotal (Precio Unitario × Cantidad)
         return {
           idProducto: item.producto[TABLA.pk],
           categoria: item.producto.CATEGORIA,
           producto: item.producto['NOMBRE-PRODUCTO'],
           cantidad: item.cantidad,
-          precio: item.producto.PRECIO,
-          monto: item.producto.PRECIO * item.cantidad
+          presentacionUnidadMedida: (item.producto['PRESENTACION-UNIDAD-MEDIDA'] || '').toString().trim(),
+          precio: precioUnit,
+          monto: subtotal
         };
       })
     };

@@ -116,11 +116,11 @@
       columns: ['COMBO-SUCURSAL-COMERCIO', 'TIPO-OPERACION', 'COMBO-CATEGORIA-PANADERIA', 'COMBO-CATEGORIA-MARKET']
     },
 
-    /** Tabla VENTAS-MARKET: ventas del market (formulario Nueva Venta). Misma estructura que hojas por mes. */
+    /** Tabla VENTAS-MARKET: ventas del market (formulario Nueva Venta). */
     VENTAS_MARKET: {
       sheet: 'VENTAS-MARKET',
       pk: 'ID-VENTA',
-      columns: ['ID-VENTA', 'AÑO', 'FECHA_OPERATIVA', 'HORA', 'NOMBRE-APELLIDO', 'TIPO-LISTA-PRECIO', 'ID-PRODUCTO', 'CATEGORIA', 'PRODUCTO', 'CANTIDAD', 'PRECIO', 'MONTO', 'USUARIO']
+      columns: ['ID-VENTA', 'AÑO', 'FECHA_OPERATIVA', 'HORA', 'NOMBRE-APELLIDO', 'TIPO-LISTA-PRECIO', 'ID-PRODUCTO', 'CATEGORIA', 'PRODUCTO', 'CANTIDAD', 'PRESENTACION-UNIDAD-MEDIDA', 'PRECIO', 'MONTO', 'USUARIO']
     }
   };
 

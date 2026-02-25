@@ -68,7 +68,7 @@ var TABLAS = {
   VENTAS_MARKET: {
     sheet: 'VENTAS-MARKET',
     pk: 'ID-VENTA',
-    columns: ['ID-VENTA', 'AÑO', 'FECHA_OPERATIVA', 'HORA', 'NOMBRE-APELLIDO', 'TIPO-LISTA-PRECIO', 'ID-PRODUCTO', 'CATEGORIA', 'PRODUCTO', 'CANTIDAD', 'PRECIO', 'MONTO', 'USUARIO']
+    columns: ['ID-VENTA', 'AÑO', 'FECHA_OPERATIVA', 'HORA', 'NOMBRE-APELLIDO', 'TIPO-LISTA-PRECIO', 'ID-PRODUCTO', 'CATEGORIA', 'PRODUCTO', 'CANTIDAD', 'PRESENTACION-UNIDAD-MEDIDA', 'PRECIO', 'MONTO', 'USUARIO']
   }
 };
 
@@ -487,6 +487,7 @@ function ventaMarketAlta(params) {
   var filas = [];
   for (var i = 0; i < items.length; i++) {
     var it = items[i];
+    // PRECIO = Precio Unitario; MONTO = Subtotal (Precio Unitario × Cantidad)
     filas.push([
       idVenta,
       anio,
@@ -498,7 +499,8 @@ function ventaMarketAlta(params) {
       it.categoria || '',
       it.producto || '',
       it.cantidad !== undefined ? it.cantidad : 0,
-      it.precio !== undefined ? it.precio : 0,
+      it.presentacionUnidadMedida || '',
+      it.precio !== undefined ? it.precio : 0,  // Precio Unitario
       it.monto !== undefined ? it.monto : 0,
       usuario
     ]);
