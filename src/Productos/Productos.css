@@ -1,0 +1,137 @@
+/* 2H MARKET — Productos — Misma paleta que el resto de la app */
+:root {
+  --azul-950: #060e2a;
+  --azul-900: #0d1f5c;
+  --azul-800: #1a3a8f;
+  --azul-700: #1565c0;
+  --azul-600: #1976d2;
+  --azul-400: #29b6f6;
+  --azul-200: #b3e5fc;
+  --azul-50: #e1f5fe;
+  --grad-accent: linear-gradient(90deg, var(--azul-700), var(--azul-400));
+  --bg: #f0f6ff;
+  --bg-card: #ffffff;
+  --texto: #060e2a;
+  --texto-2: #546e8a;
+  --borde: #cce0f5;
+  --s1: 0 2px 10px rgba(13, 31, 92, 0.1);
+  --r-s: 8px;
+  --r: 14px;
+  --r-l: 20px;
+  --t: 0.2s ease;
+  --font-display: "Syne", Georgia, serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--texto);
+  line-height: 1.65;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse at 10% 15%, rgba(13, 31, 92, 0.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 85%, rgba(0, 229, 255, 0.04) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.main {
+  flex: 1;
+  padding: 2.5rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.productos-hero {
+  margin-bottom: 2.25rem;
+}
+
+.productos-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--azul-700);
+  margin-bottom: 0.65rem;
+  padding: 0.3rem 0.8rem;
+  background: var(--azul-50);
+  border-radius: 99px;
+  border: 1px solid var(--azul-200);
+}
+
+.productos-hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.5vw, 2.25rem);
+  font-weight: 800;
+  color: var(--texto);
+  line-height: 1.15;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.025em;
+}
+
+.productos-hero__text {
+  font-size: 0.95rem;
+  color: var(--texto-2);
+}
+
+.hub-section {
+  background: var(--bg-card);
+  border: 1.5px solid var(--borde);
+  border-radius: var(--r-l);
+  padding: 1.75rem;
+  box-shadow: var(--s1);
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hub-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--grad-accent);
+}
+
+.productos__mensaje {
+  color: var(--texto-2);
+  font-size: 0.95rem;
+  padding: 0.75rem 0;
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 1.75rem 1.1rem;
+  }
+}

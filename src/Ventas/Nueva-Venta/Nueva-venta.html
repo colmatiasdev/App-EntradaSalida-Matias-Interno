@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1f5c">
+  <title>Nueva Venta Market — 2H Market</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../Header/header.css">
+  <link rel="stylesheet" href="Nueva-venta.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__stripe"></div>
+    <div class="header__inner">
+      <a href="../../../index.html" class="logo">
+        <div class="logo__ring">
+          <img src="../../img/Logo3.png" alt="2H Market" class="logo__img">
+        </div>
+        <div class="logo__texto">
+          <span class="logo__nombre"><span>2H</span> Market</span>
+          <span class="logo__sub">Control de <strong>MATIAS</strong></span>
+        </div>
+      </a>
+      <div class="header__sep"></div>
+      <span class="header__page" aria-current="page">🛒 Nueva Venta Market</span>
+      <nav class="nav">
+        <ul class="nav__menu" id="main-nav">
+          <li><a href="../../../index.html" class="nav__link">🏠 Inicio</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="hub-hero a-in">
+      <div class="hub-hero__eyebrow">🛒 2H Market</div>
+      <h1 class="hub-title">Nueva Venta Market</h1>
+      <div class="nueva-venta__cliente-info" id="nueva-venta-cliente-info">
+        <span class="nueva-venta__cliente-label">Venta para:</span>
+        <strong class="nueva-venta__cliente-nombre">—</strong>
+        <span class="nueva-venta__cliente-tipo" id="nueva-venta-cliente-tipo"></span>
+      </div>
+    </section>
+
+    <section class="nueva-venta__listado hub-section a-in-2">
+      <div class="nueva-venta__listado-header">
+        <h2 class="nueva-venta__titulo">Productos Market</h2>
+        <a href="../../Productos/Productos.html" class="nueva-venta__btn-nuevo-producto" title="Ir al módulo Productos">➕ AGREGAR NUEVO PRODUCTO</a>
+      </div>
+      <p class="nueva-venta__mensaje" id="nueva-venta-mensaje">Cargando productos…</p>
+      <div class="nueva-venta__filtro">
+        <label for="nueva-venta-buscar" class="nueva-venta__filtro-label">Buscar</label>
+        <input type="search" id="nueva-venta-buscar" class="nueva-venta__buscar-input" placeholder="🔍 Escribí nombre o categoría…" autocomplete="off">
+        <button type="button" id="nueva-venta-limpiar-busqueda" class="nueva-venta__btn-limpiar">Limpiar</button>
+      </div>
+      <div class="nueva-venta__productos-wrapper" id="nueva-venta-productos"></div>
+    </section>
+
+    <section class="nueva-venta__resumen hub-section a-in-3">
+      <h2 class="nueva-venta__titulo">Resumen de la venta</h2>
+      <div class="nueva-venta__resumen-content" id="nueva-venta-resumen-content">
+        <p class="nueva-venta__resumen-vacio" id="nueva-venta-resumen-vacio">No hay productos en la venta. Seleccioná productos arriba.</p>
+        <table class="nueva-venta__tabla" id="nueva-venta-tabla" hidden>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>U.M.</th>
+              <th>Cant U.M.</th>
+              <th class="nueva-venta__th-num">COSTO</th>
+              <th class="nueva-venta__th-num">Precio Unitario</th>
+              <th class="nueva-venta__th-num">Cantidad</th>
+              <th class="nueva-venta__th-num">Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="nueva-venta-tabla-body"></tbody>
+          <tfoot>
+            <tr class="nueva-venta__total-row">
+              <td colspan="6"><strong>Total venta</strong></td>
+              <td class="nueva-venta__th-num" id="nueva-venta-total" style="color:var(--azul-700)">$0</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+        <div class="nueva-venta__guardar">
+          <button type="button" class="nueva-venta__btn-guardar" id="nueva-venta-btn-guardar" disabled>Realizar venta</button>
+          <span class="nueva-venta__guardar-msg" id="nueva-venta-guardar-msg"></span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-container" data-footer-src="../../Footer/footer.html"></div>
+
+  <script src="../../Config/config.js"></script>
+  <script src="../../Config/tables.js"></script>
+  <script src="../../Config/negocio.js"></script>
+  <script src="../../../main.js"></script>
+  <script src="../../Footer/footer.js"></script>
+  <script src="Nueva-venta.js"></script>
+  <script>
+    (function () {
+      var path = window.location.pathname.toLowerCase();
+      document.querySelectorAll(".nav__link").forEach(function (l) {
+        l.classList.remove("nav__link--active");
+        var href = (l.getAttribute("href") || "").toLowerCase();
+        var key = href.split("/").pop().replace(".html", "");
+        if (key === "index" && (path.endsWith("index.html") || path.endsWith("/") || path === "")) l.classList.add("nav__link--active");
+        else if (key && key !== "index" && path.indexOf(key) !== -1) l.classList.add("nav__link--active");
+      });
+    })();
+  </script>
+</body>
+</html>

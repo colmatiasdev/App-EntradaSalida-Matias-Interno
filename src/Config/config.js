@@ -43,6 +43,22 @@
     },
 
     /**
+     * Unidades de medida (PRESENTACION-UNIDAD-MEDIDA) que usan cantidad decimal en el resumen de venta.
+     * Para estos valores la cantidad es un campo numérico libre con 2 decimales (ej. GRAMOS, KG).
+     * Cualquier otra unidad usa cantidad entera con botones +/-.
+     */
+    UNIDADES_CANTIDAD_DECIMAL: ['GRAMOS', 'KG'],
+
+    /**
+     * Cálculo de la columna "Precio Unitario" en el resumen de venta (Nueva Venta Market).
+     * Precio Unitario = columnaCosto / columnaCantidad (2 decimales).
+     */
+    PRECIO_UNITARIO_CALCULO: {
+      columnaCosto: 'COSTO',
+      columnaCantidad: 'PRESENTACION-CANTIDAD-UNIDAD-MEDIDA'
+    },
+
+    /**
      * Categorías para el filtro en Nueva venta. Mismo orden que en la hoja PRODUCTOS (columna CATEGORIA).
      */
     CATEGORIAS: [

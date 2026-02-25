@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1f5c">
+  <title>Productos — 2H Market</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../Header/header.css">
+  <link rel="stylesheet" href="Productos.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__stripe"></div>
+    <div class="header__inner">
+      <a href="../../index.html" class="logo">
+        <div class="logo__ring">
+          <img src="../img/Logo3.png" alt="2H Market" class="logo__img">
+        </div>
+        <div class="logo__texto">
+          <span class="logo__nombre"><span>2H</span> Market</span>
+          <span class="logo__sub">Control de <strong>MATIAS</strong></span>
+        </div>
+      </a>
+      <div class="header__sep"></div>
+      <span class="header__page" aria-current="page">📦 Productos</span>
+      <nav class="nav">
+        <ul class="nav__menu" id="main-nav">
+          <li><a href="../../index.html" class="nav__link">🏠 Inicio</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="productos-hero">
+      <div class="productos-hero__eyebrow">📦 2H Market</div>
+      <h1 class="productos-hero__title">Productos</h1>
+      <p class="productos-hero__text">Acá podés gestionar el catálogo de productos para ventas y compras.</p>
+    </section>
+
+    <section class="productos-section hub-section">
+      <p class="productos__mensaje" id="productos-mensaje">Módulo de productos. Podés agregar aquí el listado y alta de productos.</p>
+    </section>
+  </main>
+
+  <div id="footer-container" data-footer-src="../Footer/footer.html"></div>
+
+  <script src="../Config/config.js"></script>
+  <script src="../Config/tables.js"></script>
+  <script src="../Config/negocio.js"></script>
+  <script src="../../main.js"></script>
+  <script src="../Footer/footer.js"></script>
+  <script src="Productos.js"></script>
+  <script>
+    (function () {
+      var path = window.location.pathname.toLowerCase();
+      document.querySelectorAll(".nav__link").forEach(function (l) {
+        l.classList.remove("nav__link--active");
+        var href = (l.getAttribute("href") || "").toLowerCase();
+        var key = href.split("/").pop().replace(".html", "");
+        if (key === "index" && (path.endsWith("index.html") || path.endsWith("/") || path === "")) l.classList.add("nav__link--active");
+        else if (key && key !== "index" && path.indexOf(key) !== -1) l.classList.add("nav__link--active");
+      });
+    })();
+  </script>
+</body>
+</html>
