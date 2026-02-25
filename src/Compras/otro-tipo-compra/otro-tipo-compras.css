@@ -1,4 +1,4 @@
-/* Otro tipo de ventas — paleta igual que listado/Nueva venta (azul + cian) */
+/* Otro tipo de compras — paleta igual que listado/Nueva compra (azul + cian) */
 :root {
   --azul-950: #060e2a;
   --azul-900: #0d1f5c;
@@ -27,7 +27,7 @@
   margin-bottom: 1.25rem;
 }
 
-/* Formulario: card y estructura (mismo diseño que listado-ventas / Nueva-venta) */
+/* Formulario: card y estructura (mismo diseño que listado-compras / Nueva-compra) */
 .otro-tipo-compras__formulario {
   background: var(--bg-card);
   border: 1.5px solid var(--borde);

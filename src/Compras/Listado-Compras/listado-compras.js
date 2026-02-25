@@ -10,13 +10,13 @@
     'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'
   ];
 
-  /** Columnas de ventas por mes (desde tables.js). Se usan para orden y normalización. */
-  var COLUMNAS_VENTAS_DEF = (APP_TABLES && APP_TABLES.ENERO && APP_TABLES.ENERO.columns)
+  /** Columnas de compras por mes (desde tables.js). Se usan para orden y normalización. */
+  var COLUMNAS_COMPRAS_DEF = (APP_TABLES && APP_TABLES.ENERO && APP_TABLES.ENERO.columns)
     ? APP_TABLES.ENERO.columns
     : ['ID-VENTA', 'AÑO', 'FECHA_OPERATIVA', 'HORA', 'NOMBRE-APELLIDO', 'TIPO-LISTA-PRECIO', 'ID-PRODUCTO', 'CATEGORIA', 'PRODUCTO', 'CANTIDAD', 'PRECIO', 'MONTO'];
 
   /** Orden de columnas: MES + columnas de la tabla del mes (según APP_TABLES). */
-  var columnasTabla = ['MES'].concat(COLUMNAS_VENTAS_DEF);
+  var columnasTabla = ['MES'].concat(COLUMNAS_COMPRAS_DEF);
 
   /** Columnas que no se muestran en la tabla (FECHA_OPERATIVA se ve en el encabezado de grupo). */
   var columnasOcultas = ['MES', 'AÑO', 'ID-VENTA', 'ID-PRODUCTO', 'NOMBRE-APELLIDO', 'TIPO-LISTA-PRECIO', 'FECHA_OPERATIVA'];
@@ -29,11 +29,11 @@
   var pageSize = 25;
 
   /**
-   * Normaliza una fila de venta para usar las claves esperadas (columnas de APP_TABLES).
+   * Normaliza una fila de compra para usar las claves esperadas (columnas de APP_TABLES).
    * Así se muestran correctamente los datos aunque el Sheet devuelva cabeceras con distinta capitalización.
    */
-  function normalizarFilaVenta(fila, columnasEsperadas) {
-    var cols = columnasEsperadas || COLUMNAS_VENTAS_DEF;
+  function normalizarFilaCompra(fila, columnasEsperadas) {
+    var cols = columnasEsperadas || COLUMNAS_COMPRAS_DEF;
     var out = {};
     var keys = Object.keys(fila || {});
     cols.forEach(function (col) {
@@ -127,10 +127,10 @@
         selectMes.appendChild(opt);
       });
       selectMes.value = getMesActual();
-      cargarVentasDelMes();
+      cargarComprasDelMes();
     }
 
-    btnCargar.addEventListener('click', cargarVentasDelMes);
+    btnCargar.addEventListener('click', cargarComprasDelMes);
 
     var tableSearch = document.getElementById('table-search');
     if (tableSearch) {
@@ -158,7 +158,7 @@
     msg.className = 'listado-compras__mensaje' + (esError ? ' listado-compras__mensaje--error' : '');
   }
 
-  function cargarVentasDelMes() {
+  function cargarComprasDelMes() {
     var selectAnio = document.getElementById('listado-compras-anio');
     var selectMes = document.getElementById('listado-compras-mes');
     var mes = selectMes ? selectMes.value : '';
@@ -195,9 +195,9 @@
       })
       .then(function (data) {
         if (data && data.ok && Array.isArray(data.datos)) {
-          var columnasMes = (APP_TABLES && APP_TABLES[mes] && APP_TABLES[mes].columns) ? APP_TABLES[mes].columns : COLUMNAS_VENTAS_DEF;
+          var columnasMes = (APP_TABLES && APP_TABLES[mes] && APP_TABLES[mes].columns) ? APP_TABLES[mes].columns : COLUMNAS_COMPRAS_DEF;
           var datos = data.datos
-            .map(function (r) { return normalizarFilaVenta(r, columnasMes); })
+            .map(function (r) { return normalizarFilaCompra(r, columnasMes); })
             .filter(function (r) {
               var rowAnio = r.AÑO !== undefined && r.AÑO !== null && r.AÑO !== '' ? parseInt(String(r.AÑO), 10) : null;
               if (rowAnio === null) return true;
@@ -234,7 +234,7 @@
     var tableSearch = document.getElementById('table-search');
     if (tableSearch) tableSearch.value = '';
 
-    var columnasMes = (APP_TABLES && APP_TABLES[nombreMes] && APP_TABLES[nombreMes].columns) ? APP_TABLES[nombreMes].columns : COLUMNAS_VENTAS_DEF;
+    var columnasMes = (APP_TABLES && APP_TABLES[nombreMes] && APP_TABLES[nombreMes].columns) ? APP_TABLES[nombreMes].columns : COLUMNAS_COMPRAS_DEF;
     var columnas = ['MES'].concat(columnasMes).filter(function (c) { return columnasOcultas.indexOf(c) === -1; });
     currentColumnas = columnas;
 
@@ -255,7 +255,7 @@
     wrapper.hidden = false;
   }
 
-  /** Agrupa datos por FECHA_OPERATIVA y dentro de cada fecha por NOMBRE-APELLIDO + TIPO-LISTA-PRECIO. */
+  /** Agrupa datos por FECHA_OPERATIVA y dentro de cada fecha por HORA, luego NOMBRE-APELLIDO + TIPO-LISTA-PRECIO. */
   function agruparPorFechaYCliente(datos) {
     var claveFecha = function (r) {
       var f = r.FECHA_OPERATIVA;
@@ -264,9 +264,21 @@
       if (s.indexOf('T') !== -1) s = s.substring(0, s.indexOf('T'));
       return s;
     };
+    var claveHora = function (r) {
+      var h = r.HORA;
+      if (h === undefined || h === null) return '';
+      var s = String(h).trim();
+      if (s.indexOf('T') !== -1) {
+        var d = new Date(h);
+        return isNaN(d.getTime()) ? s : ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+      }
+      return s;
+    };
     var ordenarFila = function (a, b) {
       var fa = claveFecha(a), fb = claveFecha(b);
-      if (fa !== fb) return fa < fb ? -1 : 1;
+      if (fa !== fb) return fa > fb ? -1 : 1;
+      var ha = claveHora(a), hb = claveHora(b);
+      if (ha !== hb) return ha < hb ? -1 : (ha > hb ? 1 : 0);
       var na = (a['NOMBRE-APELLIDO'] || '').trim(), nb = (b['NOMBRE-APELLIDO'] || '').trim();
       if (na !== nb) return na < nb ? -1 : 1;
       var ta = (a['TIPO-LISTA-PRECIO'] || '').trim(), tb = (b['TIPO-LISTA-PRECIO'] || '').trim();
@@ -346,8 +358,25 @@
           if (col === 'FECHA_OPERATIVA') val = fmtFecha(val);
           if (col === 'HORA') val = fmtHora(val);
           if (col === 'ID-VENTA') {
-            td.className = 'id-venta';
+            td.className = 'id-compra';
             td.textContent = val;
+          } else if (col === 'USUARIO') {
+            var usuarioKey = String(val).trim();
+            var etiquetas = APP_CONFIG && APP_CONFIG.USUARIO_ETIQUETAS;
+            var info = etiquetas && etiquetas[usuarioKey];
+            if (info && info.etiqueta) {
+              var span = document.createElement('span');
+              span.className = 'listado-compras__usuario-badge';
+              span.textContent = info.etiqueta;
+              span.title = usuarioKey;
+              if (info.color) {
+                span.style.borderLeftColor = info.color;
+                span.style.backgroundColor = info.color ? (info.color + '1a') : 'transparent';
+              }
+              td.appendChild(span);
+            } else {
+              td.textContent = val;
+            }
           } else if (col === 'CATEGORIA') {
             var cat = String(val).toLowerCase();
             var badgeClass = 'badge-cat';

@@ -1,15 +1,15 @@
 (function () {
   'use strict';
 
-  var TABLA = window.APP_TABLES && window.APP_TABLES.PRODUCTOS_MARKET;
-  var TABLA_VENTAS = window.APP_TABLES && window.APP_TABLES.VENTAS;
+  var TABLA = window.APP_TABLES && window.APP_TABLES.PRODUCTOS;
+  var TABLA_COMPRAS = window.APP_TABLES && (window.APP_TABLES.ENERO || window.APP_TABLES.VENTAS_MARKET);
   var APP_SCRIPT_URL = window.APP_CONFIG && window.APP_CONFIG.APP_SCRIPT_URL;
   var CORS_PROXY = window.APP_CONFIG && window.APP_CONFIG.CORS_PROXY;
-  var HOJA_PRODUCTOS_MARKET = 'PRODUCTOS-MARKET';
+  var HOJA_PRODUCTOS = 'PRODUCTOS';
   var NEGOCIO = window.APP_NEGOCIO;
-  var STORAGE_KEY_CLIENTE = 'APP_CLIENTE_VENTA';
+  var STORAGE_KEY_CLIENTE = 'APP_CLIENTE_COMPRA';
   /** Cliente por defecto cuando no hay uno seleccionado en sesión. */
-  var CLIENTE_DEFAULT = { 'NOMBRE-APELLIDO': 'SILVINA', 'TIPO-LISTA-PRECIO': 'COSTO' };
+  var CLIENTE_DEFAULT = { 'NOMBRE-APELLIDO': 'MATIAS', 'TIPO-LISTA-PRECIO': 'DISTRIBUIDOR' };
   var clienteSeleccionado = null;
   var productos = [];
   var carrito = [];
@@ -30,7 +30,7 @@
     return undefined;
   }
 
-  /** Normaliza filas de PRODUCTOS-MARKET: COSTO se expone como PRECIO para el carrito y totales. */
+  /** Normaliza filas de PRODUCTOS: usa PRECIO (o COSTO si viene de PRODUCTOS-MARKET). */
   function normalizarProductos(filas) {
     if (!TABLA || !TABLA.columns || !filas.length) return [];
     var cols = TABLA.columns;
@@ -49,9 +49,9 @@
             p[c] = val !== undefined && val !== null ? String(val).trim() : '';
           }
         });
-        var costo = Number(claveEnFila(f, 'COSTO')) || 0;
-        p.PRECIO = costo;
-        if (p.COSTO === undefined) p.COSTO = costo;
+        var precio = Number(claveEnFila(f, 'PRECIO')) || Number(claveEnFila(f, 'COSTO')) || 0;
+        p.PRECIO = precio;
+        if (p.COSTO === undefined) p.COSTO = precio;
         return p;
       });
   }
@@ -74,7 +74,7 @@
   function cargarProductos() {
     var mensaje = document.getElementById('nueva-compra-mensaje');
     if (!TABLA) {
-      mensaje.textContent = 'Falta configurar Tables (PRODUCTOS_MARKET).';
+      mensaje.textContent = 'Falta configurar Tables (PRODUCTOS).';
       return;
     }
 
@@ -86,10 +86,10 @@
     }
 
     if (!APP_SCRIPT_URL) {
-      mensaje.textContent = 'Configura APP_SCRIPT_URL en config.js. Los productos se cargan de la hoja "' + HOJA_PRODUCTOS_MARKET + '".';
+      mensaje.textContent = 'Configura APP_SCRIPT_URL en config.js. Los productos se cargan de la hoja "' + HOJA_PRODUCTOS + '".';
       return;
     }
-    var payload = { accion: 'productoMarketLeer' };
+    var payload = { accion: 'productoLeer' };
     var bodyForm = 'data=' + encodeURIComponent(JSON.stringify(payload));
     var url = (CORS_PROXY && CORS_PROXY.length) ? CORS_PROXY + encodeURIComponent(APP_SCRIPT_URL) : APP_SCRIPT_URL;
     fetch(url, {
@@ -114,7 +114,7 @@
         }
       })
       .catch(function (err) {
-        mensaje.textContent = 'No se pudieron cargar los productos desde la hoja "' + HOJA_PRODUCTOS_MARKET + '". Revisa APP_SCRIPT_URL y que el Sheet tenga la hoja "' + HOJA_PRODUCTOS_MARKET + '".';
+        mensaje.textContent = 'No se pudieron cargar los productos desde la hoja "' + HOJA_PRODUCTOS + '". Revisa APP_SCRIPT_URL y que el Sheet tenga la hoja "' + HOJA_PRODUCTOS + '".';
       });
   }
 
@@ -335,7 +335,8 @@
     var nombreApellido = (cliente['NOMBRE-APELLIDO'] || '').trim();
     var tipoListaPrecio = (cliente['TIPO-LISTA-PRECIO'] || '').trim();
     var payload = {
-      accion: 'ventaMarketAlta',
+      accion: 'guardarVenta',
+      hoja: nombreHoja,
       idVenta: idVenta,
       fechaOperativa: fechaOp,
       hora: hora,
@@ -386,7 +387,7 @@
       .then(function (data) {
         var ok = data && (data.ok === true || data.success === true);
         if (ok) {
-          mostrarMensajeGuardar('Venta realizada. Redirigiendo al inicio…', false);
+          mostrarMensajeGuardar('Compra realizada. Redirigiendo al inicio…', false);
           setTimeout(function () {
             window.location.href = '../../../index.html';
           }, 1200);
@@ -399,7 +400,7 @@
         var msg = err && err.message ? err.message : String(err);
         var esCors = /failed to fetch|networkerror|cors|blocked|access-control/i.test(msg);
         if (esCors) {
-          mostrarMensajeGuardar('Venta enviada. Redirigiendo al inicio…', false);
+          mostrarMensajeGuardar('Compra enviada. Redirigiendo al inicio…', false);
           setTimeout(function () {
             window.location.href = '../../../index.html';
           }, 1200);

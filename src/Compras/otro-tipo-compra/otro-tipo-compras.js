@@ -1,6 +1,6 @@
 /**
- * Otro tipo de ventas.
- * Tipo de operación fijo: VENTA. Formulario Producto/Precio, guardar en hoja del mes (guardarVenta). Prefijo idVenta: OTV-
+ * Otro tipo de compras.
+ * Tipo de operación fijo: COMPRA. Formulario Producto/Precio, guardar en hoja del mes (guardarVenta). Prefijo idCompra: OTV-
  */
 (function () {
   'use strict';
@@ -14,12 +14,12 @@
   /** ID-PRODUCTO genérico para registros de este módulo (no hay producto del catálogo). */
   var ID_PRODUCTO_GENERICO = 'OTV-GEN';
 
-  /** Tipo de operación fijo: OTRA-VENTA (label estático en el formulario). */
+  /** Tipo de operación fijo: OTRA-COMPRA (label estático en el formulario). */
   function getCategoria() {
     var el = document.getElementById('otro-tipo-compras-tipo-operacion');
-    if (!el) return 'OTRA-VENTA';
+    if (!el) return 'OTRA-COMPRA';
     var v = (el.textContent || el.innerText || '').trim();
-    return v || 'OTRA-VENTA';
+    return v || 'OTRA-COMPRA';
   }
 
   function getProducto() {
@@ -79,13 +79,13 @@
     var nombreHoja = NEGOCIO.getNombreHojaMes(fechaOp);
     var ahora = new Date();
     var hora = ahora.getHours() + ':' + (ahora.getMinutes() < 10 ? '0' : '') + ahora.getMinutes();
-    var idVenta = PREFIJO_ID + Date.now();
+    var idCompra = PREFIJO_ID + Date.now();
     var nombreApellido = getNombreApellido();
 
     var payload = {
       accion: 'guardarVenta',
       hoja: nombreHoja,
-      idVenta: idVenta,
+      idVenta: idCompra,
       fechaOperativa: fechaOp,
       hora: hora,
       nombreApellido: nombreApellido,

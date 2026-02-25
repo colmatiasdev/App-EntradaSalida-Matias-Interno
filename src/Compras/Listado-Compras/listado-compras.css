@@ -348,9 +348,21 @@ body.listado-compras-page::before {
   color: #2e7d32;
 }
 
-.id-venta {
+.id-compra {
   font-size: 0.75rem;
   color: var(--texto-2);
+}
+
+/* Identificación sutil del usuario (según config USUARIO_ETIQUETAS) */
+.listado-compras__usuario-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border-left: 3px solid var(--borde);
+  background-color: rgba(0, 0, 0, 0.04);
+  color: var(--texto);
 }
 
 .td-monto {

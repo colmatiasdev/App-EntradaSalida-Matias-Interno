@@ -30,6 +30,18 @@
     /** Valor fijo para la columna USUARIO al guardar ventas/compras en el Sheet. */
     USUARIO: 'USR-MATIAS',
 
+   /**
+   * Cómo se muestra cada código de usuario en pantalla (etiqueta y color de identificación).
+   * Clave = valor guardado en el Sheet (columna USUARIO).
+   * Valor = { etiqueta: 'Nombre', color: '#hex' }.
+   */
+    USUARIO_ETIQUETAS: {
+      'USR-SILVINA': { etiqueta: 'Silvina', color: '#c0392b' },
+      'USR-MATIAS': { etiqueta: 'Matias', color: '#2980b9' },
+      'USR-MILY': { etiqueta: 'Mily', color: '#27ae60' },
+      'USR-VICKY': { etiqueta: 'Vicky', color: '#8e44ad' }
+    },
+
     /**
      * Categorías para el filtro en Nueva venta. Mismo orden que en la hoja PRODUCTOS (columna CATEGORIA).
      */
