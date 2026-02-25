@@ -353,7 +353,7 @@ function ventaAlta(params) {
   }
   if (filas.length === 0) return respuestaJson({ ok: true, mensaje: 'Sin ítems.' });
   var startRow = sheet.getLastRow() + 1;
-  sheet.getRange(startRow, 1, startRow + filas.length - 1, def.columns.length).setValues(filas);
+  sheet.getRange(startRow, 1, filas.length, def.columns.length).setValues(filas);
   return respuestaJson({ ok: true, mensaje: 'Venta guardada.' });
 }
 
