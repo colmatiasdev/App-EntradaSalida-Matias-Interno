@@ -22,12 +22,12 @@
   color: #fff;
 }
 
-.otro-tipo-ventas__intro {
+.otro-tipo-compras__intro {
   margin-bottom: 1.25rem;
 }
 
 /* Formulario: card y estructura */
-.otro-tipo-ventas__formulario {
+.otro-tipo-compras__formulario {
   background: var(--color-surface);
   border: 1px solid #e8e5e1;
   border-radius: var(--radius, 8px);
@@ -36,37 +36,37 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
-.otro-tipo-ventas__form-title {
+.otro-tipo-compras__form-title {
   margin: 0 0 1.25rem;
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--color-text);
 }
 
-.otro-tipo-ventas__form {
+.otro-tipo-compras__form {
   display: block;
 }
 
-.otro-tipo-ventas__fields {
+.otro-tipo-compras__fields {
   display: grid;
   gap: 1.25rem;
   margin-bottom: 1.5rem;
 }
 
-.otro-tipo-ventas__field {
+.otro-tipo-compras__field {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
 }
 
-.otro-tipo-ventas__label {
+.otro-tipo-compras__label {
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--color-text);
 }
 
-.otro-tipo-ventas__combo,
-.otro-tipo-ventas__input {
+.otro-tipo-compras__combo,
+.otro-tipo-compras__input {
   width: 100%;
   min-height: 44px;
   padding: 0.6rem 0.75rem;
@@ -77,18 +77,18 @@
   background: var(--color-surface);
 }
 
-.otro-tipo-ventas__combo:focus,
-.otro-tipo-ventas__input:focus {
+.otro-tipo-compras__combo:focus,
+.otro-tipo-compras__input:focus {
   outline: none;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 2px rgba(180, 30, 55, 0.15);
 }
 
-.otro-tipo-ventas__input--numero {
+.otro-tipo-compras__input--numero {
   max-width: 10rem;
 }
 
-.otro-tipo-ventas__valor-static {
+.otro-tipo-compras__valor-static {
   display: block;
   min-height: 44px;
   padding: 0.6rem 0.75rem;
@@ -101,11 +101,11 @@
   color: var(--color-text);
 }
 
-.otro-tipo-ventas__actions {
+.otro-tipo-compras__actions {
   margin-top: 0.5rem;
 }
 
-.otro-tipo-ventas__btn-guardar {
+.otro-tipo-compras__btn-guardar {
   display: block;
   width: 100%;
   min-height: 48px;
@@ -122,38 +122,38 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.otro-tipo-ventas__btn-guardar:hover:not(:disabled) {
+.otro-tipo-compras__btn-guardar:hover:not(:disabled) {
   background: var(--color-primary-dark, #9a1830);
 }
 
-.otro-tipo-ventas__btn-guardar:active:not(:disabled) {
+.otro-tipo-compras__btn-guardar:active:not(:disabled) {
   transform: scale(0.98);
 }
 
-.otro-tipo-ventas__btn-guardar:disabled {
+.otro-tipo-compras__btn-guardar:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.otro-tipo-ventas__guardar-msg {
+.otro-tipo-compras__guardar-msg {
   margin-top: 0.75rem;
   font-size: 0.95rem;
 }
 
-.otro-tipo-ventas__guardar-msg.ok {
+.otro-tipo-compras__guardar-msg.ok {
   color: var(--color-success, #0a6b0a);
 }
 
-.otro-tipo-ventas__guardar-msg.err {
+.otro-tipo-compras__guardar-msg.err {
   color: var(--color-error, #b91c1c);
 }
 
-.otro-tipo-ventas__texto {
+.otro-tipo-compras__texto {
   color: var(--color-text-muted);
   font-size: 0.95rem;
 }
 
-.otro-tipo-ventas__contenido {
+.otro-tipo-compras__contenido {
   background: var(--color-surface);
   border: 1px solid #e8e5e1;
   border-radius: var(--radius);
@@ -161,37 +161,37 @@
   min-height: 120px;
 }
 
-.otro-tipo-ventas__mensaje {
+.otro-tipo-compras__mensaje {
   color: var(--color-text-muted);
   font-size: 0.95rem;
   margin: 0;
 }
 
 @media (min-width: 640px) {
-  .otro-tipo-ventas__formulario {
+  .otro-tipo-compras__formulario {
     padding: 1.75rem;
   }
 
-  .otro-tipo-ventas__fields {
+  .otro-tipo-compras__fields {
     grid-template-columns: 1fr 1fr minmax(8rem, 1fr);
     align-items: end;
     gap: 1rem;
   }
 
-  .otro-tipo-ventas__field--precio {
+  .otro-tipo-compras__field--precio {
     max-width: 10rem;
   }
 
-  .otro-tipo-ventas__input--numero {
+  .otro-tipo-compras__input--numero {
     max-width: none;
   }
 
-  .otro-tipo-ventas__actions {
+  .otro-tipo-compras__actions {
     margin-top: 0;
     margin-bottom: 0;
   }
 
-  .otro-tipo-ventas__btn-guardar {
+  .otro-tipo-compras__btn-guardar {
     width: auto;
     min-width: 10rem;
     min-height: 44px;
@@ -199,19 +199,19 @@
 }
 
 @media (max-width: 639px) {
-  .otro-tipo-ventas__formulario {
+  .otro-tipo-compras__formulario {
     padding: 1.25rem;
     padding-left: max(1.25rem, env(safe-area-inset-left));
     padding-right: max(1.25rem, env(safe-area-inset-right));
   }
 
-  .otro-tipo-ventas__contenido {
+  .otro-tipo-compras__contenido {
     padding: 1rem;
     padding-left: max(1rem, env(safe-area-inset-left));
     padding-right: max(1rem, env(safe-area-inset-right));
   }
 
-  .otro-tipo-ventas__field--precio .otro-tipo-ventas__input--numero {
+  .otro-tipo-compras__field--precio .otro-tipo-compras__input--numero {
     max-width: none;
   }
 }

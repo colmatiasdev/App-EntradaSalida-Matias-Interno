@@ -16,41 +16,41 @@
 
   /** Tipo de operación fijo: OTRA-VENTA (label estático en el formulario). */
   function getCategoria() {
-    var el = document.getElementById('otro-tipo-ventas-tipo-operacion');
+    var el = document.getElementById('otro-tipo-compras-tipo-operacion');
     if (!el) return 'OTRA-VENTA';
     var v = (el.textContent || el.innerText || '').trim();
     return v || 'OTRA-VENTA';
   }
 
   function getProducto() {
-    var input = document.getElementById('otro-tipo-ventas-producto');
+    var input = document.getElementById('otro-tipo-compras-producto');
     if (!input) return '';
     return (input.value !== undefined && input.value !== null) ? String(input.value).trim() : '';
   }
 
   function getPrecio() {
-    var input = document.getElementById('otro-tipo-ventas-precio');
+    var input = document.getElementById('otro-tipo-compras-precio');
     if (!input || input.value === '' || input.value === null) return '';
     var n = parseFloat(String(input.value).replace(',', '.'), 10);
     return isNaN(n) ? '' : n;
   }
 
   function getNombreApellido() {
-    var el = document.getElementById('otro-tipo-ventas-nombre-apellido');
+    var el = document.getElementById('otro-tipo-compras-nombre-apellido');
     if (!el) return 'MATIAS';
     var t = (el.textContent || '').trim();
     return t || 'MATIAS';
   }
 
-  function getBtnGuardar() { return document.getElementById('otro-tipo-ventas-btn-guardar'); }
-  function getMsgGuardar() { return document.getElementById('otro-tipo-ventas-guardar-msg'); }
+  function getBtnGuardar() { return document.getElementById('otro-tipo-compras-btn-guardar'); }
+  function getMsgGuardar() { return document.getElementById('otro-tipo-compras-guardar-msg'); }
 
   function mostrarMensajeGuardar(texto, esError) {
     var msg = getMsgGuardar();
     if (!msg) return;
     msg.textContent = texto;
     msg.hidden = !texto;
-    msg.className = 'otro-tipo-ventas__guardar-msg ' + (esError ? 'err' : 'ok');
+    msg.className = 'otro-tipo-compras__guardar-msg ' + (esError ? 'err' : 'ok');
   }
 
   function guardar() {
@@ -130,8 +130,8 @@
         var ok = data && (data.ok === true || data.success === true);
         if (ok) {
           mostrarMensajeGuardar('Operación guardada en la hoja ' + nombreHoja + '.', false);
-          var inpProducto = document.getElementById('otro-tipo-ventas-producto');
-          var inpPrecio = document.getElementById('otro-tipo-ventas-precio');
+          var inpProducto = document.getElementById('otro-tipo-compras-producto');
+          var inpPrecio = document.getElementById('otro-tipo-compras-precio');
           if (inpProducto) inpProducto.value = '';
           if (inpPrecio) inpPrecio.value = '';
         } else {
@@ -153,7 +153,7 @@
   }
 
   function init() {
-    var form = document.getElementById('otro-tipo-ventas-form');
+    var form = document.getElementById('otro-tipo-compras-form');
     if (form) {
       form.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -168,10 +168,10 @@
     init();
   }
 
-  window.OtroTipoVentas = window.OtroTipoVentas || {};
-  window.OtroTipoVentas.getCategoria = getCategoria;
-  window.OtroTipoVentas.getCantidad = function () { return CANTIDAD_DEFAULT; };
-  window.OtroTipoVentas.CANTIDAD = CANTIDAD_DEFAULT;
-  window.OtroTipoVentas.getProducto = getProducto;
-  window.OtroTipoVentas.getPrecio = getPrecio;
+  window.OtroTipoCompras = window.OtroTipoCompras || {};
+  window.OtroTipoCompras.getCategoria = getCategoria;
+  window.OtroTipoCompras.getCantidad = function () { return CANTIDAD_DEFAULT; };
+  window.OtroTipoCompras.CANTIDAD = CANTIDAD_DEFAULT;
+  window.OtroTipoCompras.getProducto = getProducto;
+  window.OtroTipoCompras.getPrecio = getPrecio;
 })();

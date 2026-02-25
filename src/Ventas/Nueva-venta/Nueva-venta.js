@@ -13,10 +13,10 @@
   var carrito = [];
 
   function getBtnGuardar() {
-    return document.getElementById('nueva-venta-btn-guardar');
+    return document.getElementById('nueva-compra-btn-guardar');
   }
   function getMsgGuardar() {
-    return document.getElementById('nueva-venta-guardar-msg');
+    return document.getElementById('nueva-compra-guardar-msg');
   }
 
   function claveEnFila(fila, columna) {
@@ -62,12 +62,12 @@
   }
 
   function getTextoBusqueda() {
-    var input = document.getElementById('nueva-venta-buscar');
+    var input = document.getElementById('nueva-compra-buscar');
     return (input && input.value) ? input.value.trim() : '';
   }
 
   function cargarProductos() {
-    var mensaje = document.getElementById('nueva-venta-mensaje');
+    var mensaje = document.getElementById('nueva-compra-mensaje');
     if (!TABLA) {
       mensaje.textContent = 'Falta configurar Tables (PRODUCTOS).';
       return;
@@ -115,7 +115,7 @@
   }
 
   function pintarListado() {
-    var contenedor = document.getElementById('nueva-venta-productos');
+    var contenedor = document.getElementById('nueva-compra-productos');
     if (!contenedor) return;
     var textoBusqueda = getTextoBusqueda().toUpperCase();
     var listado = productos;
@@ -140,21 +140,21 @@
       var productosCat = grupo ? grupo.items : [];
       var labelCategoria = grupo ? grupo.label : categoriaNorm;
       var seccion = document.createElement('div');
-      seccion.className = 'nueva-venta__grupo';
-      seccion.innerHTML = '<h3 class="nueva-venta__grupo-titulo">' + escapeHtml(labelCategoria) + '</h3>';
+      seccion.className = 'nueva-compra__grupo';
+      seccion.innerHTML = '<h3 class="nueva-compra__grupo-titulo">' + escapeHtml(labelCategoria) + '</h3>';
       var ul = document.createElement('ul');
-      ul.className = 'nueva-venta__productos';
+      ul.className = 'nueva-compra__productos';
       productosCat.forEach(function (p) {
         var li = document.createElement('li');
-        li.className = 'nueva-venta__item';
+        li.className = 'nueva-compra__item';
         var nombre = (p['NOMBRE-PRODUCTO'] || '').trim() || '(Sin nombre)';
         var precio = getPrecioParaCliente(p);
         var idProd = (p[TABLA.pk] || '').toString().trim();
         li.innerHTML =
-          '<span class="nueva-venta__item-nombre">' + escapeHtml(nombre) + '</span>' +
-          '<span class="nueva-venta__item-precio">' + formatearPrecio(precio) + '</span>' +
-          '<button type="button" class="nueva-venta__btn-add" data-id="' + escapeHtml(idProd) + '">Agregar</button>';
-        li.querySelector('.nueva-venta__btn-add').addEventListener('click', function () {
+          '<span class="nueva-compra__item-nombre">' + escapeHtml(nombre) + '</span>' +
+          '<span class="nueva-compra__item-precio">' + formatearPrecio(precio) + '</span>' +
+          '<button type="button" class="nueva-compra__btn-add" data-id="' + escapeHtml(idProd) + '">Agregar</button>';
+        li.querySelector('.nueva-compra__btn-add').addEventListener('click', function () {
           agregarAlCarrito(p);
         });
         ul.appendChild(li);
@@ -206,13 +206,13 @@
   }
 
   function pintarResumen() {
-    var vacio = document.getElementById('nueva-venta-resumen-vacio');
-    var tabla = document.getElementById('nueva-venta-tabla');
-    var tbody = document.getElementById('nueva-venta-tabla-body');
-    var totalEl = document.getElementById('nueva-venta-total');
+    var vacio = document.getElementById('nueva-compra-resumen-vacio');
+    var tabla = document.getElementById('nueva-compra-tabla');
+    var tbody = document.getElementById('nueva-compra-tabla-body');
+    var totalEl = document.getElementById('nueva-compra-total');
     var btnGuardar = getBtnGuardar();
     var msgGuardar = getMsgGuardar();
-    if (msgGuardar) { msgGuardar.textContent = ''; msgGuardar.className = 'nueva-venta__guardar-msg'; }
+    if (msgGuardar) { msgGuardar.textContent = ''; msgGuardar.className = 'nueva-compra__guardar-msg'; }
     if (carrito.length === 0) {
       vacio.hidden = false;
       tabla.hidden = true;
@@ -231,21 +231,21 @@
       total += subtotal;
       var tr = document.createElement('tr');
       var qty = item.cantidad;
-      var trashSvg = '<svg class="nueva-venta__icon-trash" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>';
+      var trashSvg = '<svg class="nueva-compra__icon-trash" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>';
       tr.innerHTML =
         '<td>' + escapeHtml(item.producto['NOMBRE-PRODUCTO']) + '</td>' +
-        '<td class="nueva-venta__th-num">' + formatearPrecio(item.producto.PRECIO) + '</td>' +
-        '<td class="nueva-venta__th-num nueva-venta__td-qty">' +
-        '<div class="nueva-venta__qty-wrap">' +
-        '<button type="button" class="nueva-venta__qty-btn nueva-venta__qty-minus" data-id="' + escapeHtml(id) + '" aria-label="Disminuir cantidad">−</button>' +
-        '<input type="number" min="1" value="' + qty + '" class="nueva-venta__input-qty" data-id="' + escapeHtml(id) + '" aria-label="Cantidad">' +
-        '<button type="button" class="nueva-venta__qty-btn nueva-venta__qty-plus" data-id="' + escapeHtml(id) + '" aria-label="Aumentar cantidad">+</button>' +
+        '<td class="nueva-compra__th-num">' + formatearPrecio(item.producto.PRECIO) + '</td>' +
+        '<td class="nueva-compra__th-num nueva-compra__td-qty">' +
+        '<div class="nueva-compra__qty-wrap">' +
+        '<button type="button" class="nueva-compra__qty-btn nueva-compra__qty-minus" data-id="' + escapeHtml(id) + '" aria-label="Disminuir cantidad">−</button>' +
+        '<input type="number" min="1" value="' + qty + '" class="nueva-compra__input-qty" data-id="' + escapeHtml(id) + '" aria-label="Cantidad">' +
+        '<button type="button" class="nueva-compra__qty-btn nueva-compra__qty-plus" data-id="' + escapeHtml(id) + '" aria-label="Aumentar cantidad">+</button>' +
         '</div></td>' +
-        '<td class="nueva-venta__th-num nueva-venta__subtotal">' + formatearPrecio(subtotal) + '</td>' +
-        '<td><button type="button" class="nueva-venta__btn-quitar" data-id="' + escapeHtml(id) + '" aria-label="Quitar del resumen" title="Quitar">' + trashSvg + '</button></td>';
-      var inputQty = tr.querySelector('.nueva-venta__input-qty');
-      var btnMinus = tr.querySelector('.nueva-venta__qty-minus');
-      var btnPlus = tr.querySelector('.nueva-venta__qty-plus');
+        '<td class="nueva-compra__th-num nueva-compra__subtotal">' + formatearPrecio(subtotal) + '</td>' +
+        '<td><button type="button" class="nueva-compra__btn-quitar" data-id="' + escapeHtml(id) + '" aria-label="Quitar del resumen" title="Quitar">' + trashSvg + '</button></td>';
+      var inputQty = tr.querySelector('.nueva-compra__input-qty');
+      var btnMinus = tr.querySelector('.nueva-compra__qty-minus');
+      var btnPlus = tr.querySelector('.nueva-compra__qty-plus');
       function syncQty() {
         var val = parseInt(inputQty.value, 10);
         if (isNaN(val) || val < 1) val = 1;
@@ -265,7 +265,7 @@
         syncQty();
       });
       btnMinus.disabled = qty <= 1;
-      tr.querySelector('.nueva-venta__btn-quitar').addEventListener('click', function () {
+      tr.querySelector('.nueva-compra__btn-quitar').addEventListener('click', function () {
         quitarDelCarrito(id);
       });
       tbody.appendChild(tr);
@@ -273,7 +273,7 @@
     totalEl.textContent = formatearPrecio(total);
   }
 
-  function getTotalVenta() {
+  function getTotalCompra() {
     var t = 0;
     carrito.forEach(function (item) {
       t += item.producto.PRECIO * item.cantidad;
@@ -281,7 +281,7 @@
     return t;
   }
 
-  function guardarVenta() {
+  function guardarCompra() {
     if (carrito.length === 0) return;
     if (!APP_SCRIPT_URL) {
       mostrarMensajeGuardar('Configura APP_SCRIPT_URL en config.js', true);
@@ -293,7 +293,7 @@
     }
     var fechaOp = NEGOCIO.getFechaOperativa();
     var nombreHoja = NEGOCIO.getNombreHojaMes(fechaOp);
-    var total = getTotalVenta();
+    var total = getTotalCompra();
     var ahora = new Date();
     var hora = ahora.getHours() + ':' + (ahora.getMinutes() < 10 ? '0' : '') + ahora.getMinutes();
     var idVenta = 'V-' + Date.now();
@@ -325,7 +325,7 @@
       btnGuardar.disabled = true;
       btnGuardar.setAttribute('aria-busy', 'true');
     }
-    if (msgGuardar) { msgGuardar.textContent = 'Guardando…'; msgGuardar.className = 'nueva-venta__guardar-msg'; }
+    if (msgGuardar) { msgGuardar.textContent = 'Guardando…'; msgGuardar.className = 'nueva-compra__guardar-msg'; }
     var bodyForm = 'data=' + encodeURIComponent(JSON.stringify(payload));
     var urlGuardar = (CORS_PROXY && CORS_PROXY.length > 0)
       ? CORS_PROXY + encodeURIComponent(APP_SCRIPT_URL)
@@ -351,7 +351,7 @@
       .then(function (data) {
         var ok = data && (data.ok === true || data.success === true);
         if (ok) {
-          mostrarMensajeGuardar('Venta guardada. Redirigiendo al inicio…', false);
+          mostrarMensajeGuardar('Compra guardada. Redirigiendo al inicio…', false);
           setTimeout(function () {
             window.location.href = '../../../index.html';
           }, 1200);
@@ -364,7 +364,7 @@
         var msg = err && err.message ? err.message : String(err);
         var esCors = /failed to fetch|networkerror|cors|blocked|access-control/i.test(msg);
         if (esCors) {
-          mostrarMensajeGuardar('Venta enviada. Redirigiendo al inicio…', false);
+          mostrarMensajeGuardar('Compra enviada. Redirigiendo al inicio…', false);
           setTimeout(function () {
             window.location.href = '../../../index.html';
           }, 1200);
@@ -379,15 +379,15 @@
     var msg = getMsgGuardar();
     if (!msg) return;
     msg.textContent = texto;
-    msg.className = 'nueva-venta__guardar-msg ' + (esError ? 'err' : 'ok');
+    msg.className = 'nueva-compra__guardar-msg ' + (esError ? 'err' : 'ok');
   }
 
   function aplicarClienteEnPantalla() {
-    var bloqueCliente = document.getElementById('nueva-venta-cliente-info');
-    var tipoEl = document.getElementById('nueva-venta-cliente-tipo');
+    var bloqueCliente = document.getElementById('nueva-compra-cliente-info');
+    var tipoEl = document.getElementById('nueva-compra-cliente-tipo');
     if (bloqueCliente) {
-      bloqueCliente.classList.add('nueva-venta__cliente-info--visible');
-      var nombreEl = bloqueCliente.querySelector('.nueva-venta__cliente-nombre');
+      bloqueCliente.classList.add('nueva-compra__cliente-info--visible');
+      var nombreEl = bloqueCliente.querySelector('.nueva-compra__cliente-nombre');
       if (nombreEl) nombreEl.textContent = clienteSeleccionado ? ((clienteSeleccionado['NOMBRE-APELLIDO'] || '').trim() || '(Sin nombre)') : 'Sin cliente';
     }
     if (tipoEl) tipoEl.textContent = clienteSeleccionado ? ((clienteSeleccionado['TIPO-LISTA-PRECIO'] || '').trim() ? ' · ' + (clienteSeleccionado['TIPO-LISTA-PRECIO'] || '').trim() : '') : '';
@@ -401,8 +401,8 @@
       clienteSeleccionado = null;
     }
     aplicarClienteEnPantalla();
-    var inputBuscar = document.getElementById('nueva-venta-buscar');
-    var btnLimpiar = document.getElementById('nueva-venta-limpiar-busqueda');
+    var inputBuscar = document.getElementById('nueva-compra-buscar');
+    var btnLimpiar = document.getElementById('nueva-compra-limpiar-busqueda');
     if (inputBuscar) inputBuscar.addEventListener('input', pintarListado);
     if (btnLimpiar) {
       btnLimpiar.addEventListener('click', function () {
@@ -412,7 +412,7 @@
       });
     }
     var btnGuardar = getBtnGuardar();
-    if (btnGuardar) btnGuardar.addEventListener('click', guardarVenta);
+    if (btnGuardar) btnGuardar.addEventListener('click', guardarCompra);
     cargarProductos();
   }
 

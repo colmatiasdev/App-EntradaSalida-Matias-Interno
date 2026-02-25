@@ -11,6 +11,6 @@
       container.innerHTML = html;
     })
     .catch(function () {
-      container.innerHTML = '<footer class="footer"><p>&copy; Panificacion Colombres - Ventas</p></footer>';
+      container.innerHTML = '<footer class="footer"><p>&copy; 2H Market - Compras</p></footer>';
     });
 })();

@@ -20,7 +20,7 @@
   color: #fff;
 }
 
-.listado-ventas__filtro {
+.listado-compras__filtro {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -28,12 +28,12 @@
   margin-bottom: 1rem;
 }
 
-.listado-ventas__filtro label {
+.listado-compras__filtro label {
   font-size: 0.9rem;
   color: var(--color-text-muted);
 }
 
-.listado-ventas__select {
+.listado-compras__select {
   padding: 0.5rem 0.75rem;
   border: 1px solid #ddd;
   border-radius: var(--radius);
@@ -42,7 +42,7 @@
   min-width: 10rem;
 }
 
-.listado-ventas__btn-cargar {
+.listado-compras__btn-cargar {
   padding: 0.5rem 1rem;
   background: var(--color-primary);
   color: white;
@@ -52,17 +52,17 @@
   cursor: pointer;
 }
 
-.listado-ventas__btn-cargar:hover {
+.listado-compras__btn-cargar:hover {
   background: var(--color-primary-dark);
 }
 
-.listado-ventas__mensaje {
+.listado-compras__mensaje {
   color: var(--color-text-muted);
   font-size: 0.95rem;
   margin-bottom: 1rem;
 }
 
-.listado-ventas__mensaje--error {
+.listado-compras__mensaje--error {
   color: var(--color-primary);
 }
 
@@ -189,7 +189,7 @@
   border-bottom: none;
 }
 
-.listado-ventas__celda-fecha {
+.listado-compras__celda-fecha {
   font-weight: 700;
   color: var(--color-primary);
   background: rgba(196, 30, 58, 0.06);
@@ -199,7 +199,7 @@
 }
 
 /* Subtotal: tono neutro, celda unificada para "Total del día" */
-.listado-ventas__fila-subtotal td {
+.listado-compras__fila-subtotal td {
   font-weight: 600;
   background: rgba(0, 0, 0, 0.04);
   padding: 0.75rem 1rem;
@@ -207,7 +207,7 @@
   border-bottom: 1px solid #e8e5e1;
 }
 
-.listado-ventas__fila-subtotal .listado-ventas__subtotal-label {
+.listado-compras__fila-subtotal .listado-compras__subtotal-label {
   font-weight: 700;
   color: var(--color-text);
   font-size: 0.9rem;
@@ -217,12 +217,12 @@
   min-width: 0;
 }
 
-.listado-ventas__fila-subtotal .td-num.td-monto {
+.listado-compras__fila-subtotal .td-num.td-monto {
   color: var(--color-primary);
   font-weight: 700;
 }
 
-.listado-ventas__fila-subtotal .td-num:not(.td-monto) {
+.listado-compras__fila-subtotal .td-num:not(.td-monto) {
   color: var(--color-text);
 }
 
@@ -361,24 +361,24 @@
 
 /* ─── Móvil ─── */
 @media (max-width: 768px) {
-  .listado-ventas__filtro {
+  .listado-compras__filtro {
     flex-direction: column;
     align-items: stretch;
     gap: 0.5rem;
   }
 
-  .listado-ventas__filtro label {
+  .listado-compras__filtro label {
     margin-bottom: 0.25rem;
   }
 
-  .listado-ventas__select {
+  .listado-compras__select {
     min-width: 0;
     width: 100%;
     padding: 0.6rem 0.75rem;
     min-height: 44px;
   }
 
-  .listado-ventas__btn-cargar {
+  .listado-compras__btn-cargar {
     min-height: 44px;
     padding: 0.65rem 1rem;
   }
@@ -428,18 +428,18 @@
     min-width: 600px;
   }
 
-  .listado-ventas__fila-subtotal td {
+  .listado-compras__fila-subtotal td {
     padding: 0.85rem 0.75rem;
   }
 
-  .listado-ventas__fila-subtotal .listado-ventas__subtotal-label {
+  .listado-compras__fila-subtotal .listado-compras__subtotal-label {
     padding: 0.9rem 1rem;
     font-size: 0.82rem;
   }
 }
 
 @media (max-width: 480px) {
-  .listado-ventas__filtro {
+  .listado-compras__filtro {
     margin-bottom: 0.75rem;
   }
 

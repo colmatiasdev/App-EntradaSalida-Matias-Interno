@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Otro tipo de ventas - Panificacion Colombres</title>
+  <title>Otro tipo de compras - 2H Market</title>
   <link rel="stylesheet" href="../../../index.css">
   <link rel="stylesheet" href="../../Footer/footer.css">
   <link rel="stylesheet" href="otro-tipo-ventas.css">
@@ -11,20 +11,20 @@
 <body>
   <header class="header header--no-nav">
     <div class="header__logo">
-      <h1>Panificacion Colombres</h1>
-      <span class="header__subtitle">MÓDULO DE CONTROL VENTAS PARA <strong>MATIAS</strong></span>
+      <h1>2H Market</h1>
+      <span class="header__subtitle">MÓDULO DE CONTROL DE ENTRADA & SALIDA DE <strong>MATIAS</strong></span>
     </div>
     <a href="../../../index.html" class="header__inicio">Inicio</a>
     <nav class="nav" aria-hidden="true" hidden>
       <ul class="nav__menu">
         <li class="nav__item">
-          <a href="../Nueva-venta/Nueva-venta.html" class="nav__link">Nueva venta</a>
+          <a href="../Nueva-venta/Nueva-venta.html" class="nav__link">Nueva compra</a>
         </li>
         <li class="nav__item">
-          <a href="../Listado-Ventas/listado-ventas.html" class="nav__link">Listado de ventas</a>
+          <a href="../Listado-Ventas/listado-ventas.html" class="nav__link">Listado de compras</a>
         </li>
         <li class="nav__item">
-          <a href="otro-tipo-ventas.html" class="nav__link nav__link--active">Otro tipo de ventas</a>
+          <a href="otro-tipo-ventas.html" class="nav__link nav__link--active">Otro tipo de compras</a>
         </li>
         <li class="nav__item">
           <a href="../../Gastos-Salida/gastos-salida.html" class="nav__link">Gastos de Salida</a>
@@ -35,39 +35,39 @@
 
   <main class="main">
     <div class="page-header">
-      <h1>Otro tipo de ventas</h1>
+      <h1>Otro tipo de compras</h1>
     </div>
 
-    <section class="otro-tipo-ventas__intro">
-      <p class="otro-tipo-ventas__texto">En esta sección podés cargar las operaciones de <strong id="otro-tipo-ventas-nombre-apellido">MATIAS</strong></p>
+    <section class="otro-tipo-compras__intro">
+      <p class="otro-tipo-compras__texto">En esta sección podés cargar las operaciones de <strong id="otro-tipo-compras-nombre-apellido">MATIAS</strong></p>
     </section>
 
-    <section class="otro-tipo-ventas__formulario" aria-labelledby="otro-tipo-ventas-form-title">
-      <h2 id="otro-tipo-ventas-form-title" class="otro-tipo-ventas__form-title">Nueva operación</h2>
-      <form id="otro-tipo-ventas-form" class="otro-tipo-ventas__form" novalidate>
-        <div class="otro-tipo-ventas__fields">
-          <div class="otro-tipo-ventas__field">
-            <span class="otro-tipo-ventas__label">Tipo de operación</span>
-            <label id="otro-tipo-ventas-tipo-operacion" class="otro-tipo-ventas__valor-static">OTRA-VENTA</label>
+    <section class="otro-tipo-compras__formulario" aria-labelledby="otro-tipo-compras-form-title">
+      <h2 id="otro-tipo-compras-form-title" class="otro-tipo-compras__form-title">Nueva operación</h2>
+      <form id="otro-tipo-compras-form" class="otro-tipo-compras__form" novalidate>
+        <div class="otro-tipo-compras__fields">
+          <div class="otro-tipo-compras__field">
+            <span class="otro-tipo-compras__label">Tipo de operación</span>
+            <label id="otro-tipo-compras-tipo-operacion" class="otro-tipo-compras__valor-static">OTRA-VENTA</label>
           </div>
-          <div class="otro-tipo-ventas__field">
-            <label for="otro-tipo-ventas-producto" class="otro-tipo-ventas__label">Producto</label>
-            <input type="text" id="otro-tipo-ventas-producto" class="otro-tipo-ventas__input" placeholder="Nombre del producto" aria-label="Producto" autocomplete="off">
+          <div class="otro-tipo-compras__field">
+            <label for="otro-tipo-compras-producto" class="otro-tipo-compras__label">Producto</label>
+            <input type="text" id="otro-tipo-compras-producto" class="otro-tipo-compras__input" placeholder="Nombre del producto" aria-label="Producto" autocomplete="off">
           </div>
-          <div class="otro-tipo-ventas__field otro-tipo-ventas__field--precio">
-            <label for="otro-tipo-ventas-precio" class="otro-tipo-ventas__label">Precio</label>
-            <input type="number" id="otro-tipo-ventas-precio" class="otro-tipo-ventas__input otro-tipo-ventas__input--numero" placeholder="0" min="0" step="0.01" aria-label="Precio" inputmode="decimal">
+          <div class="otro-tipo-compras__field otro-tipo-compras__field--precio">
+            <label for="otro-tipo-compras-precio" class="otro-tipo-compras__label">Precio</label>
+            <input type="number" id="otro-tipo-compras-precio" class="otro-tipo-compras__input otro-tipo-compras__input--numero" placeholder="0" min="0" step="0.01" aria-label="Precio" inputmode="decimal">
           </div>
         </div>
-        <div class="otro-tipo-ventas__actions">
-          <button type="submit" id="otro-tipo-ventas-btn-guardar" class="otro-tipo-ventas__btn-guardar">Guardar</button>
+        <div class="otro-tipo-compras__actions">
+          <button type="submit" id="otro-tipo-compras-btn-guardar" class="otro-tipo-compras__btn-guardar">Guardar</button>
         </div>
       </form>
     </section>
 
-    <section class="otro-tipo-ventas__contenido" id="otro-tipo-ventas-contenido">
-      <p class="otro-tipo-ventas__mensaje" id="otro-tipo-ventas-mensaje" aria-live="polite">Completá producto y precio para registrar.</p>
-      <p class="otro-tipo-ventas__guardar-msg" id="otro-tipo-ventas-guardar-msg" aria-live="polite" hidden></p>
+    <section class="otro-tipo-compras__contenido" id="otro-tipo-compras-contenido">
+      <p class="otro-tipo-compras__mensaje" id="otro-tipo-compras-mensaje" aria-live="polite">Completá producto y precio para registrar.</p>
+      <p class="otro-tipo-compras__guardar-msg" id="otro-tipo-compras-guardar-msg" aria-live="polite" hidden></p>
     </section>
   </main>
 

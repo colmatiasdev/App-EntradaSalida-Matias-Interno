@@ -104,9 +104,9 @@
   }
 
   function init() {
-    var selectAnio = document.getElementById('listado-ventas-anio');
-    var selectMes = document.getElementById('listado-ventas-mes');
-    var btnCargar = document.getElementById('listado-ventas-btn-cargar');
+    var selectAnio = document.getElementById('listado-compras-anio');
+    var selectMes = document.getElementById('listado-compras-mes');
+    var btnCargar = document.getElementById('listado-compras-btn-cargar');
     if (!selectMes || !btnCargar) return;
 
     if (selectAnio) {
@@ -152,15 +152,15 @@
   }
 
   function mostrarMensaje(texto, esError) {
-    var msg = document.getElementById('listado-ventas-mensaje');
+    var msg = document.getElementById('listado-compras-mensaje');
     if (!msg) return;
     msg.textContent = texto;
-    msg.className = 'listado-ventas__mensaje' + (esError ? ' listado-ventas__mensaje--error' : '');
+    msg.className = 'listado-compras__mensaje' + (esError ? ' listado-compras__mensaje--error' : '');
   }
 
   function cargarVentasDelMes() {
-    var selectAnio = document.getElementById('listado-ventas-anio');
-    var selectMes = document.getElementById('listado-ventas-mes');
+    var selectAnio = document.getElementById('listado-compras-anio');
+    var selectMes = document.getElementById('listado-compras-mes');
     var mes = selectMes ? selectMes.value : '';
     var anio = selectAnio ? parseInt(selectAnio.value, 10) : getAnioActual();
     if (!mes) {
@@ -172,7 +172,7 @@
       return;
     }
 
-    mostrarMensaje('Cargando ventas de ' + mes + '…');
+    mostrarMensaje('Cargando compras de ' + mes + '…');
     var payload = { accion: 'ventaLeer', hoja: mes };
     var body = 'data=' + encodeURIComponent(JSON.stringify(payload));
     var url = (CORS_PROXY && CORS_PROXY.length > 0)
@@ -222,15 +222,15 @@
   }
 
   function pintarTabla(nombreMes, datos) {
-    var wrapper = document.getElementById('listado-ventas-tabla-wrapper');
-    var subtitulo = document.getElementById('listado-ventas-subtitulo');
-    var thead = document.getElementById('listado-ventas-thead');
-    var tbody = document.getElementById('listado-ventas-tbody');
+    var wrapper = document.getElementById('listado-compras-tabla-wrapper');
+    var subtitulo = document.getElementById('listado-compras-subtitulo');
+    var thead = document.getElementById('listado-compras-thead');
+    var tbody = document.getElementById('listado-compras-tbody');
     if (!wrapper || !thead || !tbody) return;
 
     allData = datos;
     currentNombreMes = nombreMes;
-    subtitulo.textContent = 'Ventas de ' + nombreMes;
+    subtitulo.textContent = 'Compras de ' + nombreMes;
     var tableSearch = document.getElementById('table-search');
     if (tableSearch) tableSearch.value = '';
 
@@ -288,7 +288,7 @@
   }
 
   function renderTable(searchTerm, nombreMes, columnas) {
-    var tbody = document.getElementById('listado-ventas-tbody');
+    var tbody = document.getElementById('listado-compras-tbody');
     var footer = document.getElementById('table-footer');
     var pagination = document.getElementById('table-pagination');
     var paginationInfo = document.getElementById('table-pagination-info');
@@ -328,11 +328,11 @@
       totalRegistrosPagina += grupo.filas.length;
 
       var trFecha = document.createElement('tr');
-      trFecha.className = 'listado-ventas__fila-fecha';
+      trFecha.className = 'listado-compras__fila-fecha';
       var tdFecha = document.createElement('td');
       tdFecha.colSpan = columnas.length;
       tdFecha.textContent = 'FECHA: ' + fmtFecha(grupo.fechaKey);
-      tdFecha.className = 'listado-ventas__celda-fecha';
+      tdFecha.className = 'listado-compras__celda-fecha';
       trFecha.appendChild(tdFecha);
       tbody.appendChild(trFecha);
 
@@ -371,14 +371,14 @@
       });
 
       var trSub = document.createElement('tr');
-      trSub.className = 'listado-ventas__fila-subtotal';
+      trSub.className = 'listado-compras__fila-subtotal';
       var idxCant = columnas.indexOf('CANTIDAD');
       var idxMonto = columnas.indexOf('MONTO');
       var colspanLabel = idxCant >= 0 ? idxCant : columnas.length - 2;
       if (colspanLabel < 1) colspanLabel = 1;
 
       var tdLabel = document.createElement('td');
-      tdLabel.className = 'listado-ventas__subtotal-label';
+      tdLabel.className = 'listado-compras__subtotal-label';
       tdLabel.colSpan = colspanLabel;
       tdLabel.textContent = 'Total del día';
       trSub.appendChild(tdLabel);
@@ -435,7 +435,7 @@
   }
 
   function ocultarTabla() {
-    var wrapper = document.getElementById('listado-ventas-tabla-wrapper');
+    var wrapper = document.getElementById('listado-compras-tabla-wrapper');
     if (wrapper) wrapper.hidden = true;
   }
 

@@ -63,7 +63,7 @@ body {
 .header__logo h1 {
   font-size: 1.35rem;
   font-weight: 700;
-  color: var(--color-primary);
+  color: #1565c0;
 }
 
 .header__subtitle {
@@ -120,10 +120,40 @@ body {
   color: var(--color-text);
 }
 
-.hub-hero.a-in .hub-title em {
+.hub-hero.a-in .hub-title em,
+.hub-section__title em {
   font-style: normal;
   font-weight: 700;
   color: var(--color-primary);
+}
+
+/* Secciones del hub (Compras a Silvina / Salidas) */
+.hub-section {
+  margin-top: 2.5rem;
+}
+
+.hub-section:first-of-type {
+  margin-top: 0;
+}
+
+.hero__intro {
+  margin-bottom: 0.5rem;
+}
+
+.hub-section__title {
+  font-size: 1.35rem;
+  margin-bottom: 0.35rem;
+  color: var(--color-text);
+}
+
+.hub-section__text {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.hub-section .hero__cards {
+  margin-bottom: 0;
 }
 
 .hub-grid {
@@ -248,8 +278,13 @@ body {
     max-width: 100%;
   }
 
-  .hero__title {
+  .hero__title,
+  .hub-section__title {
     font-size: 1.25rem;
+  }
+
+  .hub-section {
+    margin-top: 2rem;
   }
 
   .hero__text {

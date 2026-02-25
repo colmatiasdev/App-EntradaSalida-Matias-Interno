@@ -21,58 +21,58 @@
 }
 
 /* Listado y resumen */
-.page-header .nueva-venta__cliente-info {
+.page-header .nueva-compra__cliente-info {
   margin-top: 0.75rem;
   font-size: 0.95rem;
   color: var(--color-text-muted);
   display: none;
 }
 
-.page-header .nueva-venta__cliente-info.nueva-venta__cliente-info--visible {
+.page-header .nueva-compra__cliente-info.nueva-compra__cliente-info--visible {
   display: block;
 }
 
-.nueva-venta__cliente-label {
+.nueva-compra__cliente-label {
   margin-right: 0.35rem;
 }
 
-.nueva-venta__cliente-nombre {
+.nueva-compra__cliente-nombre {
   color: var(--color-text);
   margin-right: 0.25rem;
 }
 
-.nueva-venta__cliente-tipo {
+.nueva-compra__cliente-tipo {
   color: var(--color-text-muted);
   font-size: 0.9rem;
   margin-right: 0.75rem;
 }
 
-.nueva-venta__cambiar-cliente {
+.nueva-compra__cambiar-cliente {
   font-size: 0.9rem;
   color: var(--color-primary);
   text-decoration: none;
 }
 
-.nueva-venta__cambiar-cliente:hover {
+.nueva-compra__cambiar-cliente:hover {
   text-decoration: underline;
 }
 
-.nueva-venta__titulo {
+.nueva-compra__titulo {
   font-size: 1.1rem;
   color: var(--color-primary);
   margin-bottom: 0.75rem;
 }
 
-.nueva-venta__mensaje {
+.nueva-compra__mensaje {
   color: var(--color-text-muted);
   margin-bottom: 0.75rem;
 }
 
-.nueva-venta__listado {
+.nueva-compra__listado {
   margin-bottom: 2rem;
 }
 
-.nueva-venta__filtro {
+.nueva-compra__filtro {
   margin-bottom: 1rem;
   display: flex;
   flex-wrap: wrap;
@@ -80,12 +80,12 @@
   gap: 0.5rem;
 }
 
-.nueva-venta__filtro-label {
+.nueva-compra__filtro-label {
   font-size: 0.9rem;
   color: var(--color-text-muted);
 }
 
-.nueva-venta__buscar-input {
+.nueva-compra__buscar-input {
   flex: 1;
   min-width: 180px;
   padding: 0.5rem 0.75rem;
@@ -94,12 +94,12 @@
   font-size: 0.95rem;
   background: var(--color-surface);
 }
-.nueva-venta__buscar-input:focus {
+.nueva-compra__buscar-input:focus {
   outline: none;
   border-color: var(--color-primary);
 }
 
-.nueva-venta__btn-limpiar {
+.nueva-compra__btn-limpiar {
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
   font-weight: 600;
@@ -110,25 +110,25 @@
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
-.nueva-venta__btn-limpiar:hover {
+.nueva-compra__btn-limpiar:hover {
   background: #e8e6e4;
   color: var(--color-text);
 }
 
-.nueva-venta__productos-wrapper {
+.nueva-compra__productos-wrapper {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.nueva-venta__grupo {
+.nueva-compra__grupo {
   background: var(--color-surface);
   border-radius: var(--radius);
   border: 1px solid #eee;
   overflow: hidden;
 }
 
-.nueva-venta__grupo-titulo {
+.nueva-compra__grupo-titulo {
   font-size: 1rem;
   font-weight: 700;
   color: var(--color-primary);
@@ -138,7 +138,7 @@
   border-bottom: 1px solid #eee;
 }
 
-.nueva-venta__productos {
+.nueva-compra__productos {
   list-style: none;
   margin: 0;
   padding: 0.75rem;
@@ -147,7 +147,7 @@
   gap: 0.75rem;
 }
 
-.nueva-venta__item {
+.nueva-compra__item {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -158,18 +158,18 @@
   border: 1px solid #eee;
 }
 
-.nueva-venta__item-nombre {
+.nueva-compra__item-nombre {
   flex: 1 1 100%;
   font-weight: 500;
   font-size: 0.95rem;
 }
 
-.nueva-venta__item-precio {
+.nueva-compra__item-precio {
   color: var(--color-primary);
   font-weight: 600;
 }
 
-.nueva-venta__btn-add {
+.nueva-compra__btn-add {
   margin-left: auto;
   padding: 0.35rem 0.75rem;
   background: var(--color-primary);
@@ -180,44 +180,44 @@
   cursor: pointer;
 }
 
-.nueva-venta__btn-add:hover {
+.nueva-compra__btn-add:hover {
   background: var(--color-primary-dark);
 }
 
-.nueva-venta__resumen {
+.nueva-compra__resumen {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
   border-top: 1px solid #eee;
 }
 
-.nueva-venta__resumen-vacio {
+.nueva-compra__resumen-vacio {
   color: var(--color-text-muted);
   font-size: 0.95rem;
 }
 
-.nueva-venta__tabla {
+.nueva-compra__tabla {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.9rem;
 }
 
-.nueva-venta__tabla th,
-.nueva-venta__tabla td {
+.nueva-compra__tabla th,
+.nueva-compra__tabla td {
   padding: 0.5rem 0.75rem;
   text-align: left;
   border-bottom: 1px solid #eee;
 }
 
-.nueva-venta__th-num {
+.nueva-compra__th-num {
   text-align: right;
 }
 
 /* Controles de cantidad: − [input] + (móvil-friendly) */
-.nueva-venta__td-qty {
+.nueva-compra__td-qty {
   text-align: center;
 }
 
-.nueva-venta__qty-wrap {
+.nueva-compra__qty-wrap {
   display: inline-flex;
   align-items: center;
   gap: 0;
@@ -227,7 +227,7 @@
   background: var(--color-surface);
 }
 
-.nueva-venta__qty-btn {
+.nueva-compra__qty-btn {
   width: 2.25rem;
   min-width: 2.25rem;
   height: 2.25rem;
@@ -244,17 +244,17 @@
   user-select: none;
 }
 
-.nueva-venta__qty-btn:hover:not(:disabled) {
+.nueva-compra__qty-btn:hover:not(:disabled) {
   background: rgba(196, 30, 58, 0.12);
 }
 
-.nueva-venta__qty-btn:disabled {
+.nueva-compra__qty-btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
   color: var(--color-text-muted);
 }
 
-.nueva-venta__input-qty {
+.nueva-compra__input-qty {
   width: 2.75rem;
   min-width: 2.75rem;
   padding: 0.35rem 0.25rem;
@@ -268,19 +268,19 @@
   -moz-appearance: textfield;
 }
 
-.nueva-venta__input-qty::-webkit-outer-spin-button,
-.nueva-venta__input-qty::-webkit-inner-spin-button {
+.nueva-compra__input-qty::-webkit-outer-spin-button,
+.nueva-compra__input-qty::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-.nueva-venta__total-row td {
+.nueva-compra__total-row td {
   border-top: 2px solid var(--color-primary);
   padding-top: 0.75rem;
   font-size: 1rem;
 }
 
-.nueva-venta__btn-quitar {
+.nueva-compra__btn-quitar {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -296,18 +296,18 @@
   touch-action: manipulation;
 }
 
-.nueva-venta__btn-quitar:hover {
+.nueva-compra__btn-quitar:hover {
   color: var(--color-primary);
   border-color: var(--color-primary);
   background: rgba(196, 30, 58, 0.06);
 }
 
-.nueva-venta__icon-trash {
+.nueva-compra__icon-trash {
   display: block;
   pointer-events: none;
 }
 
-.nueva-venta__cliente {
+.nueva-compra__cliente {
   margin-top: 1rem;
   padding: 0.75rem 0;
   border-top: 1px solid #eee;
@@ -317,13 +317,13 @@
   gap: 0.75rem 1.5rem;
 }
 
-.nueva-venta__cliente label {
+.nueva-compra__cliente label {
   font-size: 0.9rem;
   color: var(--color-text-muted);
   margin-right: 0.25rem;
 }
 
-.nueva-venta__input {
+.nueva-compra__input {
   padding: 0.4rem 0.6rem;
   border: 1px solid #ddd;
   border-radius: var(--radius);
@@ -331,7 +331,7 @@
   min-width: 180px;
 }
 
-.nueva-venta__guardar {
+.nueva-compra__guardar {
   margin-top: 1rem;
   display: flex;
   align-items: center;
@@ -339,7 +339,7 @@
   flex-wrap: wrap;
 }
 
-.nueva-venta__btn-guardar {
+.nueva-compra__btn-guardar {
   padding: 0.6rem 1.25rem;
   background: var(--color-primary);
   color: white;
@@ -350,21 +350,21 @@
   cursor: pointer;
 }
 
-.nueva-venta__btn-guardar:hover:not(:disabled) {
+.nueva-compra__btn-guardar:hover:not(:disabled) {
   background: var(--color-primary-dark);
 }
 
-.nueva-venta__btn-guardar:disabled {
+.nueva-compra__btn-guardar:disabled {
   background: #ccc;
   cursor: not-allowed;
 }
 
-.nueva-venta__guardar-msg {
+.nueva-compra__guardar-msg {
   font-size: 0.9rem;
   color: var(--color-text-muted);
 }
 
-.nueva-venta__guardar-msg.ok {
+.nueva-compra__guardar-msg.ok {
   color: #0a0;
 }
 
@@ -374,30 +374,30 @@
     margin-bottom: 1rem;
   }
 
-  .nueva-venta__filtro {
+  .nueva-compra__filtro {
     flex-direction: column;
   }
 
-  .nueva-venta__buscar-input {
+  .nueva-compra__buscar-input {
     width: 100%;
     min-width: 0;
     min-height: 44px;
   }
 
-  .nueva-venta__productos {
+  .nueva-compra__productos {
     grid-template-columns: 1fr;
     padding: 0.5rem;
   }
 
-  .nueva-venta__item {
+  .nueva-compra__item {
     padding: 0.85rem;
   }
 
-  .nueva-venta__item-nombre {
+  .nueva-compra__item-nombre {
     font-size: 0.95rem;
   }
 
-  .nueva-venta__input {
+  .nueva-compra__input {
     min-width: 0;
     width: 100%;
     max-width: 100%;
@@ -405,36 +405,36 @@
     padding: 0.5rem 0.75rem;
   }
 
-  .nueva-venta__btn-mas,
-  .nueva-venta__btn-menos {
+  .nueva-compra__btn-mas,
+  .nueva-compra__btn-menos {
     min-width: 44px;
     min-height: 44px;
     padding: 0.5rem;
   }
 
-  .nueva-venta__btn-guardar {
+  .nueva-compra__btn-guardar {
     width: 100%;
     min-height: 48px;
     padding: 0.75rem 1.25rem;
   }
 
-  .nueva-venta__resumen {
+  .nueva-compra__resumen {
     padding: 1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .nueva-venta__grupo-titulo {
+  .nueva-compra__grupo-titulo {
     padding: 0.55rem 0.75rem;
     font-size: 0.95rem;
   }
 
-  .nueva-venta__item {
+  .nueva-compra__item {
     flex-direction: column;
     align-items: stretch;
   }
 }
 
-.nueva-venta__guardar-msg.err {
+.nueva-compra__guardar-msg.err {
   color: var(--color-primary);
 }

@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Panificacion Colombres - Ventas</title>
+  <title>2H Market - Compras</title>
   <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="src/Footer/footer.css">
 </head>
 <body>
   <header class="header c-header">
     <div class="header__logo c-header__info">
-      <h1>Panificacion Colombres</h1>
-      <span class="header__subtitle c-header__sub">MÓDULO DE CONTROL VENTAS PARA <strong>MATIAS</strong></span>
+      <h1>2H Market</h1>
+      <span class="header__subtitle c-header__sub">MÓDULO DE CONTROL DE ENTRADA & SALIDA DE <strong>MATIAS</strong></span>
     </div>
     <nav class="nav">
       <ul class="nav__menu">
         <li class="nav__item">
           <a href="src/Ventas/Nueva-venta/Nueva-venta.html" class="nav__link nav__link--active">
-            Nueva venta
+            Nueva compra
           </a>
         </li>
       </ul>
@@ -26,33 +26,50 @@
 
   <main class="main">
     <section class="hero hub-hero a-in">
-      <h1 class="hero__title hub-title">
-        <em>Ventas</em>
-      </h1>
-      <p class="hero__text">
-        Selecciona una opción para comenzar: registrar una nueva venta o consultar el listado y resumen de ventas.
+      <p class="hero__text hero__intro">
+        Selecciona una opción para comenzar según la sección.
       </p>
-      <div class="hero__cards hub-grid">
-        <a href="src/Ventas/Nueva-venta/Nueva-venta.html" class="card hub-card hub-card--cool">
-          <span class="card__icon">🛒</span>
-          <div class="hub-card__name card__title">Nueva Venta</div>
-          <p class="card__text">Seleccionar cliente y registrar una nueva venta.</p>
-        </a>
-        <a href="src/Ventas/Listado-Ventas/listado-ventas.html" class="card hub-card hub-card--urface">
-          <span class="card__icon">📅</span>
-          <div class="hub-card__name card__title">Resumen de la Venta</div>
-          <p class="card__text">Consultar y analizar ventas por período mensual.</p>
-        </a>
-        <a href="src/Ventas/otro-tipo-ventas/otro-tipo-ventas.html" class="card hub-card">
-          <span class="card__icon">📋</span>
-          <div class="hub-card__name card__title">Otro tipo de ventas</div>
-          <p class="card__text">Registrar ventas con otro criterio o flujo.</p>
-        </a>
-        <a href="src/Gastos-Salida/gastos-salida.html" class="card hub-card">
-          <span class="card__icon">📤</span>
-          <div class="hub-card__name card__title">Gastos de Salida</div>
-          <p class="card__text">Cargar y consultar gastos de salida del negocio.</p>
-        </a>
+
+      <div class="hub-section">
+        <h2 class="hub-section__title">
+          <em>Compras a Silvina</em>
+        </h2>
+        <p class="hub-section__text">
+          Registrar una nueva compra o consultar el listado y resumen de compras.
+        </p>
+        <div class="hero__cards hub-grid">
+          <a href="src/Ventas/Nueva-venta/Nueva-venta.html" class="card hub-card hub-card--cool">
+            <span class="card__icon">🛒</span>
+            <div class="hub-card__name card__title">Nueva Compra</div>
+            <p class="card__text">Seleccionar cliente y registrar una nueva compra.</p>
+          </a>
+          <a href="src/Ventas/Listado-Ventas/listado-ventas.html" class="card hub-card hub-card--urface">
+            <span class="card__icon">📅</span>
+            <div class="hub-card__name card__title">Resumen de la Compra</div>
+            <p class="card__text">Consultar y analizar compras por período mensual.</p>
+          </a>
+          <a href="src/Ventas/otro-tipo-ventas/otro-tipo-ventas.html" class="card hub-card">
+            <span class="card__icon">📋</span>
+            <div class="hub-card__name card__title">Otro tipo de compras</div>
+            <p class="card__text">Registrar compras con otro criterio o flujo.</p>
+          </a>
+        </div>
+      </div>
+
+      <div class="hub-section">
+        <h2 class="hub-section__title">
+          <em>Salidas</em>
+        </h2>
+        <p class="hub-section__text">
+          Módulos de gastos y operaciones de salida.
+        </p>
+        <div class="hero__cards hub-grid">
+          <a href="src/Gastos-Salida/gastos-salida.html" class="card hub-card">
+            <span class="card__icon">📤</span>
+            <div class="hub-card__name card__title">Gastos de Salida</div>
+            <p class="card__text">Cargar y consultar gastos de salida del negocio.</p>
+          </a>
+        </div>
       </div>
     </section>
   </main>

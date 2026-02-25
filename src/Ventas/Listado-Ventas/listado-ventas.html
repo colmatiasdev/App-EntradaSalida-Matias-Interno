@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Listado de ventas - Panificacion Colombres</title>
+  <title>Listado de compras - 2H Market</title>
   <link rel="stylesheet" href="../../../index.css">
   <link rel="stylesheet" href="../../Footer/footer.css">
   <link rel="stylesheet" href="listado-ventas.css">
@@ -11,23 +11,23 @@
 <body>
   <header class="header header--no-nav">
     <div class="header__logo">
-      <h1>Panificacion Colombres</h1>
-      <span class="header__subtitle">MÓDULO DE CONTROL VENTAS PARA <strong>MATIAS</strong></span>
+      <h1>2H Market</h1>
+      <span class="header__subtitle">MÓDULO DE CONTROL DE ENTRADA & SALIDA DE <strong>MATIAS</strong></span>
     </div>
     <a href="../../../index.html" class="header__inicio">Inicio</a>
     <nav class="nav" aria-hidden="true" hidden>
       <ul class="nav__menu">
         <li class="nav__item">
-          <a href="../Nueva-venta/Nueva-venta.html" class="nav__link">Nueva venta</a>
+          <a href="../Nueva-venta/Nueva-venta.html" class="nav__link">Nueva compra</a>
         </li>
         <li class="nav__item">
-          <a href="../Nueva-venta/Nueva-venta.html" class="nav__link">Nueva venta</a>
+          <a href="../Nueva-venta/Nueva-venta.html" class="nav__link">Nueva compra</a>
         </li>
         <li class="nav__item">
-          <a href="listado-ventas.html" class="nav__link nav__link--active">Listado de ventas</a>
+          <a href="listado-ventas.html" class="nav__link nav__link--active">Listado de compras</a>
         </li>
         <li class="nav__item">
-          <a href="../otro-tipo-ventas/otro-tipo-ventas.html" class="nav__link">Otro tipo de ventas</a>
+          <a href="../otro-tipo-ventas/otro-tipo-ventas.html" class="nav__link">Otro tipo de compras</a>
         </li>
         <li class="nav__item">
           <a href="../../Gastos-Salida/gastos-salida.html" class="nav__link">Gastos de Salida</a>
@@ -38,23 +38,23 @@
 
   <main class="main">
     <div class="page-header">
-      <h1>Listado de ventas</h1>
+      <h1>Listado de compras</h1>
     </div>
 
-    <section class="listado-ventas__filtro">
-      <label for="listado-ventas-anio">Año</label>
-      <select id="listado-ventas-anio" class="listado-ventas__select" aria-label="Año"></select>
-      <label for="listado-ventas-mes">Mes</label>
-      <select id="listado-ventas-mes" class="listado-ventas__select">
+    <section class="listado-compras__filtro">
+      <label for="listado-compras-anio">Año</label>
+      <select id="listado-compras-anio" class="listado-compras__select" aria-label="Año"></select>
+      <label for="listado-compras-mes">Mes</label>
+      <select id="listado-compras-mes" class="listado-compras__select">
       </select>
-      <button type="button" class="listado-ventas__btn-cargar" id="listado-ventas-btn-cargar">Cargar ventas</button>
+      <button type="button" class="listado-compras__btn-cargar" id="listado-compras-btn-cargar">Cargar compras</button>
     </section>
 
-    <p class="listado-ventas__mensaje" id="listado-ventas-mensaje">Seleccione año, mes y pulse Cargar ventas.</p>
+    <p class="listado-compras__mensaje" id="listado-compras-mensaje">Seleccione año, mes y pulse Cargar compras.</p>
 
-    <div class="table-section listado-ventas__tabla-wrapper" id="listado-ventas-tabla-wrapper" hidden>
+    <div class="table-section listado-compras__tabla-wrapper" id="listado-compras-tabla-wrapper" hidden>
       <div class="table-header">
-        <div class="table-header-title" id="listado-ventas-subtitulo">Detalle de ventas</div>
+        <div class="table-header-title" id="listado-compras-subtitulo">Detalle de compras</div>
         <div class="table-header-actions">
           <label for="table-page-size" class="table-page-size-label">Fechas por página</label>
           <select id="table-page-size" class="table-page-size-select" aria-label="Fechas por página">
@@ -69,8 +69,8 @@
       </div>
       <div class="table-scroll">
         <table>
-          <thead id="listado-ventas-thead"></thead>
-          <tbody id="listado-ventas-tbody"></tbody>
+          <thead id="listado-compras-thead"></thead>
+          <tbody id="listado-compras-tbody"></tbody>
         </table>
       </div>
       <div class="table-footer" id="table-footer"></div>
