@@ -14,12 +14,12 @@
   /** ID-PRODUCTO genérico para registros de este módulo (no hay producto del catálogo). */
   var ID_PRODUCTO_GENERICO = 'OTV-GEN';
 
-  /** Tipo de operación fijo: VENTA (label estático en el formulario). */
+  /** Tipo de operación fijo: OTRA-VENTA (label estático en el formulario). */
   function getCategoria() {
     var el = document.getElementById('otro-tipo-ventas-tipo-operacion');
-    if (!el) return 'VENTA';
+    if (!el) return 'OTRA-VENTA';
     var v = (el.textContent || el.innerText || '').trim();
-    return v || 'VENTA';
+    return v || 'OTRA-VENTA';
   }
 
   function getProducto() {
