@@ -217,7 +217,7 @@
 }
 
 @media (max-width: 768px) {
-  .page-header h1 {
+  .hub-hero .hub-title {
     font-size: 1.35rem;
   }
 }

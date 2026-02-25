@@ -152,10 +152,15 @@
         var nombre = (p['NOMBRE-PRODUCTO'] || '').trim() || '(Sin nombre)';
         var precio = getPrecioParaCliente(p);
         var idProd = (p[TABLA.pk] || '').toString().trim();
+        var qtyEnCarrito = getCantidadEnCarrito(idProd);
+        var textoBoton = qtyEnCarrito > 0
+          ? '✓ ' + qtyEnCarrito + (qtyEnCarrito === 1 ? ' agregado' : ' en carrito')
+          : 'Agregar';
+        var claseBoton = 'nueva-compra__btn-add' + (qtyEnCarrito > 0 ? ' nueva-compra__btn-add--added' : '');
         li.innerHTML =
           '<span class="nueva-compra__item-nombre">' + escapeHtml(nombre) + '</span>' +
           '<span class="nueva-compra__item-precio">' + formatearPrecio(precio) + '</span>' +
-          '<button type="button" class="nueva-compra__btn-add" data-id="' + escapeHtml(idProd) + '">Agregar</button>';
+          '<button type="button" class="' + claseBoton + '" data-id="' + escapeHtml(idProd) + '">' + escapeHtml(textoBoton) + '</button>';
         li.querySelector('.nueva-compra__btn-add').addEventListener('click', function () {
           agregarAlCarrito(p);
         });
@@ -176,6 +181,28 @@
     return '$ ' + Number(n).toLocaleString('es-AR');
   }
 
+  /** Cantidad en carrito para un producto (por id). */
+  function getCantidadEnCarrito(idProducto) {
+    var item = carrito.find(function (x) { return x.producto[TABLA.pk] === idProducto; });
+    return item ? item.cantidad : 0;
+  }
+
+  /** Actualiza el texto y estado visual de todos los botones "Agregar" según el carrito. */
+  function actualizarBotonesCantidadCarrito() {
+    var botones = document.querySelectorAll('.nueva-compra__btn-add');
+    botones.forEach(function (btn) {
+      var id = btn.getAttribute('data-id');
+      var qty = getCantidadEnCarrito(id);
+      if (qty > 0) {
+        btn.textContent = '✓ ' + qty + (qty === 1 ? ' agregado' : ' en carrito');
+        btn.classList.add('nueva-compra__btn-add--added');
+      } else {
+        btn.textContent = 'Agregar';
+        btn.classList.remove('nueva-compra__btn-add--added');
+      }
+    });
+  }
+
   function agregarAlCarrito(producto) {
     var pk = TABLA.pk;
     var id = producto[pk];
@@ -192,11 +219,13 @@
       carrito.push({ producto: p, cantidad: 1 });
     }
     pintarResumen();
+    actualizarBotonesCantidadCarrito();
   }
 
   function quitarDelCarrito(idProducto) {
     carrito = carrito.filter(function (x) { return x.producto[TABLA.pk] !== idProducto; });
     pintarResumen();
+    actualizarBotonesCantidadCarrito();
   }
 
   function actualizarCantidad(idProducto, cantidad) {
@@ -205,6 +234,7 @@
     var item = carrito.find(function (x) { return x.producto[TABLA.pk] === idProducto; });
     if (item) item.cantidad = n;
     pintarResumen();
+    actualizarBotonesCantidadCarrito();
   }
 
   function pintarResumen() {

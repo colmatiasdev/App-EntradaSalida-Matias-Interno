@@ -21,14 +21,14 @@
      * URL del Web App de Google Apps Script (despliegue). ÚNICA fuente de datos de la app.
      * Copiar aquí la URL que da "Implementar" > "Aplicación web" en el proyecto Apps Script vinculado al Sheet anterior.
      */
-    APP_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxlV3L6Q6AeZmXFFpKCv8PZ4ACO9Om6V5nDpU2kbEl_Jr4s_VvgEBCS-0nv4CJ62Feh9g/exec',
+    APP_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxPpjUP8LSWa58a7d2jPXLYSnFS5BlIB-aRk2v0mcaWSmWuFoMCl3mAj2B7ZS-Zg5bKmA/exec',
 
     /** Nombres de las hojas (igual que en Code.gs y tables.js). */
     HOJA_PRODUCTOS: 'PRODUCTOS',
     HOJA_CLIENTES: 'CLIENTES',
 
     /** Valor fijo para la columna USUARIO al guardar ventas/compras en el Sheet. */
-    USUARIO: 'MATIAS',
+    USUARIO: 'USR-MATIAS',
 
     /**
      * Categorías para el filtro en Nueva venta. Mismo orden que en la hoja PRODUCTOS (columna CATEGORIA).

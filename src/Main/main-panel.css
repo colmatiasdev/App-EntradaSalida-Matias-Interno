@@ -1,0 +1,205 @@
+/* Estilo unificado del área main (panel) para index y módulos */
+
+:root {
+  --azul-50: #e3f2fd;
+  --azul-200: #bbdefb;
+  --azul-700: #1565c0;
+  --texto: #0d1f3c;
+  --texto-2: #546e8a;
+  --borde: #cce0f5;
+  --bg: #f0f6ff;
+  --bg-card: #ffffff;
+  --grad-accent: linear-gradient(90deg, var(--azul-700), #42a5f5);
+  --r: 14px;
+  --r-l: 20px;
+  --t: 0.25s ease;
+  --ts: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-display: "Syne", Georgia, serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+}
+
+/* Área principal */
+.main {
+  flex: 1;
+  padding: 2.75rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+/* Hero (título principal de la página) */
+.hub-hero {
+  margin-bottom: 3rem;
+}
+
+.hub-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--azul-700);
+  margin-bottom: 0.85rem;
+  padding: 0.3rem 0.8rem;
+  background: var(--azul-50);
+  border-radius: 99px;
+  border: 1px solid var(--azul-200);
+}
+
+.hub-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 800;
+  color: var(--texto);
+  line-height: 1.15;
+  margin-bottom: 1rem;
+  letter-spacing: -0.025em;
+}
+
+.hub-title em {
+  font-style: normal;
+  color: var(--azul-700);
+}
+
+.hero__text {
+  color: var(--texto-2);
+  font-size: 1rem;
+  max-width: 520px;
+  line-height: 1.75;
+}
+
+/* Secciones con encabezado estilizado */
+.hub-section {
+  margin-top: 3rem;
+}
+
+.hub-section__header {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 2px solid var(--borde);
+  position: relative;
+}
+
+.hub-section__header::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: var(--grad-accent);
+  border-radius: 99px;
+}
+
+.hub-section__icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.hub-section__title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--texto);
+}
+
+.hub-section__title em {
+  font-style: normal;
+  color: var(--azul-700);
+}
+
+.hub-section__text {
+  font-size: 0.9rem;
+  color: var(--texto-2);
+  margin-bottom: 1.25rem;
+  padding-left: 0.25rem;
+}
+
+/* Page header (compatibilidad con módulos que usan .page-header) */
+.page-header {
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1.5px solid var(--borde);
+}
+
+.page-header__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--texto-2);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  transition: color var(--t);
+}
+
+.page-header__back:hover {
+  color: var(--azul-700);
+}
+
+.page-header h1,
+.main h1.page-header__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 800;
+  color: var(--azul-700);
+}
+
+/* Títulos h2 dentro del main con estilo panel */
+.main h2 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--texto);
+  margin-bottom: 0.75rem;
+}
+
+.main h2 em {
+  font-style: normal;
+  color: var(--azul-700);
+}
+
+/* Fondo y tipografía del body en módulos (cuando cargan main-panel) */
+body.main-panel-page {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--texto);
+  line-height: 1.65;
+}
+
+body.main-panel-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse at 10% 15%, rgba(21, 101, 192, 0.06) 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 85%, rgba(107, 224, 64, 0.05) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 1.75rem 1.1rem;
+  }
+  .hub-hero {
+    margin-bottom: 2.25rem;
+  }
+  .hub-section {
+    margin-top: 2.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .main {
+    padding: 1.25rem 0.85rem;
+  }
+}

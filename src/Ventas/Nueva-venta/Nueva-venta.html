@@ -4,49 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Nueva compra - 2H Market</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../../index.css">
+  <link rel="stylesheet" href="../../Header/header.css">
+  <link rel="stylesheet" href="../../Main/main-panel.css">
   <link rel="stylesheet" href="../../Footer/footer.css">
   <link rel="stylesheet" href="Nueva-venta.css">
 </head>
-<body>
-  <header class="header header--no-nav">
-    <div class="header__logo">
-      <h1>2H Market</h1>
-      <span class="header__subtitle">MÓDULO DE CONTROL DE ENTRADA & SALIDA DE <strong>MATIAS</strong></span>
+<body class="main-panel-page">
+  <header class="header">
+    <div class="header__stripe"></div>
+    <div class="header__inner">
+      <a href="../../../index.html" class="logo">
+        <div class="logo__ring">
+          <img src="../../../src/img/Logo2.png" alt="2H Market" class="logo__img">
+        </div>
+        <div class="logo__texto">
+          <span class="logo__nombre"><span>2H</span> Market</span>
+          <span class="logo__sub">Control de <strong>MATIAS</strong></span>
+        </div>
+      </a>
+      <div class="header__sep"></div>
+      <nav class="nav">
+        <ul class="nav__menu" id="main-nav">
+          <li><a href="../../../index.html" class="nav__link">Inicio</a></li>
+        </ul>
+      </nav>
     </div>
-    <a href="../../../index.html" class="header__inicio">Inicio</a>
-    <nav class="nav" aria-hidden="true" hidden>
-      <ul class="nav__menu">
-        <li class="nav__item">
-          <a href="Nueva-venta.html" class="nav__link">Nueva compra</a>
-        </li>
-        <li class="nav__item">
-          <a href="Nueva-venta.html" class="nav__link nav__link--active">Nueva compra</a>
-        </li>
-        <li class="nav__item">
-          <a href="../Listado-Ventas/listado-ventas.html" class="nav__link">Listado de compras</a>
-        </li>
-        <li class="nav__item">
-          <a href="../otro-tipo-ventas/otro-tipo-ventas.html" class="nav__link">Otro tipo de compras</a>
-        </li>
-        <li class="nav__item">
-          <a href="../../Gastos-Salida/gastos-salida.html" class="nav__link">Gastos de Salida</a>
-        </li>
-      </ul>
-    </nav>
   </header>
 
   <main class="main">
-    <div class="page-header">
-      <h1>Nueva compra</h1>
+    <section class="hub-hero">
+      <div class="hub-hero__eyebrow">🛒 2H Market</div>
+      <h1 class="hub-title">Nueva compra</h1>
       <div class="nueva-compra__cliente-info" id="nueva-compra-cliente-info">
         <span class="nueva-compra__cliente-label">Compra para:</span>
         <strong class="nueva-compra__cliente-nombre">—</strong>
         <span class="nueva-compra__cliente-tipo" id="nueva-compra-cliente-tipo"></span>
       </div>
-    </div>
+    </section>
 
-    <section class="nueva-compra__listado">
+    <section class="nueva-compra__listado hub-section">
       <h2 class="nueva-compra__titulo">Productos</h2>
       <p class="nueva-compra__mensaje" id="nueva-compra-mensaje">Cargando productos…</p>
       <div class="nueva-compra__filtro">
@@ -57,7 +56,7 @@
       <div class="nueva-compra__productos-wrapper" id="nueva-compra-productos"></div>
     </section>
 
-    <section class="nueva-compra__resumen">
+    <section class="nueva-compra__resumen hub-section">
       <h2 class="nueva-compra__titulo">Resumen de la compra</h2>
       <div class="nueva-compra__resumen-content" id="nueva-compra-resumen-content">
         <p class="nueva-compra__resumen-vacio" id="nueva-compra-resumen-vacio">No hay productos en la compra. Selecciona productos arriba.</p>

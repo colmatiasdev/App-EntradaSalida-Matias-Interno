@@ -21,14 +21,14 @@
 }
 
 /* Listado y resumen */
-.page-header .nueva-compra__cliente-info {
+.hub-hero .nueva-compra__cliente-info {
   margin-top: 0.75rem;
   font-size: 0.95rem;
-  color: var(--color-text-muted);
+  color: var(--texto-2, var(--color-text-muted));
   display: none;
 }
 
-.page-header .nueva-compra__cliente-info.nueva-compra__cliente-info--visible {
+.hub-hero .nueva-compra__cliente-info.nueva-compra__cliente-info--visible {
   display: block;
 }
 
@@ -178,10 +178,25 @@
   border-radius: var(--radius);
   font-size: 0.85rem;
   cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  min-width: 5.5rem;
 }
 
 .nueva-compra__btn-add:hover {
   background: var(--color-primary-dark);
+}
+
+/* Estado "agregado": marca y cantidad visible */
+.nueva-compra__btn-add--added {
+  background: #2e7d32;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(46, 125, 50, 0.35);
+}
+
+.nueva-compra__btn-add--added:hover {
+  background: #1b5e20;
+  box-shadow: 0 2px 8px rgba(46, 125, 50, 0.4);
 }
 
 .nueva-compra__resumen {
@@ -370,7 +385,7 @@
 
 /* ─── Móvil ─── */
 @media (max-width: 768px) {
-  .page-header {
+  .hub-hero {
     margin-bottom: 1rem;
   }
 
