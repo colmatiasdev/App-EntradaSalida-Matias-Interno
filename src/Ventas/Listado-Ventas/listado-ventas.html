@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1f5c">
+  <title>Listado de Ventas Market — 2H Market</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../index.css">
+  <link rel="stylesheet" href="../../Header/header.css">
+  <link rel="stylesheet" href="../../Main/main-panel.css">
+  <link rel="stylesheet" href="../../Footer/footer.css">
+  <link rel="stylesheet" href="listado-ventas.css">
+</head>
+<body class="main-panel-page listado-ventas-page">
+
+  <header class="header">
+    <div class="header__stripe"></div>
+    <div class="header__inner">
+      <a href="../../../index.html" class="logo">
+        <div class="logo__ring">
+          <img src="../../img/Logo3.png" alt="2H Market" class="logo__img">
+        </div>
+        <div class="logo__texto">
+          <span class="logo__nombre"><span>2H</span> Market</span>
+          <span class="logo__sub">Control de <strong>MATIAS</strong></span>
+        </div>
+      </a>
+      <div class="header__sep"></div>
+      <nav class="nav">
+        <ul class="nav__menu" id="main-nav">
+          <li><a href="../../../index.html" class="nav__link">🏠 Inicio</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="page-header a-in">
+      <h1>Listado de Ventas Market</h1>
+    </div>
+
+    <div class="filtro-card a-in-2">
+      <div class="filtro-card__group">
+        <label for="listado-ventas-anio" class="filtro-card__label">Año</label>
+        <select id="listado-ventas-anio" class="filtro-card__select" aria-label="Año"></select>
+      </div>
+      <div class="filtro-card__group">
+        <label for="listado-ventas-mes" class="filtro-card__label">Mes</label>
+        <select id="listado-ventas-mes" class="filtro-card__select"></select>
+      </div>
+      <button type="button" class="filtro-card__btn" id="listado-ventas-btn-cargar">
+        📊 Cargar ventas
+      </button>
+    </div>
+
+    <p class="listado-ventas__mensaje" id="listado-ventas-mensaje">
+      Seleccioná año, mes y presioná Cargar ventas.
+    </p>
+
+    <div class="table-section listado-ventas__tabla-wrapper a-in-3" id="listado-ventas-tabla-wrapper" hidden>
+      <div class="table-header">
+        <div class="table-header-title" id="listado-ventas-subtitulo">Detalle de ventas Market</div>
+        <div class="table-header-actions">
+          <label for="table-page-size" class="table-page-size-label">Fechas por página</label>
+          <select id="table-page-size" class="table-page-size-select" aria-label="Fechas por página">
+            <option value="1" selected>1</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+          <input type="search" class="table-search" id="table-search" placeholder="🔍 Buscar…">
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead id="listado-ventas-thead"></thead>
+          <tbody id="listado-ventas-tbody"></tbody>
+        </table>
+      </div>
+      <div class="table-footer" id="table-footer"></div>
+      <div class="table-pagination" id="table-pagination">
+        <span class="table-pagination-info" id="table-pagination-info"></span>
+        <div class="table-pagination-controls">
+          <button type="button" class="table-pagination-btn" id="table-pagination-first" aria-label="Primera página">«</button>
+          <button type="button" class="table-pagination-btn" id="table-pagination-prev" aria-label="Anterior">‹</button>
+          <span class="table-pagination-pages" id="table-pagination-pages"></span>
+          <button type="button" class="table-pagination-btn" id="table-pagination-next" aria-label="Siguiente">›</button>
+          <button type="button" class="table-pagination-btn" id="table-pagination-last" aria-label="Última página">»</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-container" data-footer-src="../../Footer/footer.html"></div>
+
+  <script src="../../Config/config.js"></script>
+  <script src="../../Config/tables.js"></script>
+  <script src="../../../main.js"></script>
+  <script src="../../Footer/footer.js"></script>
+  <script src="listado-ventas.js"></script>
+  <script>
+    (function () {
+      var path = window.location.pathname.toLowerCase();
+      document.querySelectorAll(".nav__link").forEach(function (l) {
+        l.classList.remove("nav__link--active");
+        var href = (l.getAttribute("href") || "").toLowerCase();
+        var key = href.split("/").pop().replace(".html", "");
+        if (key === "index" && (path.endsWith("index.html") || path.endsWith("/") || path === "")) l.classList.add("nav__link--active");
+        else if (key && key !== "index" && path.indexOf(key) !== -1) l.classList.add("nav__link--active");
+      });
+    })();
+  </script>
+</body>
+</html>
