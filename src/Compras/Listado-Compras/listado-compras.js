@@ -53,6 +53,17 @@
     return '$\u00a0' + Number(n).toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
   }
 
+  /** Convierte hex (#RRGGBB o RRGGBB) a rgba(r,g,b,a). */
+  function hexToRgba(hex, alpha) {
+    if (!hex) return 'transparent';
+    hex = String(hex).replace(/^#/, '');
+    if (hex.length !== 6) return 'transparent';
+    var r = parseInt(hex.slice(0, 2), 16);
+    var g = parseInt(hex.slice(2, 4), 16);
+    var b = parseInt(hex.slice(4, 6), 16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + (alpha != null ? alpha : 1) + ')';
+  }
+
   /** Formatea fecha a dd-MM-YYYY (ej: 22-02-2026). Acepta ISO con hora (2026-02-22T03:00:00.000Z) o solo fecha. */
   function fmtFecha(val) {
     if (val === undefined || val === null || val === '') return '';
@@ -103,7 +114,7 @@
     return lista;
   }
 
-  /** Carga usuarios desde la hoja USUARIOS y rellena APP_CONFIG.USUARIO_ETIQUETAS (etiqueta = USUARIO-ETIQUETA, color = COLOR). */
+  /** Carga usuarios desde la hoja USUARIOS y rellena APP_CONFIG.USUARIO_ETIQUETAS (etiqueta, color, perfil). */
   function cargarUsuarioEtiquetas() {
     if (!APP_SCRIPT_URL || !window.APP_CONFIG) return;
     var url = (CORS_PROXY && CORS_PROXY.length > 0) ? CORS_PROXY + encodeURIComponent(APP_SCRIPT_URL) : APP_SCRIPT_URL;
@@ -118,12 +129,32 @@
           if (!codigo) return;
           map[codigo] = {
             etiqueta: (r['USUARIO-ETIQUETA'] != null ? String(r['USUARIO-ETIQUETA']) : '').trim() || codigo,
-            color: (r.COLOR != null ? String(r.COLOR).trim() : '') || '#42a5f5'
+            color: (r.COLOR != null ? String(r.COLOR).trim() : '') || '#42a5f5',
+            perfil: (r.PERFIL != null ? String(r.PERFIL) : '').trim().toUpperCase()
           };
         });
         window.APP_CONFIG.USUARIO_ETIQUETAS = map;
+        var codigo = (APP_CONFIG.USUARIO || '').trim();
+        if (codigo && map[codigo] && map[codigo].perfil !== undefined) {
+          try {
+            localStorage.setItem('APP_USUARIO_PERFIL', map[codigo].perfil || '');
+            window.APP_CONFIG.USUARIO_PERFIL = (map[codigo].perfil || '').trim();
+          } catch (e) {}
+        }
       })
       .catch(function () {});
+  }
+
+  /** true si el usuario logueado tiene PERFIL ADMIN o GERENTE (muestra columna USUARIO). */
+  function esAdminOGerente() {
+    var config = APP_CONFIG || {};
+    var perfil = (config.USUARIO_PERFIL || '').trim().toUpperCase();
+    if (perfil) return perfil === 'ADMIN' || perfil === 'GERENTE';
+    var codigo = (config.USUARIO || '').trim();
+    if (!codigo) return false;
+    var info = config.USUARIO_ETIQUETAS && config.USUARIO_ETIQUETAS[codigo];
+    perfil = (info && info.perfil) ? String(info.perfil).toUpperCase() : '';
+    return perfil === 'ADMIN' || perfil === 'GERENTE';
   }
 
   function init() {
@@ -259,7 +290,11 @@
     if (tableSearch) tableSearch.value = '';
 
     var columnasMes = (APP_TABLES && APP_TABLES[nombreMes] && APP_TABLES[nombreMes].columns) ? APP_TABLES[nombreMes].columns : COLUMNAS_COMPRAS_DEF;
-    var columnas = ['MES'].concat(columnasMes).filter(function (c) { return columnasOcultas.indexOf(c) === -1; });
+    var columnas = ['MES'].concat(columnasMes).filter(function (c) {
+      if (columnasOcultas.indexOf(c) !== -1) return false;
+      if (c === 'USUARIO' && !esAdminOGerente()) return false;
+      return true;
+    });
     currentColumnas = columnas;
 
     thead.innerHTML = '';
@@ -268,6 +303,7 @@
       var th = document.createElement('th');
       th.textContent = col === 'FECHA_OPERATIVA' ? 'FECHA' : col;
       if (['CANTIDAD', 'PRECIO', 'MONTO'].indexOf(col) !== -1) th.className = 'th-num';
+      if (col === 'USUARIO') th.className = (th.className ? th.className + ' ' : '') + 'listado-compras__th-usuario';
       trHead.appendChild(th);
     });
     thead.appendChild(trHead);
@@ -395,7 +431,7 @@
               span.title = usuarioKey;
               if (info.color) {
                 span.style.borderLeftColor = info.color;
-                span.style.backgroundColor = info.color ? (info.color + '1a') : 'transparent';
+                span.style.backgroundColor = hexToRgba(info.color, 0.1);
               }
               td.appendChild(span);
             } else {

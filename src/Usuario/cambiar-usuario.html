@@ -75,6 +75,25 @@
       font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em;
       text-transform: uppercase; color: rgba(255,255,255,0.5);
     }
+    .header__meta {
+      display: flex; align-items: center; gap: 0.75rem;
+      margin-left: auto; flex-shrink: 0;
+    }
+    .header__user {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding: 0.25rem 0.6rem; background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15); border-radius: 999px;
+      color: rgba(255,255,255,0.85); font-size: 0.75rem; font-weight: 600;
+    }
+    .header__user-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--azul-400); flex-shrink: 0;
+    }
+    .header__badge {
+      padding: 0.25rem 0.6rem; background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15); border-radius: 999px;
+      color: rgba(255,255,255,0.65); font-size: 0.7rem; font-weight: 600;
+    }
 
     .content {
       position: relative; z-index: 1;
@@ -141,6 +160,100 @@
       font-size: 0.9rem; color: var(--texto-2); padding: 1rem 0;
     }
     .user-list-msg--error { color: #c0392b; }
+
+    /* Modal contraseña */
+    .password-modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(13, 31, 60, 0.6);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .password-modal-overlay.is-open {
+      display: flex;
+    }
+    .password-modal {
+      background: white;
+      border-radius: var(--r-l);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+      padding: 1.5rem;
+      max-width: 360px;
+      width: 100%;
+      border: 1px solid var(--borde);
+    }
+    .password-modal__title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--azul-700);
+      margin-bottom: 0.5rem;
+    }
+    .password-modal__user {
+      font-size: 0.85rem;
+      color: var(--texto-2);
+      margin-bottom: 1rem;
+    }
+    .password-modal__label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--texto-2);
+      margin-bottom: 0.35rem;
+    }
+    .password-modal__input {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      border: 2px solid var(--borde);
+      border-radius: var(--r);
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      box-sizing: border-box;
+    }
+    .password-modal__input:focus {
+      outline: none;
+      border-color: var(--azul-400);
+    }
+    .password-modal__input.error {
+      border-color: #c0392b;
+    }
+    .password-modal__msg {
+      font-size: 0.8rem;
+      color: #c0392b;
+      margin-bottom: 0.75rem;
+      min-height: 1.2em;
+    }
+    .password-modal__actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+      margin-top: 1rem;
+    }
+    .password-modal__btn {
+      padding: 0.5rem 1rem;
+      border-radius: var(--r);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .password-modal__btn--cancel {
+      background: var(--azul-50);
+      color: var(--azul-700);
+      border-color: var(--borde);
+    }
+    .password-modal__btn--cancel:hover {
+      background: var(--azul-200);
+    }
+    .password-modal__btn--ok {
+      background: var(--azul-700);
+      color: white;
+    }
+    .password-modal__btn--ok:hover {
+      background: var(--azul-600);
+    }
   </style>
 </head>
 <body>
@@ -158,6 +271,13 @@
     </a>
     <div class="header__sep"></div>
     <span class="header__title">Cambiar usuario</span>
+    <div class="header__meta">
+      <div class="header__user" id="header-user" title="Usuario del sistema">
+        <span class="header__user-dot" id="header-user-dot"></span>
+        <span id="header-user-name">—</span>
+      </div>
+      <div class="header__badge" id="live-date"></div>
+    </div>
   </header>
 
   <main class="content">
@@ -170,7 +290,22 @@
     <a href="../../index.html" class="back-link">← Volver al panel</a>
   </main>
 
-  <script src="../../Config/config.js"></script>
+  <div class="password-modal-overlay" id="password-modal" aria-hidden="true">
+    <div class="password-modal" role="dialog" aria-labelledby="password-modal-title">
+      <h2 class="password-modal__title" id="password-modal-title">Contraseña requerida</h2>
+      <p class="password-modal__user" id="password-modal-user"></p>
+      <label class="password-modal__label" for="password-modal-input">Contraseña</label>
+      <input type="password" id="password-modal-input" class="password-modal__input" autocomplete="off" placeholder="Ingresá la contraseña">
+      <p class="password-modal__msg" id="password-modal-msg" aria-live="polite"></p>
+      <div class="password-modal__actions">
+        <button type="button" class="password-modal__btn password-modal__btn--cancel" id="password-modal-cancel">Cancelar</button>
+        <button type="button" class="password-modal__btn password-modal__btn--ok" id="password-modal-ok">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../Config/config.js"></script>
+  <script src="../Header/header-common.js"></script>
   <script>
     (function () {
       var listEl = document.getElementById('user-list');
@@ -234,6 +369,83 @@
             msgEl.classList.add('user-list-msg--error');
             return;
           }
+
+          var modal = document.getElementById('password-modal');
+          var modalInput = document.getElementById('password-modal-input');
+          var modalMsg = document.getElementById('password-modal-msg');
+          var modalUser = document.getElementById('password-modal-user');
+          var modalCancel = document.getElementById('password-modal-cancel');
+          var modalOk = document.getElementById('password-modal-ok');
+
+          function tienePassword(row) {
+            var p = row.PASSWORD;
+            return p !== undefined && p !== null && String(p).trim() !== '';
+          }
+
+          function aplicarUsuario(codigo, perfil) {
+            try {
+              localStorage.setItem('APP_USUARIO', codigo);
+              localStorage.setItem('APP_USUARIO_PERFIL', (perfil != null ? String(perfil) : '').trim());
+            } catch (e) {}
+            window.location.href = '../../index.html';
+          }
+
+          function abrirModal(row, codigo, etiqueta) {
+            if (!modal || !modalInput || !modalMsg) return;
+            modalUser.textContent = 'Usuario: ' + etiqueta;
+            modalInput.value = '';
+            modalInput.classList.remove('error');
+            modalMsg.textContent = '';
+            modal.setAttribute('aria-hidden', 'false');
+            modal.classList.add('is-open');
+            modalInput.focus();
+            modal._pendingCodigo = codigo;
+            modal._pendingRow = row;
+            modal._expectedPassword = String(row.PASSWORD || '').trim();
+          }
+
+          function cerrarModal() {
+            if (!modal) return;
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden', 'true');
+            modal._pendingCodigo = null;
+            modal._pendingRow = null;
+            modal._expectedPassword = null;
+          }
+
+          if (modalCancel) {
+            modalCancel.addEventListener('click', function () {
+              cerrarModal();
+            });
+          }
+          if (modalOk) {
+            modalOk.addEventListener('click', function () {
+              var codigo = modal._pendingCodigo;
+              var row = modal._pendingRow;
+              var expected = modal._expectedPassword;
+              var ingresada = (modalInput && modalInput.value) ? modalInput.value.trim() : '';
+              if (ingresada !== expected) {
+                if (modalMsg) modalMsg.textContent = 'Error con las credenciales. La contraseña no coincide.';
+                if (modalInput) modalInput.classList.add('error');
+                return;
+              }
+              var perfil = (row && row.PERFIL != null) ? String(row.PERFIL).trim() : '';
+              cerrarModal();
+              aplicarUsuario(codigo, perfil);
+            });
+          }
+          if (modalInput) {
+            modalInput.addEventListener('keydown', function (e) {
+              if (e.key === 'Enter') modalOk && modalOk.click();
+              if (e.key === 'Escape') cerrarModal();
+            });
+          }
+          if (modal) {
+            modal.addEventListener('click', function (e) {
+              if (e.target === modal) cerrarModal();
+            });
+          }
+
           usuarios.forEach(function (row) {
             var codigo = (row.USUARIO != null ? String(row.USUARIO) : '').trim();
             if (!codigo) return;
@@ -250,8 +462,12 @@
               '<span class="user-btn__label">' + escapeHtml(etiqueta) + '</span>' +
               (isActive ? '<span class="user-btn__badge">En uso</span>' : '');
             btn.addEventListener('click', function () {
-              try { localStorage.setItem('APP_USUARIO', codigo); } catch (e) {}
-              window.location.href = '../../index.html';
+              var perfil = (row.PERFIL != null ? String(row.PERFIL) : '').trim();
+              if (!tienePassword(row)) {
+                aplicarUsuario(codigo, perfil);
+                return;
+              }
+              abrirModal(row, codigo, etiqueta);
             });
             listEl.appendChild(btn);
           });

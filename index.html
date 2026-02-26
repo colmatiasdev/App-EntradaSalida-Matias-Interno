@@ -554,6 +554,11 @@
             var etiqueta = (row['USUARIO-ETIQUETA'] != null ? String(row['USUARIO-ETIQUETA']) : '').trim() || codigo.replace(/^USR-/, '');
             var color = (row.COLOR != null ? String(row.COLOR).trim() : '') || '#42a5f5';
             pintarUsuario(etiqueta, color);
+            var perfil = (row.PERFIL != null ? String(row.PERFIL) : '').trim();
+            try {
+              localStorage.setItem('APP_USUARIO_PERFIL', perfil);
+              if (window.APP_CONFIG) window.APP_CONFIG.USUARIO_PERFIL = perfil;
+            } catch (e) {}
           }
         })
         .catch(function () {});

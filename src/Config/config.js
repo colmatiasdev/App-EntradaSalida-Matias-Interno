@@ -21,7 +21,7 @@
      * URL del Web App de Google Apps Script (despliegue). ÚNICA fuente de datos de la app.
      * Copiar aquí la URL que da "Implementar" > "Aplicación web" en el proyecto Apps Script vinculado al Sheet anterior.
      */
-    APP_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbx2rDJyiiUfM-M0seU6ejBmcM36NdzXxMaxLNIH9CeP8OC2if37Rk4FVI08Sak2tYohpw/exec',
+    APP_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxJEkLvFbzA-Ixj8o3xj6VPoxbyMf9IqsDkF5XljtRjNvzJbxPzvWmMts8ifyZGTdSM/exec',
 
     /** Nombres de las hojas (igual que en Code.gs y tables.js). */
     HOJA_PRODUCTOS: 'PRODUCTOS',
@@ -33,6 +33,12 @@
      * Etiqueta y color se obtienen de la hoja USUARIOS (USUARIO-ETIQUETA, COLOR) vía usuarioLeer.
      */
     USUARIO: '',
+
+    /**
+     * PERFIL del usuario logueado (columna PERFIL de la hoja USUARIOS).
+     * Se guarda en localStorage (APP_USUARIO_PERFIL) al cambiar de usuario o al cargar usuarioLeer.
+     */
+    USUARIO_PERFIL: '',
 
     /**
      * Map de usuario → { etiqueta, color }. Se llena desde la hoja USUARIOS (usuarioLeer):
@@ -75,9 +81,14 @@
     CORS_PROXY: ''
   };
 
-  // Usuario logueado: el elegido en "Cambiar usuario" (localStorage APP_USUARIO)
-  if (global.localStorage && global.localStorage.getItem('APP_USUARIO')) {
-    Config.USUARIO = global.localStorage.getItem('APP_USUARIO');
+  // Usuario logueado: el elegido en "Cambiar usuario" (localStorage APP_USUARIO y APP_USUARIO_PERFIL)
+  if (global.localStorage) {
+    if (global.localStorage.getItem('APP_USUARIO')) {
+      Config.USUARIO = global.localStorage.getItem('APP_USUARIO');
+    }
+    if (global.localStorage.getItem('APP_USUARIO_PERFIL') !== null) {
+      Config.USUARIO_PERFIL = (global.localStorage.getItem('APP_USUARIO_PERFIL') || '').trim();
+    }
   }
 
   global.APP_CONFIG = Config;
