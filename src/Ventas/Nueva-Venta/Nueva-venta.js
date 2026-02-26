@@ -10,6 +10,8 @@
   var STORAGE_KEY_CLIENTE = 'APP_CLIENTE_VENTA';
   /** Unidades (PRESENTACION-UNIDAD-MEDIDA) que usan cantidad decimal con 2 decimales (config.js). */
   var UNIDADES_CANTIDAD_DECIMAL = (window.APP_CONFIG && window.APP_CONFIG.UNIDADES_CANTIDAD_DECIMAL) || ['GRAMOS', 'KG'];
+  /** Cantidad decimal máxima: 6 enteros, 2 decimales. */
+  var MAX_CANTIDAD_DECIMAL = 999999.99;
   /** Config del cálculo Precio Unitario = columnaCosto / columnaCantidad (config.js). */
   var PRECIO_UNITARIO_CALCULO = (window.APP_CONFIG && window.APP_CONFIG.PRECIO_UNITARIO_CALCULO) || { columnaCosto: 'COSTO', columnaCantidad: 'PRESENTACION-CANTIDAD-UNIDAD-MEDIDA' };
   /** Cliente por defecto cuando no hay uno seleccionado en sesión (Nueva Venta Market: SILVINA / COSTO). */
@@ -201,8 +203,13 @@
     return div.innerHTML;
   }
 
+  /** Redondea a 2 decimales (para subtotales y totales). */
+  function redondear2(n) {
+    return Math.round(Number(n) * 100) / 100;
+  }
+
   function formatearPrecio(n) {
-    return '$ ' + Number(n).toLocaleString('es-AR');
+    return '$ ' + Number(n).toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
   /** Cantidad en carrito para un producto (por id). */
@@ -261,7 +268,7 @@
     if (esDecimal) {
       n = parseFloat(String(cantidad).replace(',', '.'), 10);
       if (isNaN(n) || n < 0) n = 0;
-      n = Math.min(99999.99, Math.round(n * 100) / 100);
+      n = Math.min(MAX_CANTIDAD_DECIMAL, redondear2(n));
     } else {
       n = parseInt(cantidad, 10);
       if (isNaN(n) || n < 1) n = 1;
@@ -270,6 +277,24 @@
     item.cantidad = n;
     pintarResumen();
     actualizarBotonesCantidadCarrito();
+  }
+
+  /** Actualiza cantidad en carrito y solo las celdas de subtotal/total del DOM, sin repintar la tabla (evita perder foco en input decimal). */
+  function actualizarCantidadSoloDOM(idProducto, cantidad, tr) {
+    var item = carrito.find(function (x) { return x.producto[TABLA.pk] === idProducto; });
+    if (!item) return;
+    var n = parseFloat(String(cantidad).replace(',', '.'), 10);
+    if (isNaN(n) || n < 0) n = 0;
+    n = Math.min(MAX_CANTIDAD_DECIMAL, redondear2(n));
+    item.cantidad = n;
+    var precioUnitario = getPrecioUnitario(item.producto);
+    var subtotal = redondear2(precioUnitario * n);
+    var subtotalTd = tr && tr.querySelector('.nueva-venta__subtotal');
+    if (subtotalTd) subtotalTd.textContent = formatearPrecio(subtotal);
+    var total = 0;
+    carrito.forEach(function (i) { total += redondear2(getPrecioUnitario(i.producto) * i.cantidad); });
+    var totalEl = document.getElementById('nueva-venta-total');
+    if (totalEl) totalEl.textContent = formatearPrecio(redondear2(total));
   }
 
   function pintarResumen() {
@@ -295,7 +320,7 @@
     carrito.forEach(function (item) {
       var id = item.producto[TABLA.pk];
       var precioUnitario = getPrecioUnitario(item.producto);
-      var subtotal = precioUnitario * item.cantidad;
+      var subtotal = redondear2(precioUnitario * item.cantidad);
       total += subtotal;
       var tr = document.createElement('tr');
       var qty = item.cantidad;
@@ -305,7 +330,7 @@
       var qtyCellHtml;
       if (esDecimal) {
         qtyCellHtml = '<td class="nueva-venta__th-num nueva-venta__td-qty">' +
-          '<input type="number" min="0" max="99999.99" step="0.01" value="' + escapeHtml(String(qtyVal)) + '" placeholder="" class="nueva-venta__input-qty nueva-venta__input-qty--decimal" data-id="' + escapeHtml(id) + '" aria-label="Cantidad" inputmode="decimal">' +
+          '<input type="text" inputmode="decimal" maxlength="9" value="' + escapeHtml(String(qtyVal)) + '" placeholder="" class="nueva-venta__input-qty nueva-venta__input-qty--decimal" data-id="' + escapeHtml(id) + '" aria-label="Cantidad (máx 6 enteros, 2 decimales)" autocomplete="off" title="Usar , o . como decimal. Máx 999999,99">' +
           '</td>';
       } else {
         qtyCellHtml = '<td class="nueva-venta__th-num nueva-venta__td-qty">' +
@@ -330,20 +355,29 @@
       if (esDecimal) {
         function parseQtyDecimal(raw) {
           if (raw === '') return 0;
-          var val = parseFloat(raw, 10);
+          var val = parseFloat(String(raw).replace(',', '.'), 10);
           if (isNaN(val) || val < 0) return 0;
-          return Math.min(99999.99, Math.round(val * 100) / 100);
+          return Math.min(MAX_CANTIDAD_DECIMAL, redondear2(val));
         }
         function syncQtyDecimal(allowFormatInput) {
           var raw = String(inputQty.value).replace(',', '.').trim();
           if (raw === '') {
-            actualizarCantidad(id, 0);
-            if (allowFormatInput) inputQty.value = '';
+            if (allowFormatInput) {
+              actualizarCantidad(id, 0);
+              inputQty.value = '';
+            } else {
+              actualizarCantidadSoloDOM(id, 0, tr);
+              inputQty.value = '';
+            }
             return;
           }
           var val = parseQtyDecimal(raw);
-          actualizarCantidad(id, val);
-          if (allowFormatInput) inputQty.value = val === 0 ? '' : val.toFixed(2);
+          if (allowFormatInput) {
+            actualizarCantidad(id, val);
+            inputQty.value = val === 0 ? '' : val.toFixed(2);
+          } else {
+            actualizarCantidadSoloDOM(id, val, tr);
+          }
         }
         inputQty.addEventListener('input', function () { syncQtyDecimal(false); });
         inputQty.addEventListener('change', function () { syncQtyDecimal(true); });
@@ -379,7 +413,7 @@
       });
       tbody.appendChild(tr);
     });
-    totalEl.textContent = formatearPrecio(total);
+    totalEl.textContent = formatearPrecio(redondear2(total));
   }
 
   function getTotalVenta() {
@@ -420,7 +454,7 @@
       // Al presionar "Realizar venta", el valor de la variable subtotal de cada línea se guarda en la columna MONTO de VENTAS-MARKET.
       items: carrito.filter(function (item) { return item.cantidad > 0; }).map(function (item) {
         var precioUnit = getPrecioUnitario(item.producto);
-        var subtotal = Math.round(precioUnit * item.cantidad * 100) / 100;
+        var subtotal = redondear2(precioUnit * item.cantidad);
         return {
           idProducto: item.producto[TABLA.pk],
           categoria: item.producto.CATEGORIA,

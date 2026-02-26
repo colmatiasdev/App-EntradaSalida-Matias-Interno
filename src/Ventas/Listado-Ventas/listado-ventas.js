@@ -473,15 +473,16 @@
       tdLabel.textContent = 'Total del día';
       trSub.appendChild(tdLabel);
 
+      var mostrarTotales = esAdminOGerente();
       for (var i = colspanLabel; i < columnas.length; i++) {
         var col = columnas[i];
         var td = document.createElement('td');
         td.className = col === 'MONTO' || col === 'CANTIDAD' ? 'td-num' : '';
         if (col === 'MONTO') {
-          td.textContent = fmtMoney(subtotalFecha);
-          td.classList.add('td-monto');
+          td.textContent = mostrarTotales ? fmtMoney(subtotalFecha) : '';
+          if (mostrarTotales) td.classList.add('td-monto');
         } else if (col === 'CANTIDAD') {
-          td.textContent = ''; // cantidad total oculta
+          td.textContent = mostrarTotales ? Number(subtotalCant).toLocaleString('es-AR') : '';
         } else {
           td.textContent = '';
         }
@@ -491,10 +492,13 @@
     });
 
     var totalRegistros = filteredData.length;
+    var footerTotal = esAdminOGerente()
+      ? '<span>Total: <strong>' + fmtMoney(totalFilt) + '</strong></span>'
+      : '';
     footer.innerHTML =
       '<span>Mostrando <strong>' + (grupos.length ? startGroup + 1 + '-' + endGroup + ' (fechas)' : '0') + '</strong> · ' + totalRegistros + ' registro(s)' +
       (allData.length !== filteredData.length ? ' (filtrado de ' + allData.length + ')' : '') + '</span>' +
-      '<span>Total: <strong>' + fmtMoney(totalFilt) + '</strong></span>';
+      (footerTotal ? footerTotal : '');
 
     if (pagination && paginationInfo && paginationPages) {
       var firstBtn = document.getElementById('table-pagination-first');

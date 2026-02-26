@@ -37,6 +37,8 @@
     /**
      * PERFIL del usuario logueado (columna PERFIL de la hoja USUARIOS).
      * Se guarda en localStorage (APP_USUARIO_PERFIL) al cambiar de usuario o al cargar usuarioLeer.
+     * Solo perfiles ADMIN y GERENTE: ven la columna USUARIO en listados y los montos/cantidades
+     * de "Total del día" y "Total del Mes" (Listado Compras) o "Total" (Listado Ventas).
      */
     USUARIO_PERFIL: '',
 
