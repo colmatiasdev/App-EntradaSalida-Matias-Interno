@@ -13,6 +13,13 @@
       columns: ['ID-CLIENTE', 'NOMBRE-APELLIDO', 'TIPO-LISTA-PRECIO', 'WHATSAPP', 'OBSERVACION', 'HABILITADO']
     },
 
+    /** Tabla USUARIOS: hoja "USUARIOS". PK = USUARIO. Usuarios del sistema (etiqueta = USUARIO-ETIQUETA, color = COLOR). */
+    USUARIOS: {
+      sheet: 'USUARIOS',
+      pk: 'USUARIO',
+      columns: ['USUARIO', 'PASSWORD', 'NOMBRE', 'USUARIO-ETIQUETA', 'PERFIL', 'COLOR', 'HABILITADO']
+    },
+
     /** Tabla PRODUCTOS: hoja "PRODUCTOS". PK = ID-PRODUCTO */
     PRODUCTOS: {
       sheet: 'PRODUCTOS',

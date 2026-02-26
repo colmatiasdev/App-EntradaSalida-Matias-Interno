@@ -6,7 +6,7 @@
  * IMPORTANTE: SPREADSHEET_ID debe ser el mismo que en config.js. Este script debe estar
  * vinculado al mismo Google Sheet que usa la app (o pegar aquí el ID de ese Sheet).
  *
- * Tablas (hojas): CLIENTES, PRODUCTOS, PRODUCTOS-MARKET, ENERO..DICIEMBRE, RESUMEN-VENTAS, OPERACIONES-GENERALES, RESUMEN-OPERATIVO, COMPONENTE-COMBO.
+ * Tablas (hojas): CLIENTES, PRODUCTOS, PRODUCTOS-MARKET, USUARIOS, ENERO..DICIEMBRE, RESUMEN-VENTAS, OPERACIONES-GENERALES, RESUMEN-OPERATIVO, COMPONENTE-COMBO.
  * Columnas según TABLAS más abajo (coincidir con src/Config/tables.js).
  */
 
@@ -29,6 +29,11 @@ var TABLAS = {
     sheet: 'PRODUCTOS-MARKET',
     pk: 'ID-PRODUCTO',
     columns: ['ID-PRODUCTO', 'COMERCIO-SUCURSAL', 'CATEGORIA', 'NOMBRE-PRODUCTO', 'DESCRIPCION', 'PRESENTACION-CANTIDAD-UNIDAD-MEDIDA', 'PRESENTACION-UNIDAD-MEDIDA', 'COSTO', 'HABILITADO']
+  },
+  USUARIOS: {
+    sheet: 'USUARIOS',
+    pk: 'USUARIO',
+    columns: ['USUARIO', 'PASSWORD', 'NOMBRE', 'USUARIO-ETIQUETA', 'PERFIL', 'COLOR', 'HABILITADO']
   },
   ENERO: {
     sheet: 'ENERO',
@@ -94,6 +99,10 @@ function doPost(e) {
       case 'productoMarketBaja':        return productoMarketBaja(params);
       case 'productoMarketModificacion': return productoMarketModificacion(params);
       case 'productoMarketLeer':       return productoMarketLeer(params);
+      case 'usuarioLeer':              return usuarioLeer(params);
+      case 'usuarioAlta':              return usuarioAlta(params);
+      case 'usuarioBaja':              return usuarioBaja(params);
+      case 'usuarioModificacion':      return usuarioModificacion(params);
       case 'ventaAlta':
       case 'guardarVenta':      return ventaAlta(params);
       case 'ventaMarketAlta':   return ventaMarketAlta(params);
@@ -418,6 +427,78 @@ function productoMarketLeer(params) {
     filas = filas.filter(function (f) { return String(f[def.pk]).trim() === String(id).trim(); });
   }
   return respuestaJson({ ok: true, datos: filas });
+}
+
+// --- USUARIOS ---
+
+function usuarioLeer(params) {
+  var def = TABLAS.USUARIOS;
+  var ss = getSS();
+  var sheet = ss.getSheetByName(def.sheet);
+  if (!sheet) return respuestaJson({ ok: true, datos: [] });
+  var datos = sheet.getDataRange().getValues();
+  if (datos.length < 2) return respuestaJson({ ok: true, datos: [] });
+  var headers = datos[0];
+  var filas = [];
+  for (var i = 1; i < datos.length; i++) {
+    var obj = {};
+    for (var c = 0; c < headers.length; c++) {
+      var val = c < datos[i].length ? datos[i][c] : '';
+      obj[headers[c]] = (val !== undefined && val !== null) ? val : '';
+    }
+    var pkVal = (obj[def.pk] !== undefined && obj[def.pk] !== null) ? String(obj[def.pk]).trim() : '';
+    if (pkVal === '') continue;
+    filas.push(obj);
+  }
+  var id = params[def.pk] || params.usuario;
+  if (id) {
+    filas = filas.filter(function (f) { return String(f[def.pk]).trim() === String(id).trim(); });
+  }
+  return respuestaJson({ ok: true, datos: filas });
+}
+
+function usuarioAlta(params) {
+  var def = TABLAS.USUARIOS;
+  var dato = params.dato || params;
+  if (!dato[def.pk]) return respuestaJson({ ok: false, error: 'Falta ' + def.pk });
+  var ss = getSS();
+  var sheet = getHoja(ss, def.sheet, def.columns);
+  if (sheet.getLastRow() === 0) {
+    sheet.getRange(1, 1, 1, def.columns.length).setValues([def.columns]);
+    sheet.getRange(1, 1, 1, def.columns.length).setFontWeight('bold');
+  }
+  var fila = objetoAFila(def, dato);
+  var rowNum = buscarFilaPorPK(sheet, def, dato[def.pk]);
+  if (rowNum > 0) return respuestaJson({ ok: false, error: 'Ya existe un usuario con ese ' + def.pk });
+  sheet.appendRow(fila);
+  return respuestaJson({ ok: true, mensaje: 'Usuario dado de alta.' });
+}
+
+function usuarioBaja(params) {
+  var def = TABLAS.USUARIOS;
+  var pkValor = params[def.pk] || params.usuario || params.id;
+  if (!pkValor) return respuestaJson({ ok: false, error: 'Falta ' + def.pk });
+  var ss = getSS();
+  var sheet = ss.getSheetByName(def.sheet);
+  if (!sheet) return respuestaJson({ ok: false, error: 'No existe la hoja ' + def.sheet });
+  var rowNum = buscarFilaPorPK(sheet, def, pkValor);
+  if (rowNum === -1) return respuestaJson({ ok: false, error: 'No encontrado.' });
+  sheet.deleteRow(rowNum);
+  return respuestaJson({ ok: true, mensaje: 'Usuario dado de baja.' });
+}
+
+function usuarioModificacion(params) {
+  var def = TABLAS.USUARIOS;
+  var dato = params.dato || params;
+  if (!dato[def.pk]) return respuestaJson({ ok: false, error: 'Falta ' + def.pk });
+  var ss = getSS();
+  var sheet = ss.getSheetByName(def.sheet);
+  if (!sheet) return respuestaJson({ ok: false, error: 'No existe la hoja ' + def.sheet });
+  var rowNum = buscarFilaPorPK(sheet, def, dato[def.pk]);
+  if (rowNum === -1) return respuestaJson({ ok: false, error: 'No encontrado.' });
+  var fila = objetoAFila(def, dato);
+  sheet.getRange(rowNum, 1, rowNum, def.columns.length).setValues([fila]);
+  return respuestaJson({ ok: true, mensaje: 'Usuario actualizado.' });
 }
 
 // --- VENTAS (ENERO y futuras hojas por mes) ---

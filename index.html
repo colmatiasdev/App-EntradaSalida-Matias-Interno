@@ -4,11 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0d1f5c">
-  <title>2H Market — Compras</title>
+  <title>2H Market — Panel de Control</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="src/Header/header.css">
-  <link rel="stylesheet" href="src/Main/main-panel.css">
   <style>
     :root {
       --azul-900: #0d1f3c;
@@ -20,6 +18,7 @@
       --azul-50:  #e3f2fd;
       --verde:    #6be040;
       --verde-d:  #4caf50;
+      --verde-bg: rgba(107,224,64,0.10);
       --grad-accent: linear-gradient(90deg, var(--azul-700), var(--azul-400));
       --bg:       #f0f6ff;
       --bg-card:  #ffffff;
@@ -27,231 +26,547 @@
       --texto-2:  #546e8a;
       --borde:    #cce0f5;
       --s1: 0 2px 10px rgba(21,101,192,0.10);
-      --s3: 0 14px 44px rgba(21,101,192,0.22);
-      --r: 14px; --r-s: 8px; --r-l: 20px;
-      --t: 0.25s ease; --ts: 0.35s cubic-bezier(0.4,0,0.2,1);
+      --s2: 0 6px 24px rgba(21,101,192,0.16);
+      --r: 10px; --r-l: 14px;
+      --t: 0.2s ease; --ts: 0.28s cubic-bezier(0.4,0,0.2,1);
       --font-display: "Syne", Georgia, serif;
       --font-body: "DM Sans", system-ui, sans-serif;
     }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 16px; scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    html { font-size: 15px; }
+
     body {
       font-family: var(--font-body);
       background: var(--bg);
       color: var(--texto);
-      line-height: 1.65;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
     }
+
     body::before {
       content: "";
       position: fixed; inset: 0;
       background-image:
         radial-gradient(ellipse at 10% 15%, rgba(21,101,192,0.06) 0%, transparent 55%),
-        radial-gradient(ellipse at 90% 85%, rgba(107,224,64,0.05) 0%, transparent 55%);
+        radial-gradient(ellipse at 90% 85%, rgba(107,224,64,0.04) 0%, transparent 55%);
       pointer-events: none; z-index: 0;
     }
 
-    /* CARDS */
-    .hub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; }
-    .card {
-      background: var(--bg-card); border-radius: var(--r-l);
-      padding: 1.75rem 1.5rem; text-decoration: none; color: inherit;
-      box-shadow: var(--s1); border: 1.5px solid var(--borde);
-      transition: all var(--ts); display: block; position: relative; overflow: hidden;
+    /* ── HEADER ── */
+    .header {
+      position: relative; z-index: 10;
+      background: var(--azul-900);
+      display: flex; align-items: center;
+      padding: 0 2rem;
+      height: 56px;
+      gap: 1.5rem;
+      border-bottom: 2px solid var(--azul-800);
     }
-    .card::after {
-      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: var(--grad-accent); transform: scaleX(0); transform-origin: left; transition: transform var(--ts);
+
+    .header__stripe {
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--azul-700), var(--azul-400), var(--verde));
     }
-    .card:hover { transform: translateY(-5px); box-shadow: var(--s3); border-color: var(--azul-200); }
-    .card:hover::after { transform: scaleX(1); }
-    .card__icon {
-      width: 52px; height: 52px; border-radius: var(--r);
-      background: var(--azul-50); border: 1px solid var(--azul-200);
+
+    .logo {
+      display: flex; align-items: center; gap: 0.6rem;
+      text-decoration: none; flex-shrink: 0;
+    }
+    .logo__ring {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 2px solid var(--azul-400);
+      overflow: hidden; display: flex; align-items: center; justify-content: center;
+      background: var(--azul-800);
+    }
+    .logo__img { width: 100%; height: 100%; object-fit: cover; }
+    .logo__nombre {
+      font-family: var(--font-display); font-weight: 800; font-size: 1.05rem;
+      color: white; letter-spacing: -0.01em;
+    }
+    .logo__nombre span { color: var(--azul-400); }
+    .logo__sub { font-size: 0.7rem; color: rgba(255,255,255,0.45); display: block; margin-top: -2px; }
+
+    .header__sep { width: 1px; height: 28px; background: rgba(255,255,255,0.12); flex-shrink: 0; }
+
+    .header__title {
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: rgba(255,255,255,0.5);
+    }
+
+    .header__user {
+      display: flex; align-items: center; gap: 0.5rem;
+      margin-left: auto;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.75); font-size: 0.75rem; font-weight: 600;
+      padding: 0.3rem 0.75rem; border-radius: 999px;
+    }
+    .header__user-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--azul-400);
+    }
+    .header__badge {
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.6); font-size: 0.72rem; font-weight: 600;
+      padding: 0.25rem 0.7rem; border-radius: 999px; letter-spacing: 0.05em;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      position: relative; z-index: 1;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      background: var(--azul-900);
+      border-right: 1px solid rgba(255,255,255,0.07);
+      padding: 1.25rem 0.75rem;
+      display: flex; flex-direction: column; gap: 0.25rem;
+      overflow: hidden;
+    }
+
+    .sidebar__label {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: rgba(255,255,255,0.3);
+      padding: 0 0.5rem; margin-bottom: 0.25rem; margin-top: 0.75rem;
+    }
+    .sidebar__label:first-child { margin-top: 0; }
+
+    .sidebar__link {
+      display: flex; align-items: center; gap: 0.55rem;
+      padding: 0.55rem 0.65rem; border-radius: var(--r);
+      text-decoration: none; color: rgba(255,255,255,0.6);
+      font-size: 0.82rem; font-weight: 500;
+      transition: all var(--t);
+      border: 1px solid transparent;
+    }
+    .sidebar__link:hover {
+      background: rgba(255,255,255,0.07);
+      color: white; border-color: rgba(255,255,255,0.1);
+    }
+    .sidebar__link--active {
+      background: var(--azul-700); color: white;
+      border-color: var(--azul-600);
+    }
+    .sidebar__link--accent {
+      color: rgba(107,224,64,0.85);
+    }
+    .sidebar__link--accent:hover {
+      background: rgba(107,224,64,0.1); color: var(--verde);
+      border-color: rgba(107,224,64,0.2);
+    }
+    .sidebar__icon { font-size: 0.95rem; flex-shrink: 0; width: 18px; text-align: center; }
+
+    /* ── CONTENT ── */
+    .content {
+      padding: 1.5rem 2rem;
+      display: flex; flex-direction: column; gap: 1.25rem;
+      overflow: hidden;
+    }
+
+    .content__top {
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+
+    .page-title {
+      font-family: var(--font-display); font-size: 1.5rem; font-weight: 800;
+      color: var(--azul-700); line-height: 1.1;
+    }
+    .page-title em { font-style: normal; color: var(--azul-400); }
+    .page-sub { font-size: 0.8rem; color: var(--texto-2); margin-top: 0.2rem; }
+
+    .date-badge {
+      font-size: 0.75rem; color: var(--texto-2); font-weight: 600;
+      background: white; border: 1px solid var(--borde);
+      padding: 0.35rem 0.75rem; border-radius: 999px;
+    }
+
+    /* ── SECTIONS GRID ── */
+    .sections {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 1rem;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* ── SECTION PANEL ── */
+    .section {
+      background: white; border-radius: var(--r-l);
+      border: 1.5px solid var(--borde);
+      box-shadow: var(--s1);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      animation: fadeUp 0.4s ease both;
+    }
+    .section:nth-child(2) { animation-delay: 0.06s; }
+    .section:nth-child(3) { animation-delay: 0.12s; }
+    .section:nth-child(4) { animation-delay: 0.18s; }
+    .section:nth-child(5) { animation-delay: 0.24s; }
+
+    .section__head {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.75rem 1rem 0.6rem;
+      border-bottom: 1px solid var(--borde);
+      flex-shrink: 0;
+    }
+    .section__icon { font-size: 1rem; }
+    .section__label {
+      font-family: var(--font-display); font-size: 0.85rem; font-weight: 700;
+      color: var(--azul-700);
+    }
+    .section__label--verde { color: #2e7d32; }
+    .section__count {
+      margin-left: auto; font-size: 0.68rem; font-weight: 700;
+      color: var(--texto-2); background: var(--azul-50);
+      padding: 0.15rem 0.5rem; border-radius: 999px;
+    }
+
+    .section__body {
+      flex: 1; display: flex; flex-direction: column;
+      padding: 0.6rem 0.75rem; gap: 0.4rem;
+      overflow: hidden;
+    }
+
+    /* ── ACTION CARDS ── */
+    .action {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.55rem 0.75rem; border-radius: var(--r);
+      text-decoration: none; color: var(--texto);
+      border: 1px solid var(--borde);
+      transition: all var(--ts);
+      position: relative; overflow: hidden;
+      background: var(--bg);
+    }
+    .action::before {
+      content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+      background: var(--azul-700); transform: scaleY(0); transform-origin: bottom;
+      transition: transform var(--ts);
+    }
+    .action:hover {
+      background: var(--azul-50); border-color: var(--azul-200);
+      transform: translateX(3px);
+      box-shadow: var(--s1);
+    }
+    .action:hover::before { transform: scaleY(1); }
+
+    .action--verde::before { background: var(--verde-d); }
+    .action--verde:hover { background: rgba(107,224,64,0.07); border-color: rgba(107,224,64,0.35); }
+
+    .action__icon {
+      width: 34px; height: 34px; border-radius: var(--r);
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem; margin-bottom: 1.1rem;
-      transition: transform var(--ts), background var(--ts);
+      font-size: 1rem; flex-shrink: 0;
+      background: var(--azul-50); border: 1px solid var(--azul-200);
+      transition: transform var(--ts);
     }
-    .card:hover .card__icon { transform: scale(1.1) rotate(-5deg); background: var(--azul-200); }
-    .card__title {
-      font-family: var(--font-display); font-size: 1.05rem; font-weight: 700;
-      margin-bottom: 0.4rem; color: var(--azul-700);
-    }
-    .card__text { font-size: 0.875rem; color: var(--texto-2); line-height: 1.6; }
-    .card__cta {
-      display: inline-flex; align-items: center; gap: 0.3rem;
-      margin-top: 1rem; font-size: 0.8rem; font-weight: 700;
-      color: var(--azul-700); opacity: 0; transform: translateY(4px); transition: all var(--ts);
-    }
-    .card:hover .card__cta { opacity: 1; transform: translateY(0); }
-    .card--accent .card__icon { background: rgba(107,224,64,0.12); border-color: rgba(107,224,64,0.3); }
-    .card--accent .card__title { color: #2e7d32; }
-    .card--accent::after { background: linear-gradient(90deg, var(--verde), var(--azul-400)); }
-    .card--accent:hover .card__icon { background: rgba(107,224,64,0.22); }
-    .card--accent .card__cta { color: #2e7d32; }
+    .action--verde .action__icon { background: var(--verde-bg); border-color: rgba(107,224,64,0.3); }
+    .action:hover .action__icon { transform: scale(1.08); }
 
-    /* FOOTER */
-    .footer { background: var(--azul-900); color: rgba(255,255,255,0.5); position: relative; z-index: 1; }
-    .footer__stripe { height: 3px; background: linear-gradient(90deg, var(--azul-700), var(--azul-400), var(--verde)); }
-    .footer__inner {
-      padding: 1.1rem 2rem; display: flex; align-items: center;
-      justify-content: center; gap: 0.6rem;
-      max-width: 1280px; margin: 0 auto; flex-wrap: wrap; font-size: 0.78rem;
+    .action__info { flex: 1; min-width: 0; }
+    .action__title {
+      font-size: 0.82rem; font-weight: 700; color: var(--azul-700);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .footer__logo { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; opacity: 0.75; }
+    .action--verde .action__title { color: #2e7d32; }
+    .action__desc { font-size: 0.7rem; color: var(--texto-2); margin-top: 0.05rem; }
 
-    /* PAGE-HEADER (sub-páginas) */
-    .page-header { margin-bottom: 1.75rem; padding-bottom: 1.25rem; border-bottom: 1.5px solid var(--borde); }
-    .page-header__back {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      color: var(--texto-2); text-decoration: none; font-size: 0.875rem;
-      font-weight: 600; margin-bottom: 0.75rem; transition: color var(--t);
+    .action__arrow {
+      font-size: 0.8rem; color: var(--texto-2);
+      opacity: 0; transform: translateX(-4px); transition: all var(--ts);
     }
-    .page-header__back:hover { color: var(--azul-700); }
-    .page-header h1 {
-      font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 1.9rem);
-      font-weight: 800; color: var(--azul-700);
+    .action:hover .action__arrow { opacity: 1; transform: translateX(0); }
+
+    /* ── SALIDAS: full-width col-span ── */
+    .section--salidas {
+      grid-column: 3; grid-row: 1 / 3;
     }
 
-    /* ANIMACIONES */
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-    .a-in   { animation: fadeUp 0.5s ease both; }
-    .a-in-2 { animation: fadeUp 0.5s 0.08s ease both; }
-    .a-in-3 { animation: fadeUp 0.5s 0.16s ease both; }
-    .a-in-4 { animation: fadeUp 0.5s 0.24s ease both; }
-    .a-in-5 { animation: fadeUp 0.5s 0.32s ease both; }
+    /* ── FOOTER ── */
+    .footer {
+      position: relative; z-index: 10;
+      background: var(--azul-900);
+      height: 32px; display: flex; align-items: center; justify-content: center;
+    }
+    .footer__stripe { position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, var(--azul-700), var(--azul-400), var(--verde)); }
+    .footer__text { font-size: 0.68rem; color: rgba(255,255,255,0.35); }
 
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      .main { padding: 1.75rem 1.1rem; }
-      .hub-grid { grid-template-columns: 1fr; gap: 1rem; }
-      .card { padding: 1.4rem 1.2rem; }
-      .hub-section { margin-top: 2.25rem; }
-    }
-    @media (max-width: 480px) {
-      .main { padding: 1.25rem 0.85rem; }
-    }
+    /* ── ANIMS ── */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
 
+  <!-- HEADER -->
   <header class="header">
     <div class="header__stripe"></div>
-    <div class="header__inner">
-      <a href="index.html" class="logo">
-        <div class="logo__ring">
-          <img src="src/img/Logo3.png" alt="2H Market" class="logo__img">
-        </div>
-        <div class="logo__texto">
-          <span class="logo__nombre"><span>2H</span> Market</span>
-          <span class="logo__sub">Control de <strong>MATIAS</strong></span>
-        </div>
-      </a>
-      <div class="header__sep"></div>
-      <nav class="nav">
-        <ul class="nav__menu" id="main-nav">
-          <li><a href="index.html" class="nav__link">🏠 Inicio</a></li>
-        </ul>
-      </nav>
+    <a href="index.html" class="logo">
+      <div class="logo__ring">
+        <img src="src/img/Logo3.png" alt="2H Market" class="logo__img">
+      </div>
+      <div>
+        <span class="logo__nombre"><span>2H</span> Market</span>
+        <span class="logo__sub">Sistema de MATIAS</span>
+      </div>
+    </a>
+    <div class="header__sep"></div>
+    <span class="header__title">Panel de Control</span>
+    <div class="header__user" id="header-user" title="Usuario del sistema">
+      <span class="header__user-dot" id="header-user-dot"></span>
+      <span id="header-user-name">—</span>
     </div>
+    <div class="header__badge" id="live-date"></div>
   </header>
 
-  <main class="main">
+  <!-- MAIN -->
+  <div class="main">
 
-    <section class="hub-hero a-in">
-      <div class="hub-hero__eyebrow">🏪 2H Market</div>
-      <h1 class="hub-title">Panel de <em>Control</em></h1>
-      <p class="hero__text">Seleccioná una opción para comenzar según la sección que necesités gestionar.</p>
-    </section>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <span class="sidebar__label">Compras</span>
+      <a href="src/Compras/Nueva-Compra/Nueva-compra.html" class="sidebar__link sidebar__link--accent">
+        <span class="sidebar__icon">🛒</span> Nueva Compra
+      </a>
+      <a href="src/Compras/Listado-Compras/listado-compras.html" class="sidebar__link">
+        <span class="sidebar__icon">📅</span> Resumen Compras
+      </a>
+      <a href="src/Compras/otro-tipo-compra/otro-tipo-compras.html" class="sidebar__link">
+        <span class="sidebar__icon">📋</span> Otro tipo
+      </a>
 
-    <section class="hub-section a-in-2">
-      <div class="hub-section__header">
-        <span class="hub-section__icon">🛍️</span>
-        <h2 class="hub-section__title"><em>Compras a Silvina</em></h2>
-      </div>
-      <p class="hub-section__text">Registrá nuevas compras o consultá el historial y resumen por período.</p>
-      <div class="hub-grid">
-        <a href="src/Compras/Nueva-Compra/Nueva-compra.html" class="card card--accent a-in-3">
-          <div class="card__icon">🛒</div>
-          <div class="card__title">Nueva Compra Panaderia</div>
-          <p class="card__text">Seleccioná el cliente y registrá una nueva compra rápidamente.</p>
-          <span class="card__cta">Ir al módulo →</span>
-        </a>
-        <a href="src/Compras/Listado-Compras/listado-compras.html" class="card a-in-4">
-          <div class="card__icon">📅</div>
-          <div class="card__title">Resumen de Compras</div>
-          <p class="card__text">Consultá y analizá compras filtradas por período mensual.</p>
-          <span class="card__cta">Ver resumen →</span>
-        </a>
-        <a href="src/Compras/otro-tipo-compra/otro-tipo-compras.html" class="card a-in-5">
-          <div class="card__icon">📋</div>
-          <div class="card__title">Otro tipo de compras</div>
-          <p class="card__text">Registrá compras con criterio o flujo personalizado.</p>
-          <span class="card__cta">Ver módulo →</span>
-        </a>
-      </div>
-    </section>
+      <span class="sidebar__label">Ventas</span>
+      <a href="./src/Ventas/Nueva-Venta/Nueva-venta.html" class="sidebar__link sidebar__link--accent">
+        <span class="sidebar__icon">💰</span> Nueva Venta
+      </a>
+      <a href="./src/Ventas/Listado-Ventas/listado-ventas.html" class="sidebar__link">
+        <span class="sidebar__icon">📊</span> Listado Ventas
+      </a>
 
-    <section class="hub-section a-in-3">
-      <div class="hub-section__header">
-        <span class="hub-section__icon">📊</span>
-        <h2 class="hub-section__title"><em>Ventas Market</em></h2>
-      </div>
-      <p class="hub-section__text">Registrá compras, consultá el listado y cargá otros tipos de operaciones.</p>
-      <div class="hub-grid">
-        <a href="./src/Ventas/Nueva-Venta/Nueva-venta.html" class="card card--accent a-in-4" target="_self">
-          <div class="card__icon">🛒</div>
-          <div class="card__title">Nueva Venta</div>
-          <p class="card__text">Seleccioná el cliente y registrá una nueva venta.</p>
-          <span class="card__cta">Nueva venta →</span>
-        </a>
-        <a href="./src/Ventas/Listado-Ventas/listado-ventas.html" class="card a-in-5" target="_self">
-          <div class="card__icon">📅</div>
-          <div class="card__title">Listado de Ventas Market</div>
-          <p class="card__text">Consultá y analizá ventas del market filtradas por período.</p>
-          <span class="card__cta">Ver listado →</span>
-        </a>
-      </div>
-    </section>
+      <span class="sidebar__label">Salidas</span>
+      <a href="src/Gastos-Salida/gastos-salida.html" class="sidebar__link">
+        <span class="sidebar__icon">💸</span> Gastos Salida
+      </a>
 
-    <section class="hub-section a-in-3">
-      <div class="hub-section__header">
-        <span class="hub-section__icon">📤</span>
-        <h2 class="hub-section__title"><em>Salidas</em></h2>
-      </div>
-      <p class="hub-section__text">Módulos de gastos y operaciones de salida del negocio.</p>
-      <div class="hub-grid">
-        <a href="src/Gastos-Salida/gastos-salida.html" class="card a-in-4">
-          <div class="card__icon">💸</div>
-          <div class="card__title">Gastos de Salida</div>
-          <p class="card__text">Cargá y consultá los gastos de salida del negocio.</p>
-          <span class="card__cta">Ver gastos →</span>
-        </a>
-      </div>
-    </section>
+      <span class="sidebar__label">Cuenta</span>
+      <a href="src/Usuario/cambiar-usuario.html" class="sidebar__link">
+        <span class="sidebar__icon">👤</span> Cambiar usuario
+      </a>
+    </aside>
 
-  </main>
+    <!-- CONTENT -->
+    <div class="content">
 
+      <div class="content__top">
+        <div>
+          <h1 class="page-title">Panel de <em>Control</em></h1>
+          <p class="page-sub">Seleccioná una opción para acceder rápidamente</p>
+        </div>
+        <div class="date-badge" id="live-date2"></div>
+      </div>
+
+      <div class="sections">
+
+        <!-- COMPRAS A SILVINA -->
+        <section class="section">
+          <div class="section__head">
+            <span class="section__icon">🛍️</span>
+            <span class="section__label">Compras a Silvina</span>
+            <span class="section__count">3 módulos</span>
+          </div>
+          <div class="section__body">
+            <a href="src/Compras/Nueva-Compra/Nueva-compra.html" class="action action--verde">
+              <div class="action__icon">🛒</div>
+              <div class="action__info">
+                <div class="action__title">Nueva Compra Panadería</div>
+                <div class="action__desc">Registrar compra rápida</div>
+              </div>
+              <span class="action__arrow">→</span>
+            </a>
+            <a href="src/Compras/Listado-Compras/listado-compras.html" class="action">
+              <div class="action__icon">📅</div>
+              <div class="action__info">
+                <div class="action__title">Resumen de Compras</div>
+                <div class="action__desc">Filtrar por período</div>
+              </div>
+              <span class="action__arrow">→</span>
+            </a>
+            <a href="src/Compras/otro-tipo-compra/otro-tipo-compras.html" class="action">
+              <div class="action__icon">📋</div>
+              <div class="action__info">
+                <div class="action__title">Otro tipo de compras</div>
+                <div class="action__desc">Flujo personalizado</div>
+              </div>
+              <span class="action__arrow">→</span>
+            </a>
+          </div>
+        </section>
+
+        <!-- VENTAS MARKET -->
+        <section class="section">
+          <div class="section__head">
+            <span class="section__icon">📊</span>
+            <span class="section__label">Ventas Market</span>
+            <span class="section__count">2 módulos</span>
+          </div>
+          <div class="section__body">
+            <a href="./src/Ventas/Nueva-Venta/Nueva-venta.html" class="action action--verde">
+              <div class="action__icon">💰</div>
+              <div class="action__info">
+                <div class="action__title">Nueva Venta</div>
+                <div class="action__desc">Registrar venta al cliente</div>
+              </div>
+              <span class="action__arrow">→</span>
+            </a>
+            <a href="./src/Ventas/Listado-Ventas/listado-ventas.html" class="action">
+              <div class="action__icon">📅</div>
+              <div class="action__info">
+                <div class="action__title">Listado de Ventas</div>
+                <div class="action__desc">Consultar por período</div>
+              </div>
+              <span class="action__arrow">→</span>
+            </a>
+          </div>
+        </section>
+
+        <!-- SALIDAS (columna derecha, span 2 filas) -->
+        <section class="section section--salidas">
+          <div class="section__head">
+            <span class="section__icon">📤</span>
+            <span class="section__label section__label--verde">Salidas</span>
+            <span class="section__count">1 módulo</span>
+          </div>
+          <div class="section__body">
+            <a href="src/Gastos-Salida/gastos-salida.html" class="action">
+              <div class="action__icon">💸</div>
+              <div class="action__info">
+                <div class="action__title">Gastos de Salida</div>
+                <div class="action__desc">Cargar y consultar gastos</div>
+              </div>
+              <span class="action__arrow">→</span>
+            </a>
+          </div>
+        </section>
+
+        <!-- ACCESOS RAPIDOS (bottom-left & bottom-center) -->
+        <section class="section" style="grid-column: 1 / 3; animation-delay: 0.18s;">
+          <div class="section__head">
+            <span class="section__icon">⚡</span>
+            <span class="section__label">Accesos Rápidos</span>
+          </div>
+          <div class="section__body" style="flex-direction: row; flex-wrap: wrap; align-content: flex-start;">
+            <a href="src/Compras/Nueva-Compra/Nueva-compra.html" class="action action--verde" style="flex: 1 1 180px;">
+              <div class="action__icon">🛒</div>
+              <div class="action__info">
+                <div class="action__title">Nueva Compra</div>
+                <div class="action__desc">Acción más frecuente</div>
+              </div>
+              <span class="action__arrow">→</span>
+            </a>
+            <a href="./src/Ventas/Nueva-Venta/Nueva-venta.html" class="action action--verde" style="flex: 1 1 180px;">
+              <div class="action__icon">💰</div>
+              <div class="action__info">
+                <div class="action__title">Nueva Venta</div>
+                <div class="action__desc">Acción más frecuente</div>
+              </div>
+              <span class="action__arrow">→</span>
+            </a>
+            <a href="src/Compras/Listado-Compras/listado-compras.html" class="action" style="flex: 1 1 180px;">
+              <div class="action__icon">📅</div>
+              <div class="action__info">
+                <div class="action__title">Resumen Compras</div>
+                <div class="action__desc">Ver historial</div>
+              </div>
+              <span class="action__arrow">→</span>
+            </a>
+            <a href="src/Gastos-Salida/gastos-salida.html" class="action" style="flex: 1 1 180px;">
+              <div class="action__icon">💸</div>
+              <div class="action__info">
+                <div class="action__title">Gastos Salida</div>
+                <div class="action__desc">Ver gastos</div>
+              </div>
+              <span class="action__arrow">→</span>
+            </a>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
   <footer class="footer">
     <div class="footer__stripe"></div>
-    <div class="footer__inner">
-      <span>© 2025 <strong style="color:rgba(255,255,255,0.75)">2H Market</strong> — Sistema de Control de MATIAS</span>
-    </div>
+    <span class="footer__text">© 2025 <strong style="color:rgba(255,255,255,0.5)">2H Market</strong> — Sistema de Control de MATIAS</span>
   </footer>
 
+  <script src="src/Config/config.js"></script>
   <script>
+    // Live date
+    function setDate() {
+      const now = new Date();
+      const d = now.toLocaleDateString('es-AR', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
+      document.getElementById('live-date').textContent = d;
+      document.getElementById('live-date2').textContent = d;
+    }
+    setDate();
+
+    // Usuario logueado: se carga desde hoja USUARIOS (usuarioLeer); etiqueta = USUARIO-ETIQUETA, color = COLOR
     (function () {
-      var path = window.location.pathname.toLowerCase();
-      document.querySelectorAll(".nav__link").forEach(function (l) {
-        l.classList.remove("nav__link--active");
-        var href = (l.getAttribute("href") || "").toLowerCase();
-        var key = href.split("/").pop().replace(".html", "");
-        if (key === "index" && (path.endsWith("index.html") || path.endsWith("/") || path === "")) l.classList.add("nav__link--active");
-        else if (key && key !== "index" && path.indexOf(key) !== -1) l.classList.add("nav__link--active");
-      });
+      var config = window.APP_CONFIG || {};
+      var codigo = (config.USUARIO || '').trim();
+      var nameEl = document.getElementById('header-user-name');
+      var dotEl = document.getElementById('header-user-dot');
+      var appScriptUrl = config.APP_SCRIPT_URL || '';
+      var corsProxy = config.CORS_PROXY || '';
+
+      function pintarUsuario(etiqueta, color) {
+        if (nameEl) nameEl.textContent = etiqueta || 'Sin usuario';
+        if (dotEl) dotEl.style.background = color || '#42a5f5';
+      }
+
+      if (!codigo) {
+        pintarUsuario('Sin usuario', '#94a3b8');
+        return;
+      }
+      pintarUsuario(codigo.replace(/^USR-/, ''), '#42a5f5');
+      if (!appScriptUrl) return;
+
+      var body = 'data=' + encodeURIComponent(JSON.stringify({ accion: 'usuarioLeer' }));
+      var url = (corsProxy && corsProxy.length) ? corsProxy + encodeURIComponent(appScriptUrl) : appScriptUrl;
+      fetch(url, {
+        method: 'POST',
+        mode: 'cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body
+      })
+        .then(function (res) { return res.ok ? res.json() : { ok: false }; })
+        .then(function (data) {
+          if (!data || !data.ok || !Array.isArray(data.datos)) return;
+          var row = data.datos.filter(function (r) { return String(r.USUARIO || '').trim() === codigo; })[0];
+          if (row) {
+            var etiqueta = (row['USUARIO-ETIQUETA'] != null ? String(row['USUARIO-ETIQUETA']) : '').trim() || codigo.replace(/^USR-/, '');
+            var color = (row.COLOR != null ? String(row.COLOR).trim() : '') || '#42a5f5';
+            pintarUsuario(etiqueta, color);
+          }
+        })
+        .catch(function () {});
     })();
+
+    // Active sidebar link
+    var path = window.location.pathname.toLowerCase();
+    document.querySelectorAll('.sidebar__link').forEach(function(l) {
+      var href = (l.getAttribute('href') || '').toLowerCase();
+      var key = href.split('/').pop().replace('.html','');
+      if (key && path.indexOf(key) !== -1) l.classList.add('sidebar__link--active');
+      if ((path.endsWith('/') || path.endsWith('index.html') || path === '') && href.indexOf('index') !== -1) l.classList.add('sidebar__link--active');
+    });
   </script>
 
 </body>

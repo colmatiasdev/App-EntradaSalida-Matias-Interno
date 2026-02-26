@@ -415,7 +415,7 @@
       hora: hora,
       nombreApellido: nombreApellido,
       tipoListaPrecio: tipoListaPrecio,
-      usuario: (window.APP_CONFIG && window.APP_CONFIG.USUARIO) || 'USR-MATIAS',
+      usuario: (window.APP_CONFIG && window.APP_CONFIG.USUARIO) || '',
       total: total,
       // Al presionar "Realizar venta", el valor de la variable subtotal de cada línea se guarda en la columna MONTO de VENTAS-MARKET.
       items: carrito.filter(function (item) { return item.cantidad > 0; }).map(function (item) {

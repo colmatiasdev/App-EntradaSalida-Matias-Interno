@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1f5c">
+  <title>Cambiar usuario — 2H Market</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --azul-900: #0d1f3c;
+      --azul-800: #1a3560;
+      --azul-700: #1565c0;
+      --azul-400: #42a5f5;
+      --azul-200: #bbdefb;
+      --azul-50:  #e3f2fd;
+      --bg: #f0f6ff;
+      --texto: #0d1f3c;
+      --texto-2: #546e8a;
+      --borde: #cce0f5;
+      --s1: 0 2px 10px rgba(21,101,192,0.10);
+      --r: 10px; --r-l: 14px;
+      --ts: 0.28s cubic-bezier(0.4,0,0.2,1);
+      --font-display: "Syne", Georgia, serif;
+      --font-body: "DM Sans", system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 15px; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--texto);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    body::before {
+      content: "";
+      position: fixed; inset: 0;
+      background-image:
+        radial-gradient(ellipse at 10% 15%, rgba(21,101,192,0.06) 0%, transparent 55%),
+        radial-gradient(ellipse at 90% 85%, rgba(107,224,64,0.04) 0%, transparent 55%);
+      pointer-events: none; z-index: 0;
+    }
+
+    .header {
+      position: relative; z-index: 10;
+      background: var(--azul-900);
+      display: flex; align-items: center;
+      padding: 0 2rem; height: 56px;
+      gap: 1.5rem;
+      border-bottom: 2px solid var(--azul-800);
+    }
+    .header__stripe {
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--azul-700), var(--azul-400), #6be040);
+    }
+    .logo {
+      display: flex; align-items: center; gap: 0.6rem;
+      text-decoration: none; flex-shrink: 0;
+    }
+    .logo__ring {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 2px solid var(--azul-400);
+      overflow: hidden; display: flex; align-items: center; justify-content: center;
+      background: var(--azul-800);
+    }
+    .logo__img { width: 100%; height: 100%; object-fit: cover; }
+    .logo__nombre { font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; color: white; }
+    .logo__nombre span { color: var(--azul-400); }
+    .logo__sub { font-size: 0.7rem; color: rgba(255,255,255,0.45); display: block; margin-top: -2px; }
+    .header__sep { width: 1px; height: 28px; background: rgba(255,255,255,0.12); }
+    .header__title {
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: rgba(255,255,255,0.5);
+    }
+
+    .content {
+      position: relative; z-index: 1;
+      flex: 1;
+      padding: 2rem;
+      max-width: 480px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .page-title {
+      font-family: var(--font-display); font-size: 1.5rem; font-weight: 800;
+      color: var(--azul-700); margin-bottom: 0.35rem;
+    }
+    .page-sub {
+      font-size: 0.85rem; color: var(--texto-2); margin-bottom: 2rem;
+    }
+    .user-list {
+      display: flex; flex-direction: column; gap: 0.75rem;
+    }
+    .user-btn {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 1.25rem;
+      background: white;
+      border: 2px solid var(--borde);
+      border-radius: var(--r-l);
+      cursor: pointer;
+      text-decoration: none; color: var(--texto);
+      font-size: 1rem; font-weight: 600;
+      text-align: left;
+      transition: transform var(--ts), box-shadow var(--ts), border-color var(--ts);
+      box-shadow: var(--s1);
+    }
+    .user-btn:hover {
+      border-color: var(--azul-400);
+      box-shadow: 0 6px 20px rgba(21,101,192,0.15);
+      transform: translateY(-2px);
+    }
+    .user-btn--active {
+      border-color: var(--azul-700);
+      background: var(--azul-50);
+      box-shadow: 0 4px 16px rgba(21,101,192,0.2);
+    }
+    .user-btn__dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .user-btn__label {
+      flex: 1;
+    }
+    .user-btn__badge {
+      font-size: 0.7rem; font-weight: 600;
+      color: var(--texto-2); background: var(--azul-50);
+      padding: 0.2rem 0.5rem; border-radius: 999px;
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      margin-top: 1.5rem;
+      color: var(--azul-700); font-size: 0.9rem; font-weight: 600;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--azul-400); }
+    .user-list-msg {
+      font-size: 0.9rem; color: var(--texto-2); padding: 1rem 0;
+    }
+    .user-list-msg--error { color: #c0392b; }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__stripe"></div>
+    <a href="../../index.html" class="logo">
+      <div class="logo__ring">
+        <img src="../img/Logo3.png" alt="2H Market" class="logo__img">
+      </div>
+      <div>
+        <span class="logo__nombre"><span>2H</span> Market</span>
+        <span class="logo__sub">Sistema de MATIAS</span>
+      </div>
+    </a>
+    <div class="header__sep"></div>
+    <span class="header__title">Cambiar usuario</span>
+  </header>
+
+  <main class="content">
+    <h1 class="page-title">Usuario del sistema</h1>
+    <p class="page-sub">Elegí con qué usuario vas a registrar ventas, compras y gastos. Ese usuario quedará logueado y se usará en la columna USUARIO.</p>
+
+    <div class="user-list" id="user-list"></div>
+    <p class="user-list-msg" id="user-list-msg"></p>
+
+    <a href="../../index.html" class="back-link">← Volver al panel</a>
+  </main>
+
+  <script src="../../Config/config.js"></script>
+  <script>
+    (function () {
+      var listEl = document.getElementById('user-list');
+      var msgEl = document.getElementById('user-list-msg');
+      var config = window.APP_CONFIG || {};
+      var appScriptUrl = config.APP_SCRIPT_URL || '';
+      var corsProxy = config.CORS_PROXY || '';
+      var usuarioActual = (config.USUARIO || '').trim() || (typeof localStorage !== 'undefined' ? (localStorage.getItem('APP_USUARIO') || '').trim() : '');
+
+      function escapeHtml(s) {
+        var div = document.createElement('div');
+        div.textContent = s == null ? '' : s;
+        return div.innerHTML;
+      }
+
+      function esHabilitado(val) {
+        if (val === undefined || val === null) return true;
+        var v = String(val).toUpperCase().trim();
+        return v === 'SI' || v === 'S' || v === '1' || v === 'TRUE' || v === 'YES';
+      }
+
+      if (!listEl) return;
+
+      if (!appScriptUrl) {
+        msgEl.textContent = 'Configurá APP_SCRIPT_URL en config.js.';
+        msgEl.classList.add('user-list-msg--error');
+        return;
+      }
+
+      msgEl.textContent = 'Cargando usuarios…';
+      var payload = { accion: 'usuarioLeer' };
+      var body = 'data=' + encodeURIComponent(JSON.stringify(payload));
+      var url = (corsProxy && corsProxy.length) ? corsProxy + encodeURIComponent(appScriptUrl) : appScriptUrl;
+
+      fetch(url, {
+        method: 'POST',
+        mode: 'cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          var ct = (res.headers.get('Content-Type') || '').toLowerCase();
+          if (ct.indexOf('json') !== -1) return res.json();
+          return res.text().then(function (t) {
+            try { return JSON.parse(t); } catch (e) { return { ok: false, error: t }; };
+          });
+        })
+        .then(function (data) {
+          msgEl.textContent = '';
+          if (!data || !data.ok || !Array.isArray(data.datos)) {
+            msgEl.textContent = (data && data.error) ? data.error : 'No se pudieron cargar los usuarios.';
+            msgEl.classList.add('user-list-msg--error');
+            return;
+          }
+          var usuarios = data.datos.filter(function (row) {
+            return esHabilitado(row.HABILITADO);
+          });
+          if (usuarios.length === 0) {
+            msgEl.textContent = 'No hay usuarios habilitados en la hoja USUARIOS.';
+            msgEl.classList.add('user-list-msg--error');
+            return;
+          }
+          usuarios.forEach(function (row) {
+            var codigo = (row.USUARIO != null ? String(row.USUARIO) : '').trim();
+            if (!codigo) return;
+            var etiqueta = (row['USUARIO-ETIQUETA'] != null ? String(row['USUARIO-ETIQUETA']) : codigo).trim();
+            var color = (row.COLOR != null ? String(row.COLOR).trim() : '') || '#42a5f5';
+            var isActive = codigo === usuarioActual;
+
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'user-btn' + (isActive ? ' user-btn--active' : '');
+            btn.setAttribute('data-usuario', codigo);
+            btn.innerHTML =
+              '<span class="user-btn__dot" style="background:' + escapeHtml(color) + '"></span>' +
+              '<span class="user-btn__label">' + escapeHtml(etiqueta) + '</span>' +
+              (isActive ? '<span class="user-btn__badge">En uso</span>' : '');
+            btn.addEventListener('click', function () {
+              try { localStorage.setItem('APP_USUARIO', codigo); } catch (e) {}
+              window.location.href = '../../index.html';
+            });
+            listEl.appendChild(btn);
+          });
+        })
+        .catch(function (err) {
+          msgEl.textContent = 'Error: ' + (err && err.message ? err.message : String(err));
+          msgEl.classList.add('user-list-msg--error');
+        });
+    })();
+  </script>
+
+</body>
+</html>

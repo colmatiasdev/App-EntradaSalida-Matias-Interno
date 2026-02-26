@@ -156,7 +156,7 @@
       tipoOperacion: tipoOperacion,
       descripcion: descripcion,
       importe: importeNum,
-      usuario: (window.APP_CONFIG && window.APP_CONFIG.USUARIO) || 'USR-MATIAS'
+      usuario: (window.APP_CONFIG && window.APP_CONFIG.USUARIO) || ''
     };
 
     var btnGuardar = getBtnGuardar();

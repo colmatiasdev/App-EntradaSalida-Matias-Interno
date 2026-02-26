@@ -27,20 +27,19 @@
     HOJA_PRODUCTOS: 'PRODUCTOS',
     HOJA_CLIENTES: 'CLIENTES',
 
-    /** Valor fijo para la columna USUARIO al guardar ventas/compras en el Sheet. */
-    USUARIO: 'USR-MATIAS',
+    /**
+     * Usuario logueado (columna USUARIO al guardar ventas/compras).
+     * Se establece en el módulo "Cambiar usuario" y se guarda en localStorage (APP_USUARIO).
+     * Etiqueta y color se obtienen de la hoja USUARIOS (USUARIO-ETIQUETA, COLOR) vía usuarioLeer.
+     */
+    USUARIO: '',
 
-   /**
-   * Cómo se muestra cada código de usuario en pantalla (etiqueta y color de identificación).
-   * Clave = valor guardado en el Sheet (columna USUARIO).
-   * Valor = { etiqueta: 'Nombre', color: '#hex' }.
-   */
-    USUARIO_ETIQUETAS: {
-      'USR-SILVINA': { etiqueta: 'Silvina', color: '#c0392b' },
-      'USR-MATIAS': { etiqueta: 'Matias', color: '#2980b9' },
-      'USR-MILY': { etiqueta: 'Mily', color: '#27ae60' },
-      'USR-VICKY': { etiqueta: 'Vicky', color: '#8e44ad' }
-    },
+    /**
+     * Map de usuario → { etiqueta, color }. Se llena desde la hoja USUARIOS (usuarioLeer):
+     * etiqueta = columna USUARIO-ETIQUETA, color = columna COLOR.
+     * Los listados y el panel lo rellenan al cargar usuarioLeer.
+     */
+    USUARIO_ETIQUETAS: {},
 
     /**
      * Unidades de medida (PRESENTACION-UNIDAD-MEDIDA) que usan cantidad decimal en el resumen de venta.
@@ -75,6 +74,11 @@
     /** Proxy CORS. Dejar '' para usar directo APP_SCRIPT_URL. */
     CORS_PROXY: ''
   };
+
+  // Usuario logueado: el elegido en "Cambiar usuario" (localStorage APP_USUARIO)
+  if (global.localStorage && global.localStorage.getItem('APP_USUARIO')) {
+    Config.USUARIO = global.localStorage.getItem('APP_USUARIO');
+  }
 
   global.APP_CONFIG = Config;
 })(typeof window !== 'undefined' ? window : this);

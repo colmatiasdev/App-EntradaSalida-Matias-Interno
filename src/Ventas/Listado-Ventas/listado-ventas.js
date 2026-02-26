@@ -100,7 +100,31 @@
     return lista;
   }
 
+  /** Carga usuarios desde la hoja USUARIOS y rellena APP_CONFIG.USUARIO_ETIQUETAS (etiqueta = USUARIO-ETIQUETA, color = COLOR). */
+  function cargarUsuarioEtiquetas() {
+    if (!APP_SCRIPT_URL || !window.APP_CONFIG) return;
+    var url = (CORS_PROXY && CORS_PROXY.length > 0) ? CORS_PROXY + encodeURIComponent(APP_SCRIPT_URL) : APP_SCRIPT_URL;
+    var body = 'data=' + encodeURIComponent(JSON.stringify({ accion: 'usuarioLeer' }));
+    fetch(url, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body })
+      .then(function (res) { return res.ok ? res.json() : { ok: false }; })
+      .then(function (data) {
+        if (!data || !data.ok || !Array.isArray(data.datos)) return;
+        var map = {};
+        data.datos.forEach(function (r) {
+          var codigo = (r.USUARIO != null ? String(r.USUARIO) : '').trim();
+          if (!codigo) return;
+          map[codigo] = {
+            etiqueta: (r['USUARIO-ETIQUETA'] != null ? String(r['USUARIO-ETIQUETA']) : '').trim() || codigo,
+            color: (r.COLOR != null ? String(r.COLOR).trim() : '') || '#42a5f5'
+          };
+        });
+        window.APP_CONFIG.USUARIO_ETIQUETAS = map;
+      })
+      .catch(function () {});
+  }
+
   function init() {
+    cargarUsuarioEtiquetas();
     var selectAnio = document.getElementById('listado-ventas-anio');
     var selectMes = document.getElementById('listado-ventas-mes');
     var btnCargar = document.getElementById('listado-ventas-btn-cargar');
