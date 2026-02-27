@@ -91,6 +91,18 @@
     return (input && input.value) ? input.value.trim() : '';
   }
 
+  /** true si el usuario logueado tiene PERFIL ADMIN o GERENTE (muestra precios en cards y columnas de precio en resumen). */
+  function esAdminOGerente() {
+    var config = window.APP_CONFIG || {};
+    var perfil = (config.USUARIO_PERFIL || '').trim().toUpperCase();
+    if (perfil) return perfil === 'ADMIN' || perfil === 'GERENTE';
+    var codigo = (config.USUARIO || '').trim();
+    if (!codigo) return false;
+    var info = config.USUARIO_ETIQUETAS && config.USUARIO_ETIQUETAS[codigo];
+    perfil = (info && info.perfil) ? String(info.perfil).toUpperCase() : '';
+    return perfil === 'ADMIN' || perfil === 'GERENTE';
+  }
+
   function cargarProductos() {
     var mensaje = document.getElementById('nueva-venta-mensaje');
     if (!TABLA) {
@@ -182,10 +194,12 @@
           ? '✓ ' + qtyEnCarrito + (qtyEnCarrito === 1 ? ' agregado' : ' en carrito')
           : 'Agregar';
         var claseBoton = 'nueva-venta__btn-add' + (qtyEnCarrito > 0 ? ' nueva-venta__btn-add--added' : '');
+        var mostrarPrecio = esAdminOGerente();
+        var mostrarPresentacion = esAdminOGerente();
         li.innerHTML =
           '<span class="nueva-venta__item-nombre">' + escapeHtml(nombre) + '</span>' +
-          (presentacionTexto ? '<span class="nueva-venta__item-presentacion">' + escapeHtml(presentacionTexto) + '</span>' : '') +
-          '<span class="nueva-venta__item-precio">' + formatearPrecio(precio) + '</span>' +
+          (mostrarPresentacion && presentacionTexto ? '<span class="nueva-venta__item-presentacion">' + escapeHtml(presentacionTexto) + '</span>' : '') +
+          (mostrarPrecio ? '<span class="nueva-venta__item-precio">' + formatearPrecio(precio) + '</span>' : '') +
           '<button type="button" class="' + claseBoton + '" data-id="' + escapeHtml(idProd) + '">' + escapeHtml(textoBoton) + '</button>';
         li.querySelector('.nueva-venta__btn-add').addEventListener('click', function () {
           agregarAlCarrito(p);
@@ -315,6 +329,7 @@
     vacio.hidden = true;
     tabla.hidden = false;
     if (btnGuardar) btnGuardar.disabled = false;
+    tabla.classList.toggle('nueva-venta__tabla--sin-precios', !esAdminOGerente());
     tbody.innerHTML = '';
     var total = 0;
     carrito.forEach(function (item) {

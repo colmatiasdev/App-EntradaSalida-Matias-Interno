@@ -293,7 +293,7 @@
 
     var columnas = COLUMNAS_VENTAS_MARKET.filter(function (c) {
       if (columnasOcultas.indexOf(c) !== -1) return false;
-      if (c === 'USUARIO' && !esAdminOGerente()) return false;
+      if (!esAdminOGerente() && ['PRESENTACION-UNIDAD-MEDIDA', 'PRECIO', 'MONTO'].indexOf(c) !== -1) return false;
       return true;
     });
     currentColumnas = columnas;
@@ -302,7 +302,7 @@
     var trHead = document.createElement('tr');
     columnas.forEach(function (col) {
       var th = document.createElement('th');
-      th.textContent = col === 'FECHA_OPERATIVA' ? 'FECHA' : (col === 'PRESENTACION-UNIDAD-MEDIDA' ? 'U.M.' : col);
+      th.textContent = col === 'FECHA_OPERATIVA' ? 'FECHA' : (col === 'PRESENTACION-UNIDAD-MEDIDA' ? 'U.M.' : (col === 'PRECIO' ? 'COSTO' : col));
       if (['CANTIDAD', 'PRECIO', 'MONTO'].indexOf(col) !== -1) th.className = 'th-num';
       if (col === 'USUARIO') th.className = (th.className ? th.className + ' ' : '') + 'listado-ventas__th-usuario';
       trHead.appendChild(th);
@@ -379,7 +379,7 @@
     if (!columnas) {
       columnas = currentColumnas.length ? currentColumnas : COLUMNAS_VENTAS_MARKET.filter(function (c) {
         if (columnasOcultas.indexOf(c) !== -1) return false;
-        if (c === 'USUARIO' && !esAdminOGerente()) return false;
+        if (!esAdminOGerente() && ['PRESENTACION-UNIDAD-MEDIDA', 'PRECIO', 'MONTO'].indexOf(c) !== -1) return false;
         return true;
       });
     }
@@ -460,35 +460,36 @@
         tbody.appendChild(tr);
       });
 
-      var trSub = document.createElement('tr');
-      trSub.className = 'listado-ventas__fila-subtotal';
-      var idxCant = columnas.indexOf('CANTIDAD');
-      var idxMonto = columnas.indexOf('MONTO');
-      var colspanLabel = idxCant >= 0 ? idxCant : columnas.length - 2;
-      if (colspanLabel < 1) colspanLabel = 1;
+      if (esAdminOGerente()) {
+        var trSub = document.createElement('tr');
+        trSub.className = 'listado-ventas__fila-subtotal';
+        var idxCant = columnas.indexOf('CANTIDAD');
+        var idxMonto = columnas.indexOf('MONTO');
+        var colspanLabel = idxCant >= 0 ? idxCant : columnas.length - 2;
+        if (colspanLabel < 1) colspanLabel = 1;
 
-      var tdLabel = document.createElement('td');
-      tdLabel.className = 'listado-ventas__subtotal-label';
-      tdLabel.colSpan = colspanLabel;
-      tdLabel.textContent = 'Total del día';
-      trSub.appendChild(tdLabel);
+        var tdLabel = document.createElement('td');
+        tdLabel.className = 'listado-ventas__subtotal-label';
+        tdLabel.colSpan = colspanLabel;
+        tdLabel.textContent = 'Total del día';
+        trSub.appendChild(tdLabel);
 
-      var mostrarTotales = esAdminOGerente();
-      for (var i = colspanLabel; i < columnas.length; i++) {
-        var col = columnas[i];
-        var td = document.createElement('td');
-        td.className = col === 'MONTO' || col === 'CANTIDAD' ? 'td-num' : '';
-        if (col === 'MONTO') {
-          td.textContent = mostrarTotales ? fmtMoney(subtotalFecha) : '';
-          if (mostrarTotales) td.classList.add('td-monto');
-        } else if (col === 'CANTIDAD') {
-          td.textContent = mostrarTotales ? Number(subtotalCant).toLocaleString('es-AR') : '';
-        } else {
-          td.textContent = '';
+        for (var i = colspanLabel; i < columnas.length; i++) {
+          var col = columnas[i];
+          var td = document.createElement('td');
+          td.className = col === 'MONTO' || col === 'CANTIDAD' ? 'td-num' : '';
+          if (col === 'MONTO') {
+            td.textContent = fmtMoney(subtotalFecha);
+            td.classList.add('td-monto');
+          } else if (col === 'CANTIDAD') {
+            td.textContent = Number(subtotalCant).toLocaleString('es-AR');
+          } else {
+            td.textContent = '';
+          }
+          trSub.appendChild(td);
         }
-        trSub.appendChild(td);
+        tbody.appendChild(trSub);
       }
-      tbody.appendChild(trSub);
     });
 
     var totalRegistros = filteredData.length;

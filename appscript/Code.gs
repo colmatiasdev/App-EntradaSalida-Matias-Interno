@@ -6,7 +6,7 @@
  * IMPORTANTE: SPREADSHEET_ID debe ser el mismo que en config.js. Este script debe estar
  * vinculado al mismo Google Sheet que usa la app (o pegar aquí el ID de ese Sheet).
  *
- * Tablas (hojas): CLIENTES, PRODUCTOS, PRODUCTOS-MARKET, USUARIOS, ENERO..DICIEMBRE, RESUMEN-VENTAS, OPERACIONES-GENERALES, RESUMEN-OPERATIVO, COMPONENTE-COMBO.
+ * Tablas (hojas): CLIENTES, PRODUCTOS, PRODUCTOS-MARKET, ENERO..DICIEMBRE, RESUMEN-VENTAS, OPERACIONES-GENERALES, RESUMEN-OPERATIVO, COMPONENTE-COMBO.
  * Columnas según TABLAS más abajo (coincidir con src/Config/tables.js).
  */
 
@@ -29,11 +29,6 @@ var TABLAS = {
     sheet: 'PRODUCTOS-MARKET',
     pk: 'ID-PRODUCTO',
     columns: ['ID-PRODUCTO', 'COMERCIO-SUCURSAL', 'CATEGORIA', 'NOMBRE-PRODUCTO', 'DESCRIPCION', 'PRESENTACION-CANTIDAD-UNIDAD-MEDIDA', 'PRESENTACION-UNIDAD-MEDIDA', 'COSTO', 'HABILITADO']
-  },
-  USUARIOS: {
-    sheet: 'USUARIOS',
-    pk: 'USUARIO',
-    columns: ['USUARIO', 'PASSWORD', 'NOMBRE', 'USUARIO-ETIQUETA', 'PERFIL', 'COLOR', 'HABILITADO']
   },
   ENERO: {
     sheet: 'ENERO',
@@ -99,10 +94,6 @@ function doPost(e) {
       case 'productoMarketBaja':        return productoMarketBaja(params);
       case 'productoMarketModificacion': return productoMarketModificacion(params);
       case 'productoMarketLeer':       return productoMarketLeer(params);
-      case 'usuarioLeer':              return usuarioLeer(params);
-      case 'usuarioAlta':              return usuarioAlta(params);
-      case 'usuarioBaja':              return usuarioBaja(params);
-      case 'usuarioModificacion':      return usuarioModificacion(params);
       case 'ventaAlta':
       case 'guardarVenta':      return ventaAlta(params);
       case 'ventaMarketAlta':   return ventaMarketAlta(params);
@@ -119,6 +110,7 @@ function doPost(e) {
       case 'resumenOperativoLeer':       return resumenOperativoLeer(params);
       case 'componenteComboLeer':        return componenteComboLeer(params);
       case 'operacionesGralAlta':        return operacionesGralAlta(params);
+      case 'cierreOperacionesDiaLeer':   return cierreOperacionesDiaLeer(params);
       default:
         return respuestaJson({ ok: false, error: 'Acción no reconocida: ' + accion });
     }
@@ -427,78 +419,6 @@ function productoMarketLeer(params) {
     filas = filas.filter(function (f) { return String(f[def.pk]).trim() === String(id).trim(); });
   }
   return respuestaJson({ ok: true, datos: filas });
-}
-
-// --- USUARIOS ---
-
-function usuarioLeer(params) {
-  var def = TABLAS.USUARIOS;
-  var ss = getSS();
-  var sheet = ss.getSheetByName(def.sheet);
-  if (!sheet) return respuestaJson({ ok: true, datos: [] });
-  var datos = sheet.getDataRange().getValues();
-  if (datos.length < 2) return respuestaJson({ ok: true, datos: [] });
-  var headers = datos[0];
-  var filas = [];
-  for (var i = 1; i < datos.length; i++) {
-    var obj = {};
-    for (var c = 0; c < headers.length; c++) {
-      var val = c < datos[i].length ? datos[i][c] : '';
-      obj[headers[c]] = (val !== undefined && val !== null) ? val : '';
-    }
-    var pkVal = (obj[def.pk] !== undefined && obj[def.pk] !== null) ? String(obj[def.pk]).trim() : '';
-    if (pkVal === '') continue;
-    filas.push(obj);
-  }
-  var id = params[def.pk] || params.usuario;
-  if (id) {
-    filas = filas.filter(function (f) { return String(f[def.pk]).trim() === String(id).trim(); });
-  }
-  return respuestaJson({ ok: true, datos: filas });
-}
-
-function usuarioAlta(params) {
-  var def = TABLAS.USUARIOS;
-  var dato = params.dato || params;
-  if (!dato[def.pk]) return respuestaJson({ ok: false, error: 'Falta ' + def.pk });
-  var ss = getSS();
-  var sheet = getHoja(ss, def.sheet, def.columns);
-  if (sheet.getLastRow() === 0) {
-    sheet.getRange(1, 1, 1, def.columns.length).setValues([def.columns]);
-    sheet.getRange(1, 1, 1, def.columns.length).setFontWeight('bold');
-  }
-  var fila = objetoAFila(def, dato);
-  var rowNum = buscarFilaPorPK(sheet, def, dato[def.pk]);
-  if (rowNum > 0) return respuestaJson({ ok: false, error: 'Ya existe un usuario con ese ' + def.pk });
-  sheet.appendRow(fila);
-  return respuestaJson({ ok: true, mensaje: 'Usuario dado de alta.' });
-}
-
-function usuarioBaja(params) {
-  var def = TABLAS.USUARIOS;
-  var pkValor = params[def.pk] || params.usuario || params.id;
-  if (!pkValor) return respuestaJson({ ok: false, error: 'Falta ' + def.pk });
-  var ss = getSS();
-  var sheet = ss.getSheetByName(def.sheet);
-  if (!sheet) return respuestaJson({ ok: false, error: 'No existe la hoja ' + def.sheet });
-  var rowNum = buscarFilaPorPK(sheet, def, pkValor);
-  if (rowNum === -1) return respuestaJson({ ok: false, error: 'No encontrado.' });
-  sheet.deleteRow(rowNum);
-  return respuestaJson({ ok: true, mensaje: 'Usuario dado de baja.' });
-}
-
-function usuarioModificacion(params) {
-  var def = TABLAS.USUARIOS;
-  var dato = params.dato || params;
-  if (!dato[def.pk]) return respuestaJson({ ok: false, error: 'Falta ' + def.pk });
-  var ss = getSS();
-  var sheet = ss.getSheetByName(def.sheet);
-  if (!sheet) return respuestaJson({ ok: false, error: 'No existe la hoja ' + def.sheet });
-  var rowNum = buscarFilaPorPK(sheet, def, dato[def.pk]);
-  if (rowNum === -1) return respuestaJson({ ok: false, error: 'No encontrado.' });
-  var fila = objetoAFila(def, dato);
-  sheet.getRange(rowNum, 1, rowNum, def.columns.length).setValues([fila]);
-  return respuestaJson({ ok: true, mensaje: 'Usuario actualizado.' });
 }
 
 // --- VENTAS (ENERO y futuras hojas por mes) ---
@@ -834,25 +754,38 @@ function resumenOperativoModificacion(params) {
 function resumenOperativoLeer(params) {
   var def = TABLAS.RESUMEN_OPERATIVO;
   var ss = getSS();
-  var sheet = ss.getSheetByName(def.sheet);
-  if (!sheet) return respuestaJson({ ok: true, datos: [] });
+  var sheet = ss.getSheetByName(def.sheet) || ss.getSheetByName('RESUMEN OPERATIVO');
+  if (!sheet) {
+    return respuestaJson({ ok: false, error: 'No existe la hoja RESUMEN-OPERATIVO. Revisá que la pestaña del Sheet se llame exactamente así.' });
+  }
   var datos = sheet.getDataRange().getValues();
   if (datos.length < 2) return respuestaJson({ ok: true, datos: [] });
   var headers = datos[0];
+  var colCount = Math.min(headers.length, def.columns.length);
+  var tz = Session.getScriptTimeZone() || 'America/Argentina/Buenos_Aires';
   var filas = [];
   for (var i = 1; i < datos.length; i++) {
     var obj = {};
     for (var c = 0; c < headers.length; c++) {
-      var val = datos[i][c];
-      obj[headers[c]] = (val !== undefined && val !== null) ? val : '';
+      var val = c < datos[i].length ? datos[i][c] : '';
+      if (val === undefined || val === null) val = '';
+      var key = (c < colCount) ? def.columns[c] : (headers[c] || '');
+      if (key) obj[key] = val;
     }
-    var pkVal = (obj[def.pk] !== undefined && obj[def.pk] !== null) ? String(obj[def.pk]).trim() : '';
-    if (pkVal === '') continue;
+    for (var k = 0; k < def.columns.length; k++) {
+      if (obj[def.columns[k]] === undefined) obj[def.columns[k]] = '';
+    }
+    if (obj.FECHA_OPERATIVA && obj.FECHA_OPERATIVA instanceof Date) {
+      obj.FECHA_OPERATIVA = Utilities.formatDate(obj.FECHA_OPERATIVA, tz, 'yyyy-MM-dd');
+    }
+    if (obj.HORA && obj.HORA instanceof Date) {
+      obj.HORA = Utilities.formatDate(obj.HORA, tz, 'HH:mm');
+    }
     filas.push(obj);
   }
   var id = params[def.pk] || params.id;
   if (id) {
-    filas = filas.filter(function (f) { return String(f[def.pk]).trim() === String(id).trim(); });
+    filas = filas.filter(function (f) { return String(f[def.pk] || '').trim() === String(id).trim(); });
   }
   return respuestaJson({ ok: true, datos: filas });
 }
@@ -910,6 +843,72 @@ function componenteComboLeer(params) {
     filas.push(obj);
   }
   return respuestaJson({ ok: true, datos: filas });
+}
+
+// --- CIERRE OPERACIONES DÍA (Compras Panadería + Ventas Market + Gastos Salida por fecha) ---
+
+var NOMBRES_HOJAS_MES = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+
+function normalizarFechaOperativa(val, tz) {
+  if (val === undefined || val === null || val === '') return '';
+  if (val instanceof Date) {
+    tz = tz || Session.getScriptTimeZone() || 'America/Argentina/Buenos_Aires';
+    return Utilities.formatDate(val, tz, 'yyyy-MM-dd');
+  }
+  var s = String(val).trim();
+  if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.substring(0, 10);
+  return s;
+}
+
+function leerHojaYFiltrarPorFecha(ss, nombreHoja, columnas, fechaYyyyMmDd) {
+  var sheet = ss.getSheetByName(nombreHoja);
+  if (!sheet) return [];
+  var datos = sheet.getDataRange().getValues();
+  if (datos.length < 2) return [];
+  var headers = datos[0];
+  var colFecha = headers.indexOf('FECHA_OPERATIVA');
+  if (colFecha === -1) return [];
+  var tz = Session.getScriptTimeZone() || 'America/Argentina/Buenos_Aires';
+  var filas = [];
+  for (var i = 1; i < datos.length; i++) {
+    var fechaVal = datos[i][colFecha];
+    var fechaStr = normalizarFechaOperativa(fechaVal, tz);
+    if (fechaStr !== fechaYyyyMmDd) continue;
+    var obj = {};
+    for (var c = 0; c < headers.length; c++) {
+      var v = c < datos[i].length ? datos[i][c] : '';
+      if (v instanceof Date && headers[c] === 'HORA') v = Utilities.formatDate(v, tz, 'HH:mm');
+      else if (v instanceof Date && headers[c] === 'FECHA_OPERATIVA') v = Utilities.formatDate(v, tz, 'yyyy-MM-dd');
+      obj[headers[c]] = (v !== undefined && v !== null) ? v : '';
+    }
+    filas.push(obj);
+  }
+  return filas;
+}
+
+function cierreOperacionesDiaLeer(params) {
+  var fechaParam = params.fecha || params.fechaOperativa || '';
+  if (!fechaParam) return respuestaJson({ ok: false, error: 'Falta fecha (YYYY-MM-DD).' });
+  var fechaStr = normalizarFechaOperativa(fechaParam);
+  if (fechaStr.length !== 10) return respuestaJson({ ok: false, error: 'Fecha inválida. Usar YYYY-MM-DD.' });
+  var partes = fechaStr.split('-');
+  var anio = parseInt(partes[0], 10);
+  var mes = parseInt(partes[1], 10);
+  if (isNaN(mes) || mes < 1 || mes > 12) return respuestaJson({ ok: false, error: 'Mes inválido.' });
+  var nombreHojaMes = NOMBRES_HOJAS_MES[mes - 1];
+  var ss = getSS();
+  var comprasPanaderia = leerHojaYFiltrarPorFecha(ss, nombreHojaMes, TABLAS[nombreHojaMes] ? TABLAS[nombreHojaMes].columns : COLUMNAS_VENTAS, fechaStr);
+  var defMarket = TABLAS.VENTAS_MARKET;
+  var ventasMarket = leerHojaYFiltrarPorFecha(ss, defMarket.sheet, defMarket.columns, fechaStr);
+  var defOpGral = TABLAS.OPERACIONES_GENERALES;
+  var gastosSalida = leerHojaYFiltrarPorFecha(ss, defOpGral.sheet, defOpGral.columns, fechaStr);
+  return respuestaJson({
+    ok: true,
+    fecha: fechaStr,
+    comprasPanaderia: comprasPanaderia,
+    ventasMarket: ventasMarket,
+    gastosSalida: gastosSalida
+  });
 }
 
 function respuestaJson(obj) {

@@ -380,6 +380,16 @@ body::before {
   margin-bottom: 1.25rem;
 }
 
+/* Perfiles que no son ADMIN/GERENTE: ocultar columna Subtotal y fila Total compra (solo vista; cálculos y registros igual). */
+.nueva-compra__tabla--sin-totales th:nth-child(4),
+.nueva-compra__tabla--sin-totales tbody td:nth-child(4) {
+  display: none;
+}
+.nueva-compra__tabla--sin-totales tfoot tr td:nth-child(1),
+.nueva-compra__tabla--sin-totales tfoot tr td:nth-child(2) {
+  display: none;
+}
+
 .nueva-compra__tabla th {
   padding: 0.6rem 0.85rem;
   text-align: left;

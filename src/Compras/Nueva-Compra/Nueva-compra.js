@@ -71,6 +71,18 @@
     return (input && input.value) ? input.value.trim() : '';
   }
 
+  /** true si el usuario logueado tiene PERFIL ADMIN o GERENTE (muestra columna Subtotal y Total compra). */
+  function esAdminOGerente() {
+    var config = window.APP_CONFIG || {};
+    var perfil = (config.USUARIO_PERFIL || '').trim().toUpperCase();
+    if (perfil) return perfil === 'ADMIN' || perfil === 'GERENTE';
+    var codigo = (config.USUARIO || '').trim();
+    if (!codigo) return false;
+    var info = config.USUARIO_ETIQUETAS && config.USUARIO_ETIQUETAS[codigo];
+    perfil = (info && info.perfil) ? String(info.perfil).toUpperCase() : '';
+    return perfil === 'ADMIN' || perfil === 'GERENTE';
+  }
+
   function cargarProductos() {
     var mensaje = document.getElementById('nueva-compra-mensaje');
     if (!TABLA) {
@@ -257,6 +269,7 @@
     vacio.hidden = true;
     tabla.hidden = false;
     if (btnGuardar) btnGuardar.disabled = false;
+    tabla.classList.toggle('nueva-compra__tabla--sin-totales', !esAdminOGerente());
     tbody.innerHTML = '';
     var total = 0;
     carrito.forEach(function (item) {

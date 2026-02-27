@@ -72,6 +72,16 @@
   line-height: 1.75;
 }
 
+/* Nombre de usuario en hero: resalte sutil en tono rojo (ej. SILVINA). */
+.hero__user {
+  font-weight: 600;
+  color: #b71c1c;
+  background: rgba(183, 28, 28, 0.08);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  border-left: 3px solid #b71c1c;
+}
+
 /* Secciones con encabezado estilizado */
 .hub-section {
   margin-top: 3rem;

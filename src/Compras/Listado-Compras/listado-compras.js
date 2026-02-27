@@ -292,7 +292,7 @@
     var columnasMes = (APP_TABLES && APP_TABLES[nombreMes] && APP_TABLES[nombreMes].columns) ? APP_TABLES[nombreMes].columns : COLUMNAS_COMPRAS_DEF;
     var columnas = ['MES'].concat(columnasMes).filter(function (c) {
       if (columnasOcultas.indexOf(c) !== -1) return false;
-      if (c === 'USUARIO' && !esAdminOGerente()) return false;
+      if (!esAdminOGerente() && ['PRECIO', 'MONTO'].indexOf(c) !== -1) return false;
       return true;
     });
     currentColumnas = columnas;
@@ -376,7 +376,13 @@
         })
       : allData;
 
-    if (!columnas) columnas = currentColumnas.length ? currentColumnas : columnasTabla;
+    if (!columnas) {
+      columnas = currentColumnas.length ? currentColumnas : (columnasTabla || []).filter(function (c) {
+        if (columnasOcultas.indexOf(c) !== -1) return false;
+        if (!esAdminOGerente() && ['PRECIO', 'MONTO'].indexOf(c) !== -1) return false;
+        return true;
+      });
+    }
     if (!nombreMes) nombreMes = currentNombreMes;
 
     var totalFilt = filteredData.reduce(function (sum, r) {
@@ -459,35 +465,36 @@
         tbody.appendChild(tr);
       });
 
-      var trSub = document.createElement('tr');
-      trSub.className = 'listado-compras__fila-subtotal';
-      var idxCant = columnas.indexOf('CANTIDAD');
-      var idxMonto = columnas.indexOf('MONTO');
-      var colspanLabel = idxCant >= 0 ? idxCant : columnas.length - 2;
-      if (colspanLabel < 1) colspanLabel = 1;
+      if (esAdminOGerente()) {
+        var trSub = document.createElement('tr');
+        trSub.className = 'listado-compras__fila-subtotal';
+        var idxCant = columnas.indexOf('CANTIDAD');
+        var idxMonto = columnas.indexOf('MONTO');
+        var colspanLabel = idxCant >= 0 ? idxCant : columnas.length - 2;
+        if (colspanLabel < 1) colspanLabel = 1;
 
-      var tdLabel = document.createElement('td');
-      tdLabel.className = 'listado-compras__subtotal-label';
-      tdLabel.colSpan = colspanLabel;
-      tdLabel.textContent = 'Total del día';
-      trSub.appendChild(tdLabel);
+        var tdLabel = document.createElement('td');
+        tdLabel.className = 'listado-compras__subtotal-label';
+        tdLabel.colSpan = colspanLabel;
+        tdLabel.textContent = 'Total del día';
+        trSub.appendChild(tdLabel);
 
-      var mostrarTotales = esAdminOGerente();
-      for (var i = colspanLabel; i < columnas.length; i++) {
-        var col = columnas[i];
-        var td = document.createElement('td');
-        td.className = col === 'MONTO' || col === 'CANTIDAD' ? 'td-num' : '';
-        if (col === 'MONTO') {
-          td.textContent = mostrarTotales ? fmtMoney(subtotalFecha) : '';
-          if (mostrarTotales) td.classList.add('td-monto');
-        } else if (col === 'CANTIDAD') {
-          td.textContent = mostrarTotales ? Number(subtotalCant).toLocaleString('es-AR') : '';
-        } else {
-          td.textContent = '';
+        for (var i = colspanLabel; i < columnas.length; i++) {
+          var col = columnas[i];
+          var td = document.createElement('td');
+          td.className = col === 'MONTO' || col === 'CANTIDAD' ? 'td-num' : '';
+          if (col === 'MONTO') {
+            td.textContent = fmtMoney(subtotalFecha);
+            td.classList.add('td-monto');
+          } else if (col === 'CANTIDAD') {
+            td.textContent = Number(subtotalCant).toLocaleString('es-AR');
+          } else {
+            td.textContent = '';
+          }
+          trSub.appendChild(td);
         }
-        trSub.appendChild(td);
+        tbody.appendChild(trSub);
       }
-      tbody.appendChild(trSub);
     });
 
     var totalRegistros = filteredData.length;
